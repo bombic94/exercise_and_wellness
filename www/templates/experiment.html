@@ -1,0 +1,68 @@
+<ion-view title="{{name}}" id="experiment" style="background-color:#C8FFC8;" class=" ">
+    <ion-content padding="true" class="has-header">
+
+    <label class="item item-input">
+        <span class="input-label">ID</span>
+        <input type="text" placeholder="" ng-model="personID" >
+    </label>
+    <button class="text-right button button-block button-positive icon icon-left ion-qr-scanner"
+                ng-click="scanBarcode()">
+            QR
+    </button>
+
+    <ion-list>        
+        <ion-item ng-repeat-start="dotaznik in objects" style="display:none;"></ion-item>
+        
+        <ion-row class="item item-calm">
+            <ion-col>{{dotaznik.name}}, ID: {{dotaznik.expID}} &nbsp</ion-col>
+            <ion-col ng-if="dotaznik.units != ''">[{{dotaznik.units}}]</ion-col>
+            <ion-col class="assertive" ng-if="dotaznik.required">* &nbsp</ion-col>
+            
+            <ion-col ng-if="dotaznik.formType == 'file'">
+                 <button class="text-right button button-small button-positive icon icon-left ion-arrow-round-up" 
+                         ng-click="">
+                    Nahrát soubor
+                </button>
+            </ion-col>
+        </ion-row>
+
+        <label class="item item-input" ng-if="dotaznik.formType == 'integer'">
+            <input type="number" placeholder="{{dotaznik.formLabels[0]}}" ng-model="data[0]" >
+        </label>
+
+        <label class="item item-input" ng-if="dotaznik.formType == 'float'">
+            <input  type="number" placeholder="{{dotaznik.formLabels[0]}}" ng-model="data[0]">
+        </label>
+
+        <label class="item item-input" ng-if="dotaznik.formType == 'text'">
+            <input type="text" placeholder="{{dotaznik.formLabels[0]}}" ng-model="data[0]">
+        </label>
+
+        <ion-checkbox ng-if="dotaznik.formType == 'checkbox'"
+            ng-repeat="label in dotaznik.formLabels"               
+            ng-model="data[label]"            
+            ng-change=""
+            name="label">
+            {{ label }}
+        </ion-checkbox>
+        
+        <ion-radio ng-if="dotaznik.formType == 'radio'"
+            ng-repeat="label in dotaznik.formLabels"
+            ng-value="label"
+            ng-model="data[0]"
+            ng-change=""
+            name="label">
+            {{ label }}
+        </ion-radio>
+        
+        <div class="spacer" style="height: 10px;"></div>
+
+        <ion-item ng-repeat-end style="display:none;"></ion-item>
+    </ion-list>
+    
+    <button id="form-button1" class=" button button-positive button-block " ng-click="showConfirm()">
+        Uložit
+    </button>
+
+    </ion-content>
+</ion-view>

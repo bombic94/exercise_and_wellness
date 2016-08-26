@@ -1,0 +1,27 @@
+<ion-view title="Formulář motivace" id="page2" style="background-color:#C8FFC8;" class=" ">
+    <ion-content padding="true" class="has-header">
+    
+    <ion-list>
+        <ion-item ng-repeat-start="form in objects" style="display:none;"></ion-item>
+        
+        <ion-item class="item-calm">{{form.name}} &nbsp {{form.answer}}</ion-item>         
+        
+        <ion-radio
+                ng-repeat="label in form.formLabels"
+                ng-value="label"
+                ng-model="form.answer"
+                name="{{form.name}}">
+          {{ label }}
+        </ion-radio>
+        
+        <div class="spacer" style="height: 20px;"></div>
+
+        <ion-item ng-repeat-end style="display:none;"></ion-item>
+    </ion-list>
+                                                                    
+    <button id="form-button1" class=" button button-positive button-block " ng-click="showConfirm()">
+       	Uložit
+    </button>
+        
+    </ion-content>
+</ion-view>

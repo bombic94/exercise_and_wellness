@@ -1,0 +1,10 @@
+<ion-view title="Seznam měření" id="experimentList" style="background-color:#C8FFC8;" class=" ">
+    <ion-content padding="true" class="has-header">
+    
+    <ion-list>
+        <ion-item class="item" ng-repeat="experiment in experiments" ng-click="showExperiment({{experiment}})" href="#">
+                Místo:&nbsp{{ experiment.name }} <br>Datum:&nbsp{{experiment.date}}<br>Čas:&nbsp{{experiment.time}}
+        </ion-item>
+        
+    </ion-content>
+</ion-view>
