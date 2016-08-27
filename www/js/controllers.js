@@ -47,7 +47,8 @@ angular.module('app.controllers', [])
     $scope.showExperiment = function(experiment) {
           window.localStorage.setItem("measurementNumber", experiment.id);
           window.localStorage.setItem("measurementName", experiment.name);
-          socket.emit('measurement index', {"measurementNumber":experiment.id}); 
+          $scope.token = window.localStorage.getItem("token");
+          socket.emit('measurement index', {"token":$scope.token,"measurementNumber":experiment.id}); 
           $state.go('menu.experiment');
     };
 
@@ -93,26 +94,30 @@ angular.module('app.controllers', [])
     };
 
     $scope.showConfirm = function() {
-      var confirmPopup = $ionicPopup.confirm({
-      title: 'Uložit experiment',
-      template: 'Opravdu chcete uložit změřené hodnoty?'
-      });
+        var confirmPopup = $ionicPopup.confirm({
+        title: 'Uložit experiment',
+        template: 'Opravdu chcete uložit změřené hodnoty?'
+        });
 
-      confirmPopup.then(function(res) {
-        if(res) {
+        confirmPopup.then(function(res) {
+            if(res) {
+                $scope.token = window.localStorage.getItem("token");
+                $scope.experimentID = window.localStorage.getItem("measurementNumber");           
+                for(var i = 0; i < data.length; i++){
+                    socket.emit('data to server', {"token":$scope.token,"measurementNumber":$scope.experimentID,"personID":$scope.personID,"data":$scope.data[i]})
+                }
+                var alertPopup = $ionicPopup.alert({
+                    title: 'Uložit experiment',
+                    template: 'Změřené hodnoty úspěšně uloženy'
+                });
 
-          var alertPopup = $ionicPopup.alert({
-            title: 'Uložit experiment',
-            template: 'Změřené hodnoty úspěšně uloženy'
-          });
-
-          alertPopup.then(function(res) {
+                alertPopup.then(function(res) {
+                
+                });
+            } else {
             
-          });
-        } else {
-          
-        }
-      });
+            }
+        });
     };
 })
 
