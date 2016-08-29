@@ -26,8 +26,8 @@ angular.module('app.controllers', [])
     var dataSource = 'data/JSON2.json';
     $scope.experiments = "";
 
-    $scope.$on('$ionicView.enter', function(){
-        $ionicLoading.show();
+    $scope.$on('$ionicView.beforeEnter', function(){
+     //   $ionicLoading.show();
         //socket.on('measurement array', function(msg){
         // $scope.experiments = msg;
         //})
@@ -39,14 +39,19 @@ angular.module('app.controllers', [])
         }).catch(function(response){
             
         }).finally(function(){
-            $ionicLoading.hide();
+     //       $ionicLoading.hide();
         });
     });
 
 
     $scope.showExperiment = function(experiment) {
           window.localStorage.setItem("measurementNumber", experiment.id);
-          window.localStorage.setItem("measurementName", experiment.name);
+          window.localStorage.setItem("measurementInstitution", experiment.institution);
+          window.localStorage.setItem("measurementBegin", experiment.begin);
+          window.localStorage.setItem("measurementEnd", experiment.end);
+          window.localStorage.setItem("measurementTown", experiment.town);
+          window.localStorage.setItem("measurementStreet", experiment.street);
+          window.localStorage.setItem("measurementNumber", experiment.number);
           $scope.token = window.localStorage.getItem("token");
           socket.emit('measurement index', {"token":$scope.token,"measurementNumber":experiment.id}); 
           $state.go('menu.experiment');
@@ -61,11 +66,16 @@ angular.module('app.controllers', [])
     $scope.data = "";   
     var dataSource = 'data/JSON1.json';
 
-    $scope.$on('$ionicView.enter', function(){
-        $scope.name = window.localStorage.getItem("measurementName");
+    $scope.$on('$ionicView.beforeEnter', function(){
+        $scope.institution = window.localStorage.getItem("measurementInstitution");
+        $scope.begin = window.localStorage.getItem("measurementBegin");
+        $scope.end = window.localStorage.getItem("measurementEnd");
+        $scope.town = window.localStorage.getItem("measurementTown");
+        $scope.street = window.localStorage.getItem("measurementStreet");
+        $scope.number = window.localStorage.getItem("measurementNumber");
+        
 
-
-        $ionicLoading.show();
+    //    $ionicLoading.show();
         //socket.on('form scheme to mobile device', function(msg){
         // $scope.objects = msg;
         //})
@@ -74,7 +84,7 @@ angular.module('app.controllers', [])
         }).catch(function(response){
             
         }).finally(function(){
-            $ionicLoading.hide();
+    //        $ionicLoading.hide();
         });
     });
 
@@ -127,8 +137,8 @@ angular.module('app.controllers', [])
     $scope.objects = "";   
     var dataSource = 'data/motivJSON.json';
 
-    $scope.$on('$ionicView.enter', function(){
-        $ionicLoading.show();
+    $scope.$on('$ionicView.beforeEnter', function(){
+     //   $ionicLoading.show();
         //socket.on('motivational form', function(msg){
         // $scope.objects = msg;
         //})
@@ -137,7 +147,7 @@ angular.module('app.controllers', [])
         }).catch(function(response){
             
         }).finally(function(){
-            $ionicLoading.hide();
+    //        $ionicLoading.hide();
         });
     });
 
