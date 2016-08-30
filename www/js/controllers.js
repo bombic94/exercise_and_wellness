@@ -31,6 +31,7 @@ angular.module('app.controllers', [])
         //socket.on('measurement array', function(msg){
         // $scope.experiments = msg;
         //})
+
         LoadJSON.getJSON(dataSource).then(function(response){
             $scope.experiments = response.data;
             if ($scope.experiments.length == 1){

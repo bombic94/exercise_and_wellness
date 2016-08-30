@@ -1,12 +1,15 @@
-<ion-view title="Seznam měření" id="experimentList" style="background-color:#C8FFC8;" class=" ">
+<ion-view title="Seznam měření" id="experimentList" style="background-color:#FFFFFF;" class=" ">
     <ion-content padding="true" class="has-header">
     
-    <ion-list>
-        <ion-item class="item" ng-repeat="experiment in experiments" ng-click="showExperiment({{experiment}})" href="#">
-                {{experiment.institution}} <br>
-                {{experiment.begin}} - {{experiment.end}}<br>
-                {{experiment.town}}, {{experiment.street}} {{experiment.number}}
-        </ion-item>
-        
+        <ion-list>
+            <ion-item class="item" ng-repeat="experiment in experiments" ng-click="showExperiment({{experiment}})" href="#">
+                    {{experiment.institution}} <br>
+                    {{experiment.begin}} - {{experiment.end}}<br>
+                    {{experiment.town}}, {{experiment.street}} {{experiment.number}}
+            </ion-item>
+        </ion-list>
+
+        <p> {{username}} {{password}}</p>
+
     </ion-content>
 </ion-view>
