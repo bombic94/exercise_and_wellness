@@ -4,7 +4,7 @@
     <ion-list>
         <ion-item ng-repeat-start="form in objects" style="display:none;"></ion-item>
         
-        <ion-item class="item-calm">{{form.name}} &nbsp {{form.answer}}</ion-item>         
+        <ion-item class="item-calm item-text-wrap">{{form.name}}</ion-item>         
         
         <ion-radio
                 ng-repeat="label in form.formLabels"

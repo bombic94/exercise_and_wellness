@@ -17,9 +17,9 @@ angular.module('app.services', [])
 })
 
 .factory('socket',function(socketFactory){
-    //Create socket and connect to http://chat.socket.io 
-    var myIoSocket = io.connect('http://147.228.63.49:8080/mobile-services');
-
+    //var myIoSocket = io.connect('http://147.228.63.49:8080/app.fcgi/mobile-services');
+    var myIoSocket = io.connect('http://147.228.63.49:8080/app.fcgi/m');
+    //var myIoSocket = io.connect('http://chat.socket.io')
     mySocket = socketFactory({
         ioSocket: myIoSocket
     });
