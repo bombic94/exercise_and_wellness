@@ -8,7 +8,7 @@
         <span class="input-label">ID</span>
         <input type="text" placeholder="" ng-model="personID" >
     </label>
-    <button class="text-right button button-block button-positive icon icon-left ion-qr-scanner"
+    <button class="text-right button button-block icon icon-left ion-qr-scanner" style="background-color:#E3520F"
                 ng-click="scanBarcode()">
             QR
     </button>
@@ -19,7 +19,7 @@
         <ion-list>        
             <ion-item ng-repeat-start="dotaznik in mereni.scheme" style="display:none;"></ion-item>
             
-            <ion-row class="item item-calm">
+            <ion-row class="item" style="background-color:#99FF00">
                 <ion-col>{{dotaznik.name}}, ID: {{dotaznik.expID}} &nbsp</ion-col>
                 <ion-col ng-if="dotaznik.units != ''">[{{dotaznik.units}}]</ion-col>
                 <ion-col class="assertive" ng-if="dotaznik.required">* &nbsp</ion-col>
@@ -69,7 +69,7 @@
         <ion-item ng-repeat-end="dotazniky in objects" style="display:none;"></ion-item>
     </ion-list>
 
-    <button id="form-button1" class=" button button-positive button-block " ng-click="showConfirm()">
+    <button id="form-button1" class=" button button-block " style="background-color:#E3520F" ng-click="showConfirm()">
         Uložit
     </button>
 
