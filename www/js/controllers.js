@@ -7,17 +7,18 @@ angular.module('app.controllers', [])
     $scope.login = function() {
         window.localStorage.setItem("username", "smucrz@students.zcu.cz");
         window.localStorage.setItem("password", "a3tKe");
-        
-        socket.emit('login', {'username':"smucrz@students.zcu.cz",'password':"a3tKe"});
-        
+        console.log("clicked");
+        socket.emit('login',{'username':"smucrz@students.zcu.cz",'password':"a3tKe"});
+        console.log("emit");
         //socket.emit('refresh', {'data':"jsem tady"});
         //socket.on('data'), function(msg){
-            $state.go('menu.experimentList')
+        //    $state.go('menu.experimentList')
         //}
 
         socket.on('token', function(msg){
-          window.localStorage.setItem("token", msg);
-          $state.go('menu.experimentList')
+            console.log("received");
+            window.localStorage.setItem("token", msg);
+            $state.go('menu.experimentList')
         })
     };
  
