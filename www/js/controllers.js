@@ -1,54 +1,52 @@
 angular.module('app.controllers', [])
 
 .controller('loginCtrl', function($scope, $state, socket) {
-    $scope.username;
-    $scope.password;
+    $scope.username = "smucrz@students.zcu.cz";
+    $scope.password = "a3tKe";
 
     $scope.login = function() {
-        window.localStorage.setItem("username", "smucrz@students.zcu.cz");
-        window.localStorage.setItem("password", "a3tKe");
-        console.log("clicked");
-        socket.emit('login',{'username':"smucrz@students.zcu.cz",'password':"a3tKe"});
-        console.log("emit");
-        //socket.emit('refresh', {'data':"jsem tady"});
-        //socket.on('data'), function(msg){
-        //    $state.go('menu.experimentList')
-        //}
+        window.localStorage.setItem("username", $scope.username);
+        window.localStorage.setItem("password", $scope.password);
+
+        socket.emit('login',{'username':$scope.username,'password':$scope.password});
 
         socket.on('token', function(msg){
-            console.log("received");
-            window.localStorage.setItem("token", msg);
-            $state.go('menu.experimentList')
+            var socketData = JSON.parse(msg);
+            if (socketData.username == window.localStorage.getItem("username")){
+                window.localStorage.setItem("token", socketData.token);
+                console.log("received token");
+                console.log(socketData.token);
+                $state.go('menu.experimentList')
+            }
         })
     };
  
     $scope.logout = function() {
-       // window.localStorage.removeItem("username");
-       // window.localStorage.removeItem("password");
+        window.localStorage.removeItem("username");
+        window.localStorage.removeItem("password");
+        window.localStorage.removeItem("token");
     };
 })
 
 
 .controller('experimentListCtrl', function($scope, $state, $ionicLoading, LoadJSON, socket) {
-    var dataSource = 'data/JSON2.json';
-    $scope.experiments = "";
+
 
     $scope.$on('$ionicView.beforeEnter', function(){
 
-        //socket.on('measurement array', function(msg){
-        // $scope.experiments = msg;
-        //})
-
-        LoadJSON.getJSON(dataSource).then(function(response){
-            $scope.experiments = response.data;
-            if ($scope.experiments.length == 1){
-                $scope.showExperiment($scope.experiments[0]);
+        socket.on('measurement array', function(msg){
+            console.log("received measurement array");
+            var socketData = JSON.parse(msg);
+            $scope.experiments = socketData.data;
+            console.log(socketData.username);
+            console.log($scope.experiments.length);
+            if (socketData.username == window.localStorage.getItem("username")){
+                if ($scope.experiments.length == 1){
+                    $scope.showExperiment($scope.experiments[0]);
+                }
             }
-        }).catch(function(response){
-            
-        }).finally(function(){
+        })
 
-        });
     });
 
 
@@ -63,10 +61,8 @@ angular.module('app.controllers', [])
           
           $scope.token = window.localStorage.getItem("token");
           $scope.username = window.localStorage.getItem("username")
-         
-          socket.emit('measurement id', {'username':$scope.username,
-                                         'token':$scope.token,
-                                         'measurementID':measurement.id}); 
+
+          socket.emit('measurement id',{'username':$scope.username,'token':$scope.token,'measurementID':measurement.id}); 
           $state.go('menu.experiment');
     };
 
@@ -90,16 +86,15 @@ angular.module('app.controllers', [])
         $scope.token = window.localStorage.getItem("token"); 
         $scope.username = window.localStorage.getItem("username");
 
-        //socket.on('form scheme to mobile device', function(msg){
-        // $scope.objects += msg;
-        //})
-        LoadJSON.getJSON(dataSource).then(function(response){
-            $scope.objects = response.data;
-        }).catch(function(response){
-
-        }).finally(function(){
-
-        });
+        socket.on('form scheme to mobile device', function(msg){
+            console.log("received scheme");
+            var socketData = JSON.parse(msg);
+            console.log(socketData.username);
+            console.log(socketData);
+            if (socketData.username == window.localStorage.getItem("username")){
+                $scope.objects = socketData;
+            }
+        })
     });
 
     $scope.scanBarcode = function() {
@@ -126,7 +121,7 @@ angular.module('app.controllers', [])
         confirmPopup.then(function(res) {
             if(res) {
                 
-                var response[];
+                var response = [];
                 for (var i = 0; i < $scope.objects.length; i++){
                     for (var j = 0; j < $scope.objects[i].length; j++){
                       response[i][j].id = $scope.objects[i][j].id;
