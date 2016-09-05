@@ -76,7 +76,6 @@ angular.module('app.controllers', [])
 
     $scope.objects = "";
     $scope.personID = "";
-    $scope.data = "";   
     var dataSource = 'data/JSON1.json';
 
     $scope.$on('$ionicView.beforeEnter', function(){
@@ -126,14 +125,23 @@ angular.module('app.controllers', [])
 
         confirmPopup.then(function(res) {
             if(res) {
+                
+                var response[];
+                for (var i = 0; i < $scope.objects.length; i++){
+                    for (var j = 0; j < $scope.objects[i].length; j++){
+                      response[i][j].id = $scope.objects[i][j].id;
+                      response[i][j].data = $scope.objects[i][j].data;
+                    }
+                } 
+                
                            
-                for(var i = 0; i < data.length; i++){
+                for(var i = 0; i < response.length; i++){
                     socket.emit('data to server', {'username':$scope.username,
                                                    'token':$scope.token,
                                                    'personID':$scope.personID,
                                                    'measurementID':$scope.measurementID,
-                                                   'experimentID':$scope.experimentID,
-                                                   'data':data});
+                                                   'experimentID':$scope.objects[i].experimentID,
+                                                   'data':response[i]});
                 }
 
                 socket.on('info', function(msg){
@@ -157,9 +165,10 @@ angular.module('app.controllers', [])
 })
 
 
-.controller('form_motivationCtrl', function($scope, $ionicPopup, $ionicLoading, LoadJSON, socket) {
+.controller('form_motivationCtrl', function($scope, $cordovaBarcodeScanner, $ionicPopup, $ionicLoading, LoadJSON, socket) {
   
-    $scope.objects = "";   
+    $scope.objects = "";
+    $scope.personID = "";   
     var dataSource = 'data/motivJSON.json';
 
     $scope.$on('$ionicView.beforeEnter', function(){
@@ -175,6 +184,22 @@ angular.module('app.controllers', [])
         });
     });
 
+    $scope.scanBarcode = function() {
+        $cordovaBarcodeScanner.scan().then(function(imageData) {
+            //var str = "http://www.exerciseandwellnes.org/users/id/41de0b5764d683ef";
+            var str = imageData.text;
+            str = str.substring(str.lastIndexOf("/") + 1);
+            $scope.personID = str;
+            
+        }, function(error) {
+            var alertPopup = $ionicPopup.alert({
+              title: 'Chyba',
+              template: 'Něco se nepovedlo',
+            });
+        });
+    };
+
+
     $scope.showConfirm = function() {
       var confirmPopup = $ionicPopup.confirm({
         title: 'Uložit formulář',
@@ -183,6 +208,11 @@ angular.module('app.controllers', [])
 
       confirmPopup.then(function(res) {
         if(res) {
+
+          socket.emit('motivation', {'username':$scope.username,
+                                         'token':$scope.token,
+                                         'personID':$scope.personID,
+                                         'form':objects});
 
           var alertPopup = $ionicPopup.alert({
             title: 'Uložit formulář',

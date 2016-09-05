@@ -1,25 +1,24 @@
-<ion-view title="Měření" id="experiment" style="background-color:#FFFFFF;" class=" ">
+<ion-view title="Měření" id="experiment" style="background-color:#C8FFC8;" class=" ">
     <ion-content padding="true" class="has-header">
-    <h3 align="center">{{institution}}</h3>
-    <p align="center">{{town}}, {{street}} {{number}}</p>
-    <p align="center">{{begin}} - {{end}}</p>
-    <p align="center">User: {{username}} {{token}}</p>
+    <h3>{{institution}}<h3>
+    <p>{{town}} , &nbsp {{street}} &nbsp {{number}}</b><p>
+    <p>{{begin}} &nbsp - &nbsp {{end}}<p>
     <label class="item item-input">
         <span class="input-label">ID</span>
         <input type="text" placeholder="" ng-model="personID" >
     </label>
-    <button class="text-right button button-block icon icon-left ion-qr-scanner" style="background-color:#E3520F"
+    <button class="text-right button button-block button-positive icon icon-left ion-qr-scanner"
                 ng-click="scanBarcode()">
             QR
     </button>
 
     <ion-list>        
-        <ion-item ng-repeat-start="mereni in objects" style="display:none;"></ion-item>
-        <h4 align="center">{{mereni.experimentID}} {{mereni.experimentName}}</h4>
+        <ion-item ng-repeat-start="dotazniky in objects" style="display:none;"></ion-item>
+        <h4 align="center">{{dotazniky.name}}</h4>
         <ion-list>        
-            <ion-item ng-repeat-start="dotaznik in mereni.scheme" style="display:none;"></ion-item>
+            <ion-item ng-repeat-start="dotaznik in dotazniky.dotaznik" style="display:none;"></ion-item>
             
-            <ion-row class="item" style="background-color:#99FF00">
+            <ion-row class="item item-calm">
                 <ion-col>{{dotaznik.name}}, ID: {{dotaznik.expID}} &nbsp</ion-col>
                 <ion-col ng-if="dotaznik.units != ''">[{{dotaznik.units}}]</ion-col>
                 <ion-col class="assertive" ng-if="dotaznik.required">* &nbsp</ion-col>
@@ -33,21 +32,22 @@
             </ion-row>
 
             <label class="item item-input" ng-if="dotaznik.formType == 'integer'">
-                <input type="number" placeholder="{{dotaznik.formLabels[0]}}" ng-model="data[0]" >
+                <input type="number" placeholder="{{dotaznik.formLabels[0]}}" ng-model="dotaznik.data[0]" >
             </label>
 
             <label class="item item-input" ng-if="dotaznik.formType == 'float'">
-                <input  type="number" placeholder="{{dotaznik.formLabels[0]}}" ng-model="data[0]">
+                <input  type="number" placeholder="{{dotaznik.formLabels[0]}}" ng-model="dotaznik.data[0]">
             </label>
 
             <label class="item item-input" ng-if="dotaznik.formType == 'text'">
-                <input type="text" placeholder="{{dotaznik.formLabels[0]}}" ng-model="data[0]">
+                <input type="text" placeholder="{{dotaznik.formLabels[0]}}" ng-model="dotaznik.data[0]">
             </label>
 
             <ion-checkbox ng-if="dotaznik.formType == 'checkbox'"
                 ng-repeat="label in dotaznik.formLabels"               
-                ng-model="data[label]"            
-                ng-change=""
+                ng-model="dotaznik.data[label]"            
+                ng-true-value="1"
+                ng-false-value="0"
                 name="label">
                 {{ label }}
             </ion-checkbox>
@@ -55,8 +55,7 @@
             <ion-radio ng-if="dotaznik.formType == 'radio'"
                 ng-repeat="label in dotaznik.formLabels"
                 ng-value="label"
-                ng-model="data[0]"
-                ng-change=""
+                ng-model="dotaznik.data[0]"
                 name="label">
                 {{ label }}
             </ion-radio>
@@ -69,7 +68,7 @@
         <ion-item ng-repeat-end="dotazniky in objects" style="display:none;"></ion-item>
     </ion-list>
 
-    <button id="form-button1" class=" button button-block " style="background-color:#E3520F" ng-click="showConfirm()">
+    <button id="form-button1" class=" button button-positive button-block " ng-click="showConfirm()">
         Uložit
     </button>
 

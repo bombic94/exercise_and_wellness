@@ -1,6 +1,15 @@
 <ion-view title="Formulář motivace" id="page2" style="background-color:#FFFFFF;" class=" ">99FF00   E3520F
     <ion-content padding="true" class="has-header">
     
+    <label class="item item-input">
+        <span class="input-label">ID</span>
+        <input type="text" placeholder="" ng-model="personID" >
+    </label>
+    <button class="text-right button button-block button-positive icon icon-left ion-qr-scanner"
+                ng-click="scanBarcode()">
+            QR
+    </button>
+    
     <ion-list>
         <ion-item ng-repeat-start="form in objects" style="display:none;"></ion-item>
         
@@ -14,7 +23,7 @@
           {{ label }}
         </ion-radio>
         
-        <div class="spacer" style="height: 20px;"></div>
+        <div class="spacer" style="height: 10px;"></div>
 
         <ion-item ng-repeat-end style="display:none;"></ion-item>
     </ion-list>
