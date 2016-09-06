@@ -1,30 +1,39 @@
 angular.module('app.controllers', [])
 
-.controller('loginCtrl', function($scope, $state, socket) {
-    $scope.username = "smucrz@students.zcu.cz";
-    $scope.password = "a3tKe";
+.controller('loginCtrl', function($scope, $state, socket, $ionicPopup) {
+    $scope.user = {};
+    //"smucrz@students.zcu.cz";
+    //"a3tKe";
 
     $scope.login = function() {
-        window.localStorage.setItem("username", $scope.username);
-        window.localStorage.setItem("password", $scope.password);
+        window.localStorage.setItem("username", $scope.user.username);
+        window.localStorage.setItem("password", $scope.user.password);
 
-        socket.emit('login',{'username':$scope.username,'password':$scope.password});
+        socket.emit('login',{'username':$scope.user.username,'password':$scope.user.password});
 
         socket.on('token', function(msg){
             var socketData = JSON.parse(msg);
             if (socketData.username == window.localStorage.getItem("username")){
                 window.localStorage.setItem("token", socketData.token);
+
                 console.log("received token");
                 console.log(socketData.token);
+
                 $state.go('menu.experimentList')
             }
+        });
+
+        socket.on('error', function(msg){
+            var alertPopup = $ionicPopup.alert({
+              title: 'Špatné jméno nebo heslo',
+              template: 'Zkuste se přihlásit znovu',
+            });
         })
     };
  
     $scope.logout = function() {
-        window.localStorage.removeItem("username");
-        window.localStorage.removeItem("password");
-        window.localStorage.removeItem("token");
+        window.localStorage.clear();
+        $scope.user = {};
     };
 })
 
@@ -37,10 +46,9 @@ angular.module('app.controllers', [])
         socket.on('measurement array', function(msg){
             console.log("received measurement array");
             var socketData = JSON.parse(msg);
-            $scope.experiments = socketData.data;
-            console.log(socketData.username);
-            console.log($scope.experiments.length);
+
             if (socketData.username == window.localStorage.getItem("username")){
+                $scope.experiments = socketData.data;
                 if ($scope.experiments.length == 1){
                     $scope.showExperiment($scope.experiments[0]);
                 }
@@ -89,9 +97,8 @@ angular.module('app.controllers', [])
         socket.on('form scheme to mobile device', function(msg){
             console.log("received scheme");
             var socketData = JSON.parse(msg);
-            console.log(socketData.username);
             console.log(socketData);
-            if (socketData.username == window.localStorage.getItem("username")){
+            if (socketData[0].username == window.localStorage.getItem("username")){
                 $scope.objects = socketData;
             }
         })
@@ -105,10 +112,7 @@ angular.module('app.controllers', [])
             $scope.personID = str;
             
         }, function(error) {
-            var alertPopup = $ionicPopup.alert({
-              title: 'Chyba',
-              template: 'Něco se nepovedlo',
-            });
+            
         });
     };
 
