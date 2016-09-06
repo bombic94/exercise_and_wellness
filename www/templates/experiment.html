@@ -35,20 +35,20 @@
             </ion-row>
 
             <label class="item item-input" ng-if="dotaznik.formType == 'integer'">
-                <input type="number" placeholder="{{dotaznik.formLabels[0]}}" ng-model="dotaznik.data[0]" >
+                <input type="number" placeholder="{{dotaznik.formLabels[0]}}" ng-model="dotaznik.values[0]" >
             </label>
 
             <label class="item item-input" ng-if="dotaznik.formType == 'float'">
-                <input  type="number" placeholder="{{dotaznik.formLabels[0]}}" ng-model="dotaznik.data[0]">
+                <input  type="number" placeholder="{{dotaznik.formLabels[0]}}" ng-model="dotaznik.values[0]">
             </label>
 
             <label class="item item-input" ng-if="dotaznik.formType == 'text'">
-                <input type="text" placeholder="{{dotaznik.formLabels[0]}}" ng-model="dotaznik.data[0]">
+                <input type="text" placeholder="{{dotaznik.formLabels[0]}}" ng-model="dotaznik.values[0]">
             </label>
 
             <ion-checkbox ng-if="dotaznik.formType == 'checkbox'"
                 ng-repeat="label in dotaznik.formLabels"               
-                ng-model="dotaznik.data[label]"            
+                ng-model="dotaznik.values[label]"            
                 ng-true-value="1"
                 ng-false-value="0"
                 name="label">
@@ -58,7 +58,7 @@
             <ion-radio ng-if="dotaznik.formType == 'radio'"
                 ng-repeat="label in dotaznik.formLabels"
                 ng-value="label"
-                ng-model="dotaznik.data[0]"
+                ng-model="dotaznik.values[0]"
                 name="label">
                 {{ label }}
             </ion-radio>

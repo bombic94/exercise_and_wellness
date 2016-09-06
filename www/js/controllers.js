@@ -132,7 +132,7 @@ angular.module('app.controllers', [])
                     for (var j = 0; j < $scope.objects[i].scheme.length; j++){
                         response[i][j] = {
                             id: "",
-                            data: ""
+                            values: ""
                         };
                     }
                 }
@@ -140,7 +140,7 @@ angular.module('app.controllers', [])
                 for (var i = 0; i < $scope.objects.length; i++){
                     for (var j = 0; j < $scope.objects[i].scheme.length; j++){
                         response[i][j].id = $scope.objects[i].scheme[j].id;
-                        response[i][j].data = $scope.objects[i].scheme[j].data;
+                        response[i][j].values = $scope.objects[i].scheme[j].values;
                     }
                 } 
 
