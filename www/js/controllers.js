@@ -9,7 +9,8 @@ angular.module('app.controllers', [])
         window.localStorage.setItem("username", $scope.user.username);
         window.localStorage.setItem("password", $scope.user.password);
 
-        socket.emit('login',{'username':$scope.user.username,'password':$scope.user.password});
+        socket.emit('login',{'username':$scope.user.username,
+                             'password':$scope.user.password});
 
         socket.on('token', function(msg){
             var socketData = JSON.parse(msg);
@@ -23,12 +24,12 @@ angular.module('app.controllers', [])
             }
         });
 
-        socket.on('error', function(msg){
+      /*  socket.on('error', function(msg){
             var alertPopup = $ionicPopup.alert({
               title: 'Špatné jméno nebo heslo',
               template: 'Zkuste se přihlásit znovu',
             });
-        })
+        })*/
     };
  
     $scope.logout = function() {
@@ -70,7 +71,9 @@ angular.module('app.controllers', [])
           $scope.token = window.localStorage.getItem("token");
           $scope.username = window.localStorage.getItem("username")
 
-          socket.emit('measurement id',{'username':$scope.username,'token':$scope.token,'measurementID':measurement.id}); 
+          socket.emit('measurement id',{'username':$scope.username,
+                                        'token':$scope.token,
+                                        'measurementID':measurement.id}); 
           $state.go('menu.experiment');
     };
 
@@ -78,8 +81,8 @@ angular.module('app.controllers', [])
 
 .controller('experimentCtrl', function($scope, $cordovaBarcodeScanner, $ionicPopup, $ionicLoading, LoadJSON, socket) {
 
-    $scope.objects = "";
-    $scope.personID = "";
+    $scope.objects = [];
+    $scope.person = {};
     var dataSource = 'data/JSON1.json';
 
     $scope.$on('$ionicView.beforeEnter', function(){
@@ -98,8 +101,10 @@ angular.module('app.controllers', [])
             console.log("received scheme");
             var socketData = JSON.parse(msg);
             console.log(socketData);
-            if (socketData[0].username == window.localStorage.getItem("username")){
-                $scope.objects = socketData;
+            for (var i = 0; i < socketData.length; i++){
+                if (socketData[i].username == window.localStorage.getItem("username")){
+                    $scope.objects[i] = socketData[i];
+                }
             }
         })
     });
@@ -109,7 +114,7 @@ angular.module('app.controllers', [])
             //var str = "http://www.exerciseandwellnes.org/users/id/41de0b5764d683ef";
             var str = imageData.text;
             str = str.substring(str.lastIndexOf("/") + 1);
-            $scope.personID = str;
+            $scope.person.personID = str;
             
         }, function(error) {
             
@@ -125,31 +130,50 @@ angular.module('app.controllers', [])
         confirmPopup.then(function(res) {
             if(res) {
                 
-                var response = [];
+                var response = new Array($scope.objects.length);
+                for (var i = 0; i < $scope.objects.length; i++) {
+                    response[i] = new Array($scope.objects[i].scheme.length);
+                    for (var j = 0; j < $scope.objects[i].scheme.length; j++){
+                        response[i][j] = {
+                            id: "",
+                            data: ""
+                        };
+                    }
+                }
                 for (var i = 0; i < $scope.objects.length; i++){
-                    for (var j = 0; j < $scope.objects[i].length; j++){
-                      response[i][j].id = $scope.objects[i][j].id;
-                      response[i][j].data = $scope.objects[i][j].data;
+                    for (var j = 0; j < $scope.objects[i].scheme.length; j++){
+                        response[i][j].id = $scope.objects[i].scheme[j].id;
+                        response[i][j].data = $scope.objects[i].scheme[j].data;
                     }
                 } 
-                
-                           
+
+
                 for(var i = 0; i < response.length; i++){
-                    socket.emit('data to server', {'username':$scope.username,
+                    socket.emit('data to server',{'username':$scope.username,
                                                    'token':$scope.token,
-                                                   'personID':$scope.personID,
+                                                   'personID':$scope.person.personID,
                                                    'measurementID':$scope.measurementID,
                                                    'experimentID':$scope.objects[i].experimentID,
                                                    'data':response[i]});
+                    console.log({'username':$scope.username,
+                                                   'token':$scope.token,
+                                                   'personID':$scope.person.personID,
+                                                   'measurementID':$scope.measurementID,
+                                                   'experimentID':$scope.objects[i].experimentID,
+                                                   'data':response[i]})
                 }
 
                 socket.on('info', function(msg){
-                    $scope.info.type = msg.typ;
-                    $scope.info.message = msg.message;  
+                    $scope.info = {};
+                    var socketData = JSON.parse(msg);
+                    console.log(socketData);
+                    $scope.info.type = socketData.type;
+                    $scope.info.message = socketData.message;  
+                    console.log(socketData);
                 });
 
                 var alertPopup = $ionicPopup.alert({
-                    title: 'Uložit experiment',
+                    title: $scope.info.type,
                     template: $scope.info.message
                 });
 
