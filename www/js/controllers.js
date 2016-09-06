@@ -83,7 +83,6 @@ angular.module('app.controllers', [])
 
     $scope.objects = [];
     $scope.person = {};
-    var dataSource = 'data/JSON1.json';
 
     $scope.$on('$ionicView.beforeEnter', function(){
         $scope.measurementID = window.localStorage.getItem("measurementID");
@@ -111,20 +110,17 @@ angular.module('app.controllers', [])
 
     $scope.scanBarcode = function() {
         $cordovaBarcodeScanner.scan().then(function(imageData) {
-            //var str = "http://www.exerciseandwellnes.org/users/id/41de0b5764d683ef";
             var str = imageData.text;
             str = str.substring(str.lastIndexOf("/") + 1);
             $scope.person.personID = str;
-            
-        }, function(error) {
-            
+        }, function(error) { 
         });
     };
 
     $scope.showConfirm = function() {
         var confirmPopup = $ionicPopup.confirm({
-        title: 'Uložit experiment',
-        template: 'Opravdu chcete uložit změřené hodnoty?'
+            title: 'Uložit experiment',
+            template: 'Opravdu chcete uložit změřené hodnoty?'
         });
 
         confirmPopup.then(function(res) {
@@ -140,13 +136,13 @@ angular.module('app.controllers', [])
                         };
                     }
                 }
+
                 for (var i = 0; i < $scope.objects.length; i++){
                     for (var j = 0; j < $scope.objects[i].scheme.length; j++){
                         response[i][j].id = $scope.objects[i].scheme[j].id;
                         response[i][j].data = $scope.objects[i].scheme[j].data;
                     }
                 } 
-
 
                 for(var i = 0; i < response.length; i++){
                     socket.emit('data to server',{'username':$scope.username,
@@ -155,12 +151,7 @@ angular.module('app.controllers', [])
                                                    'measurementID':$scope.measurementID,
                                                    'experimentID':$scope.objects[i].experimentID,
                                                    'data':response[i]});
-                    console.log({'username':$scope.username,
-                                                   'token':$scope.token,
-                                                   'personID':$scope.person.personID,
-                                                   'measurementID':$scope.measurementID,
-                                                   'experimentID':$scope.objects[i].experimentID,
-                                                   'data':response[i]})
+                    console.log({'username':$scope.username,'token':$scope.token,'personID':$scope.person.personID,'measurementID':$scope.measurementID,'experimentID':$scope.objects[i].experimentID,'data':response[i]})
                 }
 
                 socket.on('info', function(msg){
@@ -190,8 +181,8 @@ angular.module('app.controllers', [])
 
 .controller('form_motivationCtrl', function($scope, $cordovaBarcodeScanner, $ionicPopup, $ionicLoading, LoadJSON, socket) {
   
-    $scope.objects = "";
-    $scope.personID = "";   
+    $scope.objects = [];
+    $scope.person = {};   
     var dataSource = 'data/motivJSON.json';
 
     $scope.$on('$ionicView.beforeEnter', function(){
@@ -209,46 +200,40 @@ angular.module('app.controllers', [])
 
     $scope.scanBarcode = function() {
         $cordovaBarcodeScanner.scan().then(function(imageData) {
-            //var str = "http://www.exerciseandwellnes.org/users/id/41de0b5764d683ef";
             var str = imageData.text;
             str = str.substring(str.lastIndexOf("/") + 1);
-            $scope.personID = str;
-            
+            $scope.person.personID = str;
         }, function(error) {
-            var alertPopup = $ionicPopup.alert({
-              title: 'Chyba',
-              template: 'Něco se nepovedlo',
-            });
         });
     };
 
 
     $scope.showConfirm = function() {
-      var confirmPopup = $ionicPopup.confirm({
-        title: 'Uložit formulář',
-        template: 'Opravdu chcete uložit vyplněný formulář?'
-      });
-
-      confirmPopup.then(function(res) {
-        if(res) {
-
-          socket.emit('motivation', {'username':$scope.username,
-                                         'token':$scope.token,
-                                         'personID':$scope.personID,
-                                         'form':objects});
-
-          var alertPopup = $ionicPopup.alert({
+        var confirmPopup = $ionicPopup.confirm({
             title: 'Uložit formulář',
-            template: 'Formulář úspěšně uložen'
-          });
+            template: 'Opravdu chcete uložit vyplněný formulář?'
+        });
 
-          alertPopup.then(function(res) {
-            
-          });
-        } else {
+        confirmPopup.then(function(res) {
+            if(res) {
+
+                socket.emit('motivation',{'username':$scope.username,
+                                          'token':$scope.token,
+                                          'personID':$scope.person.personID,
+                                          'form':objects});
+
+                var alertPopup = $ionicPopup.alert({
+                    title: 'Uložit formulář',
+                    template: 'Formulář úspěšně uložen'
+                });
+
+                alertPopup.then(function(res) {
+                    
+                });
+            } else {
           
-        }
-      });
+            }
+        });
     };
 })
    
