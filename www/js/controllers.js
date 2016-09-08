@@ -2,18 +2,22 @@ angular.module('app.controllers', [])
 
 .controller('loginCtrl', function($scope, $state, socket, $ionicPopup) {
     $scope.user = {};
-    //"smucrz@students.zcu.cz";
-    //"a3tKe";
+    //smucrz@students.zcu.cz
+    //a3tKe
 
+    //kraft@students.zcu.cz
+    //utBK8
     $scope.login = function() {
         window.localStorage.setItem("username", $scope.user.username);
         window.localStorage.setItem("password", $scope.user.password);
 
         socket.emit('login',{'username':$scope.user.username,
                              'password':$scope.user.password});
-
+console.log({'username':$scope.user.username,
+                             'password':$scope.user.password});
         socket.on('token', function(msg){
             var socketData = JSON.parse(msg);
+            console.log(socketData);
             if (socketData.username == window.localStorage.getItem("username")){
                 window.localStorage.setItem("token", socketData.token);
 
@@ -44,10 +48,10 @@ angular.module('app.controllers', [])
 
     $scope.$on('$ionicView.beforeEnter', function(){
 
-        socket.on('measurement array', function(msg){
-            console.log("received measurement array");
+        socket.on('measurement array', function(msg){         
             var socketData = JSON.parse(msg);
-
+            console.log("received measurement array");
+            console.log(socketData);
             if (socketData.username == window.localStorage.getItem("username")){
                 $scope.experiments = socketData.data;
                 if ($scope.experiments.length == 1){
@@ -60,21 +64,15 @@ angular.module('app.controllers', [])
 
 
     $scope.showExperiment = function(measurement) {
-          window.localStorage.setItem("measurementID", measurement.id);
-          window.localStorage.setItem("measurementInstitution", measurement.institution);
-          window.localStorage.setItem("measurementBegin", measurement.begin);
-          window.localStorage.setItem("measurementEnd", measurement.end);
-          window.localStorage.setItem("measurementTown", measurement.town);
-          window.localStorage.setItem("measurementStreet", measurement.street);
-          window.localStorage.setItem("measurementNumber", measurement.number);
+        window.localStorage.setItem("measurement", JSON.stringify(measurement))
           
-          $scope.token = window.localStorage.getItem("token");
-          $scope.username = window.localStorage.getItem("username")
+        $scope.token = window.localStorage.getItem("token");
+        $scope.username = window.localStorage.getItem("username")
 
-          socket.emit('measurement id',{'username':$scope.username,
+        socket.emit('measurement id',{'username':$scope.username,
                                         'token':$scope.token,
                                         'measurementID':measurement.id}); 
-          $state.go('menu.experiment');
+        $state.go('menu.experiment');
     };
 
 })
@@ -85,14 +83,8 @@ angular.module('app.controllers', [])
     $scope.person = {};
 
     $scope.$on('$ionicView.beforeEnter', function(){
-        $scope.measurementID = window.localStorage.getItem("measurementID");
-        $scope.institution = window.localStorage.getItem("measurementInstitution");
-        $scope.begin = window.localStorage.getItem("measurementBegin");
-        $scope.end = window.localStorage.getItem("measurementEnd");
-        $scope.town = window.localStorage.getItem("measurementTown");
-        $scope.street = window.localStorage.getItem("measurementStreet");
-        $scope.number = window.localStorage.getItem("measurementNumber");
         
+        $scope.measurement = JSON.parse(window.localStorage.getItem("measurement"));
         $scope.token = window.localStorage.getItem("token"); 
         $scope.username = window.localStorage.getItem("username");
 
@@ -148,10 +140,12 @@ angular.module('app.controllers', [])
                     socket.emit('data to server',{'username':$scope.username,
                                                    'token':$scope.token,
                                                    'personID':$scope.person.personID,
-                                                   'measurementID':$scope.measurementID,
+                                                   'measurementID':$scope.measurement.id,
                                                    'experimentID':$scope.objects[i].experimentID,
-                                                   'data':response[i]});
-                    console.log({'username':$scope.username,'token':$scope.token,'personID':$scope.person.personID,'measurementID':$scope.measurementID,'experimentID':$scope.objects[i].experimentID,'data':response[i]})
+                                                   'data':response[i]
+                                                   //'data':[{'id':0, values:["email@email.cz"]}]
+                                                });
+                    console.log({'username':$scope.username,'token':$scope.token,'personID':$scope.person.personID,'measurementID':$scope.measurement.id,'experimentID':$scope.objects[i].experimentID,'data':[{'id':0, values:["email@email.cz"]}]})
                 }
 
                 socket.on('info', function(msg){

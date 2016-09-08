@@ -1,9 +1,9 @@
 <ion-view title="Měření" id="experiment" style="background-color:#FFFFFF;" class=" ">
     <ion-content padding="true" class="has-header">
-    <h3 align="center">{{institution}}</h3>
-    <p align="center">{{town}}, {{street}} {{number}}</p>
-    <p align="center">Start: {{begin}}</p>
-    <p align="center">End: {{end}}</p>
+    <h3 align="center">{{measurement.institution}}</h3>
+    <p align="center">{{measurement.town}}, {{measurement.street}} {{measurement.number}}</p>
+    <p align="center">Start: {{measurement.begin}}</p>
+    <p align="center">End: {{measurement.end}}</p>
     <p align="center">User: {{username}}</p>
     <label class="item item-input">
         <span class="input-label">ID</span>
@@ -17,7 +17,7 @@
     <ion-list>        
         <ion-item ng-repeat-start="mereni in objects" style="display:none;"></ion-item>
         
-        <h4  align="center">{{mereni.experimentID}} {{mereni.experimentName}}</h4>
+        <h4  align="center">{{mereni.experimentName}}</h4>
         <ion-list>        
             <ion-item ng-repeat-start="dotaznik in mereni.scheme" style="display:none;"></ion-item>
             
