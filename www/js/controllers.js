@@ -1,6 +1,6 @@
 angular.module('app.controllers', [])
 
-.controller('loginCtrl', function($scope, $state, socket, $ionicPopup) {
+.controller('loginCtrl', function($scope, $state, $http, $ionicPopup) {
     $scope.user = {};
     //smucrz@students.zcu.cz
     //a3tKe
@@ -11,15 +11,16 @@ angular.module('app.controllers', [])
         window.localStorage.setItem("username", $scope.user.username);
         window.localStorage.setItem("password", $scope.user.password);
 
-        socket.emit('login',{'username':$scope.user.username,
-                             'password':$scope.user.password});
-console.log({'username':$scope.user.username,
-                             'password':$scope.user.password});
-        socket.on('token', function(msg){
-            var socketData = JSON.parse(msg);
+        $http.post("url login", {'username':$scope.user.username,
+                                 'password':$scope.user.password})
+        console.log({'username':$scope.user.username, 'password':$scope.user.password});
+        
+        $http.get("url token").then(function(response){
+            var socketData = response;
             console.log(socketData);
             if (socketData.username == window.localStorage.getItem("username")){
                 window.localStorage.setItem("token", socketData.token);
+                window.localStorage.setItem("measurement_array", JSON.stringify(socketData.data))
 
                 console.log("received token");
                 console.log(socketData.token);
@@ -27,13 +28,6 @@ console.log({'username':$scope.user.username,
                 $state.go('menu.experimentList')
             }
         });
-
-      /*  socket.on('error', function(msg){
-            var alertPopup = $ionicPopup.alert({
-              title: 'Špatné jméno nebo heslo',
-              template: 'Zkuste se přihlásit znovu',
-            });
-        })*/
     };
  
     $scope.logout = function() {
@@ -43,22 +37,18 @@ console.log({'username':$scope.user.username,
 })
 
 
-.controller('experimentListCtrl', function($scope, $state, $ionicLoading, LoadJSON, socket) {
+.controller('experimentListCtrl', function($scope, $state, $ionicLoading, $http) {
 
 
     $scope.$on('$ionicView.beforeEnter', function(){
-
-        socket.on('measurement array', function(msg){         
-            var socketData = JSON.parse(msg);
-            console.log("received measurement array");
-            console.log(socketData);
-            if (socketData.username == window.localStorage.getItem("username")){
-                $scope.experiments = socketData.data;
-                if ($scope.experiments.length == 1){
-                    $scope.showExperiment($scope.experiments[0]);
-                }
-            }
-        })
+        
+        var socketData = JSON.parse(window.localStorage.getItem("measurement_array"));
+        console.log("received measurement array");
+        console.log(socketData);
+        $scope.experiments = socketData;
+        if ($scope.experiments.length == 1){
+            $scope.showExperiment($scope.experiments[0]);
+        }
 
     });
 
@@ -69,7 +59,7 @@ console.log({'username':$scope.user.username,
         $scope.token = window.localStorage.getItem("token");
         $scope.username = window.localStorage.getItem("username")
 
-        socket.emit('measurement id',{'username':$scope.username,
+        $http.post("url measurement id",{'username':$scope.username,
                                         'token':$scope.token,
                                         'measurementID':measurement.id}); 
         $state.go('menu.experiment');
@@ -77,7 +67,7 @@ console.log({'username':$scope.user.username,
 
 })
 
-.controller('experimentCtrl', function($scope, $cordovaBarcodeScanner, $ionicPopup, $ionicLoading, LoadJSON, socket) {
+.controller('experimentCtrl', function($scope, $cordovaBarcodeScanner, $ionicPopup, $ionicLoading, $http) {
 
     $scope.objects = [];
     $scope.person = {};
@@ -88,9 +78,9 @@ console.log({'username':$scope.user.username,
         $scope.token = window.localStorage.getItem("token"); 
         $scope.username = window.localStorage.getItem("username");
 
-        socket.on('form scheme to mobile device', function(msg){
+        $http.get("url form scheme to mobile device").then(function(response){
             console.log("received scheme");
-            var socketData = JSON.parse(msg);
+            var socketData = response;
             console.log(socketData);
             for (var i = 0; i < socketData.length; i++){
                 if (socketData[i].username == window.localStorage.getItem("username")){
@@ -137,7 +127,7 @@ console.log({'username':$scope.user.username,
                 } 
 
                 for(var i = 0; i < response.length; i++){
-                    socket.emit('data to server',{'username':$scope.username,
+                    $http.post("url data to server",{'username':$scope.username,
                                                    'token':$scope.token,
                                                    'personID':$scope.person.personID,
                                                    'measurementID':$scope.measurement.id,
@@ -148,9 +138,9 @@ console.log({'username':$scope.user.username,
                     console.log({'username':$scope.username,'token':$scope.token,'personID':$scope.person.personID,'measurementID':$scope.measurement.id,'experimentID':$scope.objects[i].experimentID,'data':[{'id':0, values:["email@email.cz"]}]})
                 }
 
-                socket.on('info', function(msg){
+                $http.get("url info").then(function(response){
                     $scope.info = {};
-                    var socketData = JSON.parse(msg);
+                    var socketData = response;
                     console.log(socketData);
                     $scope.info.type = socketData.type;
                     $scope.info.message = socketData.message;  
@@ -173,17 +163,15 @@ console.log({'username':$scope.user.username,
 })
 
 
-.controller('form_motivationCtrl', function($scope, $cordovaBarcodeScanner, $ionicPopup, $ionicLoading, LoadJSON, socket) {
+.controller('form_motivationCtrl', function($scope, $cordovaBarcodeScanner, $ionicPopup, $ionicLoading, $http) {
   
     $scope.objects = [];
     $scope.person = {};   
     var dataSource = 'data/motivJSON.json';
 
     $scope.$on('$ionicView.beforeEnter', function(){
-        //socket.on('motivational form', function(msg){
-        // $scope.objects = msg;
-        //})
-        LoadJSON.getJSON(dataSource).then(function(response){
+
+        $http.get('data/motivJSON.json').then(function(response){
             $scope.objects = response.data;
         }).catch(function(response){
             
@@ -211,7 +199,7 @@ console.log({'username':$scope.user.username,
         confirmPopup.then(function(res) {
             if(res) {
 
-                socket.emit('motivation',{'username':$scope.username,
+                $http.post('motivation',{'username':$scope.username,
                                           'token':$scope.token,
                                           'personID':$scope.person.personID,
                                           'form':objects});

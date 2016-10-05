@@ -8,14 +8,6 @@ angular.module('app.services', [])
 
 }])
 
-.factory('LoadJSON', function($http) {
-    return {
-        getJSON: function(dataSource) {
-            return $http.get(dataSource);
-        },
-    }
-})
-
 .factory('socket',function(socketFactory){
     var myIoSocket = io.connect('http://147.228.63.49:8080/mobile');
     //var myIoSocket = io.connect('http://147.228.63.49:8080/app.fcgi/m');
