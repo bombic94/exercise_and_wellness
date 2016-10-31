@@ -7,23 +7,23 @@ angular.module('app.controllers', [])
 
     //kraft@students.zcu.cz
     //utBK8
+
     $scope.login = function() {
         window.localStorage.setItem("username", $scope.user.username);
-        window.localStorage.setItem("password", $scope.user.password);
+        window.localStorage.setItem("password", $scope.user.password);       
 
-        $http.post("url login", {'username':$scope.user.username,
-                                 'password':$scope.user.password})
-        console.log({'username':$scope.user.username, 'password':$scope.user.password});
-        
-        $http.get("url token").then(function(response){
-            var socketData = response;
-            console.log(socketData);
-            if (socketData.username == window.localStorage.getItem("username")){
-                window.localStorage.setItem("token", socketData.token);
-                window.localStorage.setItem("measurement_array", JSON.stringify(socketData.data))
+        var url = 'http://147.228.63.49:80/app/mobile-services/login';
+        var data = {'client_username': 'smucrz@students.zcu.cz', 'client_passwd': 'a3tKe'};
+
+        $http.post(url, data).then(function(response){
+            var myData = response;
+            console.log(myData);
+            if (myData.username == window.localStorage.getItem("username")){
+                window.localStorage.setItem("token", myData.token);
+                window.localStorage.setItem("measurement_array", JSON.stringify(myData.data))
 
                 console.log("received token");
-                console.log(socketData.token);
+                console.log(myData.token);
 
                 $state.go('menu.experimentList')
             }
@@ -42,10 +42,10 @@ angular.module('app.controllers', [])
 
     $scope.$on('$ionicView.beforeEnter', function(){
         
-        var socketData = JSON.parse(window.localStorage.getItem("measurement_array"));
+        var myData = JSON.parse(window.localStorage.getItem("measurement_array"));
         console.log("received measurement array");
-        console.log(socketData);
-        $scope.experiments = socketData;
+        console.log(myData);
+        $scope.experiments = myData;
         if ($scope.experiments.length == 1){
             $scope.showExperiment($scope.experiments[0]);
         }
@@ -59,9 +59,12 @@ angular.module('app.controllers', [])
         $scope.token = window.localStorage.getItem("token");
         $scope.username = window.localStorage.getItem("username")
 
-        $http.post("url measurement id",{'username':$scope.username,
-                                        'token':$scope.token,
-                                        'measurementID':measurement.id}); 
+        var url = '';
+        var data = {'username':$scope.username, 'token':$scope.token, 'measurementID':measurement.id};
+
+        $http.post(url, data).then(function(response){
+
+        }); 
         $state.go('menu.experiment');
     };
 
@@ -78,7 +81,9 @@ angular.module('app.controllers', [])
         $scope.token = window.localStorage.getItem("token"); 
         $scope.username = window.localStorage.getItem("username");
 
-        $http.get("url form scheme to mobile device").then(function(response){
+        var url = ''
+        
+        $http.get(url).then(function(response){
             console.log("received scheme");
             var socketData = response;
             console.log(socketData);
