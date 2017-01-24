@@ -3,7 +3,7 @@ angular.module('app.controllers', [])
 .controller('loginCtrl', function($scope, $state, $http, $ionicPopup) {
     $scope.user = {};
     //smucrz@students.zcu.cz
-    //a3tKe
+    //mmm
 
     //kraft@students.zcu.cz
     //utBK8
@@ -13,19 +13,27 @@ angular.module('app.controllers', [])
         window.localStorage.setItem("password", $scope.user.password);       
 
         var url = 'http://147.228.63.49:80/app/mobile-services/login';
-        var data = {'client_username': 'smucrz@students.zcu.cz', 'client_passwd': 'a3tKe'};
-
-        $http.post(url, data).then(function(response){
+        var data = {'client_username': $scope.user.username, 'client_passwd': $scope.user.password};
+        $http.post(url, data)
+        .then(function(response){
             var myData = response;
             console.log(myData);
-            if (myData.username == window.localStorage.getItem("username")){
-                window.localStorage.setItem("token", myData.token);
-                window.localStorage.setItem("measurement_array", JSON.stringify(myData.data))
+            
+            if (myData.data == 'authorization failed'){
+                var alertPopup = $ionicPopup.alert({
+                    title: 'Chyba',
+                    template: 'Neúspěšné přihlášení'
+                });
+                $scope.user = {};
+            }
+            else {
+                window.localStorage.setItem("token", myData.data.token);
+                window.localStorage.setItem("measurement_array", JSON.stringify(myData.data.data))
 
                 console.log("received token");
-                console.log(myData.token);
+                console.log(myData.data.token);
 
-                $state.go('menu.experimentList')
+                $state.go('menu.experimentList');
             }
         });
     };
@@ -46,9 +54,9 @@ angular.module('app.controllers', [])
         console.log("received measurement array");
         console.log(myData);
         $scope.experiments = myData;
-        if ($scope.experiments.length == 1){
-            $scope.showExperiment($scope.experiments[0]);
-        }
+        //if ($scope.experiments.length == 1){
+         //   $scope.showExperiment($scope.experiments[0]);
+        //}
 
     });
 
@@ -57,15 +65,20 @@ angular.module('app.controllers', [])
         window.localStorage.setItem("measurement", JSON.stringify(measurement))
           
         $scope.token = window.localStorage.getItem("token");
-        $scope.username = window.localStorage.getItem("username")
+        $scope.username = window.localStorage.getItem("username");
 
-        var url = '';
-        var data = {'username':$scope.username, 'token':$scope.token, 'measurementID':measurement.id};
-
+        var url = 'http://147.228.63.49:80/app/mobile-services/scheme';
+        var data = {'client_username': $scope.username, 'token': $scope.token, 'measurementID': measurement.id};
+        console.log(data);
         $http.post(url, data).then(function(response){
-
+            var myData = response;
+            console.log("received scheme"); 
+            console.log(myData);
+            
+            window.localStorage.setItem("measurement_scheme", JSON.stringify(myData.data))
+            $state.go('menu.experiment');   
         }); 
-        $state.go('menu.experiment');
+        
     };
 
 })
@@ -76,23 +89,21 @@ angular.module('app.controllers', [])
     $scope.person = {};
 
     $scope.$on('$ionicView.beforeEnter', function(){
-        
+        var myData = JSON.parse(window.localStorage.getItem("measurement_scheme"));
         $scope.measurement = JSON.parse(window.localStorage.getItem("measurement"));
         $scope.token = window.localStorage.getItem("token"); 
         $scope.username = window.localStorage.getItem("username");
-
-        var url = ''
         
-        $http.get(url).then(function(response){
-            console.log("received scheme");
-            var socketData = response;
-            console.log(socketData);
-            for (var i = 0; i < socketData.length; i++){
-                if (socketData[i].username == window.localStorage.getItem("username")){
-                    $scope.objects[i] = socketData[i];
+        for (var i = 0; i < myData.length; i++){
+                $scope.objects[i] = myData[i];
+                $scope.objects[i].schema = JSON.parse(myData[i].scheme);
+                for (var j = 0; j < $scope.objects[i].schema.length; j++){
+                    if ($scope.objects[i].schema[j].formType == 'checkbox'){
+                        
+                    }
                 }
-            }
-        })
+        }
+
     });
 
     $scope.scanBarcode = function() {
@@ -112,56 +123,88 @@ angular.module('app.controllers', [])
 
         confirmPopup.then(function(res) {
             if(res) {
-                
+                //creating array empty
                 var response = new Array($scope.objects.length);
                 for (var i = 0; i < $scope.objects.length; i++) {
-                    response[i] = new Array($scope.objects[i].scheme.length);
-                    for (var j = 0; j < $scope.objects[i].scheme.length; j++){
+                    response[i] = new Array($scope.objects[i].schema.length);
+                    for (var j = 0; j < $scope.objects[i].schema.length; j++){
                         response[i][j] = {
-                            id: "",
-                            values: ""
+                            values: {},
+                            id: ""
                         };
+                        if ($scope.objects[i].schema[j].formType == 'checkbox'){
+                            response[i][j].values = new Array(1);
+                            response[i][j].values[0] = new Array(Object.keys($scope.objects[i].schema[j].values).length);
+                        }
+                        else {
+                            response[i][j].values = new Array(Object.keys($scope.objects[i].schema[j].values).length);
+                        }
                     }
                 }
-
+                // filling array with data
                 for (var i = 0; i < $scope.objects.length; i++){
-                    for (var j = 0; j < $scope.objects[i].scheme.length; j++){
-                        response[i][j].id = $scope.objects[i].scheme[j].id;
-                        response[i][j].values = $scope.objects[i].scheme[j].values;
+                    for (var j = 0; j < $scope.objects[i].schema.length; j++){
+                        response[i][j].id = $scope.objects[i].schema[j].id;
+                        for (var k = 0; k < Object.keys($scope.objects[i].schema[j].values).length; k++){         
+                            if ($scope.objects[i].schema[j].formType == 'checkbox'){
+                                response[i][j].values[0][k] = $scope.objects[i].schema[j].values[k];
+                            }
+                            else {
+                                response[i][j].values[k] = $scope.objects[i].schema[j].values[k];
+                            }
+                        }
                     }
                 } 
-
+                // sending to server
                 for(var i = 0; i < response.length; i++){
-                    $http.post("url data to server",{'username':$scope.username,
-                                                   'token':$scope.token,
-                                                   'personID':$scope.person.personID,
-                                                   'measurementID':$scope.measurement.id,
-                                                   'experimentID':$scope.objects[i].experimentID,
-                                                   'data':response[i]
-                                                   //'data':[{'id':0, values:["email@email.cz"]}]
-                                                });
-                    console.log({'username':$scope.username,'token':$scope.token,'personID':$scope.person.personID,'measurementID':$scope.measurement.id,'experimentID':$scope.objects[i].experimentID,'data':[{'id':0, values:["email@email.cz"]}]})
+                    console.log(JSON.stringify({'client_username':$scope.username,
+                            'token':$scope.token,
+                            'personID':$scope.person.personID,
+                            'measurementID':$scope.measurement.id,
+                            'experimentID':$scope.objects[i].experimentID,
+                            'data':response[i]
+                            
+                    }))
+                    console.log(JSON.stringify(response[i]));
+                    $http.post('http://147.228.63.49:80/app/mobile-services/recieve-data',
+                            {'client_username':$scope.username,
+                            'token':$scope.token,
+                            'personID':$scope.person.personID,
+                            'measurementID':$scope.measurement.id,
+                            'experimentID':$scope.objects[i].experimentID,
+                            'data':response[i]
+                            
+                    }).then(function(response){
+                        var myData = response;
+                        console.log(myData);
+                        
+                        if (myData.data == 'id used'){
+                            var alertPopup = $ionicPopup.alert({
+                                title: 'ID uživatele již zaregistrováno',
+                                template: 'Použijte prosím jiné ID'
+                            });
+                            $scope.person.personID = "";
+                        } else if (myData.data == 'id not found'){
+                            var alertPopup = $ionicPopup.alert({
+                                title: 'ID uživatele nenalezeno',
+                                template: 'Použijte prosím jiné ID'
+                            });
+                            $scope.person.personID = "";
+                        }
+                        else {
+                            var alertPopup = $ionicPopup.alert({
+                                title: 'OK',
+                                template: 'Uložení proběhlo v pořádku'
+                            });
+                            var myData = JSON.parse(window.localStorage.getItem("measurement_scheme"));
+                            for (var i = 0; i < myData.length; i++){
+                                $scope.person.personID = "";
+                                $scope.objects[i] = myData[i];
+                                $scope.objects[i].schema = JSON.parse(myData[i].scheme);
+                            } 
+                        }
+                    });
                 }
-
-                $http.get("url info").then(function(response){
-                    $scope.info = {};
-                    var socketData = response;
-                    console.log(socketData);
-                    $scope.info.type = socketData.type;
-                    $scope.info.message = socketData.message;  
-                    console.log(socketData);
-                });
-
-                var alertPopup = $ionicPopup.alert({
-                    title: $scope.info.type,
-                    template: $scope.info.message
-                });
-
-                alertPopup.then(function(res) {
-                
-                });
-            } else {
-            
             }
         });
     };

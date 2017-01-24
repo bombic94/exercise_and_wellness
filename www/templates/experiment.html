@@ -1,4 +1,4 @@
-<ion-view title="Měření" id="experiment" style="background-color:#FFFFFF;" class=" ">
+<ion-view title="Měření" id="experiment" style="background-color:#CECECE;" class=" ">
     <ion-content padding="true" class="has-header">
     <h3 align="center">{{measurement.institution}}</h3>
     <p align="center">{{measurement.town}}, {{measurement.street}} {{measurement.number}}</p>
@@ -9,20 +9,20 @@
         <span class="input-label">ID</span>
         <input type="text" placeholder="" ng-model="person.personID" >
     </label>
-    <button class="text-right button button-block icon icon-left ion-qr-scanner" style="background-color:#E3520F"
+    <button class="button button-positive  button-block icon ion-qr-scanner"
                 ng-click="scanBarcode()">
-            QR
+            Scan Person ID
     </button>
 
     <ion-list>        
         <ion-item ng-repeat-start="mereni in objects" style="display:none;"></ion-item>
         
-        <h4  align="center">{{mereni.experimentName}}</h4>
+        <h4  align="center" style="color:#000000;">{{mereni.experimentName}}</h4>
         <ion-list>        
-            <ion-item ng-repeat-start="dotaznik in mereni.scheme" style="display:none;"></ion-item>
+            <ion-item ng-repeat-start="dotaznik in mereni.schema" style="display:none;"></ion-item>
             
-            <ion-row class="item" style="background-color:#99FF00">
-                <ion-col>{{dotaznik.name}}, ID: {{dotaznik.expID}} &nbsp</ion-col>
+            <ion-row class="item" style="background-color:#0000C0;color:#FFFFFF;font-weight:400;text-align:justify;">
+                <ion-col>{{dotaznik.name}} &nbsp</ion-col>
                 <ion-col ng-if="dotaznik.units != ''">[{{dotaznik.units}}]</ion-col>
                 <ion-col class="assertive" ng-if="dotaznik.required">* &nbsp</ion-col>
                 
@@ -47,19 +47,20 @@
             </label>
 
             <ion-checkbox ng-if="dotaznik.formType == 'checkbox'"
-                ng-repeat="label in dotaznik.formLabels"               
-                ng-model="dotaznik.values[label]"            
+                ng-repeat="label in dotaznik.formLabels"   
+                ng-init="dotaznik.values[$index] = 0"     
+                ng-model="dotaznik.values[$index]"            
                 ng-true-value="1"
                 ng-false-value="0"
-                name="label">
+                name="{{dotaznik.id}}">
                 {{ label }}
             </ion-checkbox>
             
             <ion-radio ng-if="dotaznik.formType == 'radio'"
                 ng-repeat="label in dotaznik.formLabels"
-                ng-value="label"
+                ng-value="$index"
                 ng-model="dotaznik.values[0]"
-                name="label">
+                name="{{dotaznik.id}}">
                 {{ label }}
             </ion-radio>
             
@@ -71,7 +72,7 @@
         <ion-item ng-repeat-end="mereni in objects" style="display:none;"></ion-item>
     </ion-list>
 
-    <button id="form-button1" class=" button button-block " style="background-color:#E3520F" ng-click="showConfirm()">
+    <button id="form-button1" class="button button-positive  button-block icon ion-android-arrow-up" ng-click="showConfirm()">
         Uložit
     </button>
 
