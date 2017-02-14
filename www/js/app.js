@@ -5,7 +5,25 @@
 // the 2nd parameter is an array of 'requires'
 // 'starter.services' is found in services.js
 // 'starter.controllers' is found in controllers.js
-angular.module('app', ['ionic', 'app.controllers', 'app.routes', 'app.services', 'app.directives', 'ngCordova', 'btford.socket-io'])
+angular.module('app', ['ionic', 'app.controllers', 'app.routes', 'app.services', 'app.directives', 'ngCordova', 'btford.socket-io', 'pascalprecht.translate'])
+
+.config(function ($translateProvider) {
+  $translateProvider.translations('en', {
+    LOGIN: 'Login',
+    USERNAME: 'Username',
+    PASSWORD: 'Password',
+    LOG_IN: 'Log in',
+    GET_SECTION: 'Get section'
+  });
+  $translateProvider.translations('cz', {
+    LOGIN: 'Přihlášení',
+    USERNAME: 'Jméno',
+    PASSWORD: 'Heslo',
+    LOG_IN: 'Přihlásit',
+    GET_SECTION: 'Načíst stanoviště'
+  });
+  $translateProvider.preferredLanguage('en');
+})
 
 .run(function($ionicPlatform) {
   $ionicPlatform.ready(function() {

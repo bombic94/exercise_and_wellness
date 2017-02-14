@@ -1,19 +1,27 @@
-<ion-view cache-view="false" title="Login" id="page4" style="background-color:#CECECE;" class=" ">
+<ion-view cache-view="false" title="{{ 'LOGIN' | translate }}" id="page4" style="background-color:#CECECE;" class=" ">
     <ion-content padding="true" class="has-header">
+
+        <button class="button button-clear" ng-click="ChangeLanguage('en')">EN</button>
+        <button class="button button-clear" ng-click="ChangeLanguage('cz')">CZ</button>
+        
         <form id="login-form1" class="list ">
             <ion-list id="login-list1" class=" ">
+                <button class="button button-positive button-clear button-block icon ion-qr-scanner"
+                    ng-click="scanBarcode()">
+                    {{ 'GET_SECTION' | translate }}
+                </button>
                 <label class="item item-input " id="login-input1">
-                    <span class="input-label">Username</span>
+                    <span class="input-label">{{ 'USERNAME' | translate }}</span>
                     <input type="text" placeholder="" ng-model="user.username">
                 </label>
                 <label class="item item-input " id="login-input2">
-                    <span class="input-label">Password</span>
+                    <span class="input-label">{{ 'PASSWORD' | translate }}</span>
                     <input type="password" placeholder="" ng-model="user.password">
                 </label>
             </ion-list>
             <div class="spacer" style="height: 40px;"></div>
             
-            <button id="login-button1" class=" button button-block button-positive" ng-click="login()">Log in</button>
+            <button id="login-button1" class=" button button-block button-positive" ng-click="login()">{{ 'LOG_IN' | translate }}</button>
             <!--button ui-sref="signup" id="login-button2" class=" button button-positive  button-block button-clear ">Or create an account</button-->
         </form>
     </ion-content>

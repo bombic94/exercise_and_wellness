@@ -1,12 +1,28 @@
 angular.module('app.controllers', [])
 
-.controller('loginCtrl', function($scope, $state, $http, $ionicPopup) {
-    $scope.user = {};
-    //smucrz@students.zcu.cz
-    //mmm
+.controller('loginCtrl', function($scope, $cordovaBarcodeScanner, $state, $http, $ionicPopup, $translate) {
 
-    //kraft@students.zcu.cz
-    //utBK8
+    $scope.ChangeLanguage = function(lang){
+		$translate.use(lang);
+	}
+    
+    $scope.$on('$ionicView.beforeEnter', function(){
+        cordova.plugins.diagnostic.getCameraAuthorizationStatus(function(status){
+            if(status === cordova.plugins.diagnostic.permissionStatus.GRANTED){
+                console.log("Camera use is authorized");
+            } else {
+                cordova.plugins.diagnostic.requestCameraAuthorization(function(status){
+                    console.log("Authorization request for camera use was " + (status == cordova.plugins.diagnostic.permissionStatus.GRANTED ? "granted" : "denied"));
+                }, function(error){
+                    console.error(error);
+                });
+            }
+        }, function(error){
+            console.error("The following error occurred: "+error);
+        });
+    });
+
+    $scope.user = {};
 
     $scope.login = function() {
         window.localStorage.setItem("username", $scope.user.username);
@@ -38,10 +54,21 @@ angular.module('app.controllers', [])
         });
     };
  
-    $scope.logout = function() {
-        window.localStorage.clear();
-        $scope.user = {};
+    $scope.scanBarcode = function() {
+        $cordovaBarcodeScanner.scan().then(function(imageData) {
+            $scope.user.username = imageData.text;
+            alert("We got a barcode\n" +
+                "Result: " + imageData.text + "\n" +
+                "Format: " + imageData.format + "\n" +
+                "Cancelled: " + imageData.cancelled);
+        }, function(error) { 
+        });
     };
+
+    //$scope.logout = function() {
+    //    window.localStorage.clear();
+    //    $scope.user = {};
+    //};
 })
 
 
@@ -156,6 +183,10 @@ angular.module('app.controllers', [])
                     }
                 } 
                 // sending to server
+                var ok = 0;
+                var idUsed = 0;
+                var idNotFound = 0;
+
                 for(var i = 0; i < response.length; i++){
                     console.log(JSON.stringify({'client_username':$scope.username,
                             'token':$scope.token,
@@ -179,31 +210,41 @@ angular.module('app.controllers', [])
                         console.log(myData);
                         
                         if (myData.data == 'id used'){
-                            var alertPopup = $ionicPopup.alert({
-                                title: 'ID uživatele již zaregistrováno',
-                                template: 'Použijte prosím jiné ID'
-                            });
+                            idUsed++;
                             $scope.person.personID = "";
-                        } else if (myData.data == 'id not found'){
-                            var alertPopup = $ionicPopup.alert({
-                                title: 'ID uživatele nenalezeno',
-                                template: 'Použijte prosím jiné ID'
-                            });
+                        } else if (myData.data == 'id not found'){                            
+                            idNotFound++;
                             $scope.person.personID = "";
                         }
                         else {
-                            var alertPopup = $ionicPopup.alert({
-                                title: 'OK',
-                                template: 'Uložení proběhlo v pořádku'
-                            });
+                            //clean up
                             var myData = JSON.parse(window.localStorage.getItem("measurement_scheme"));
-                            for (var i = 0; i < myData.length; i++){
+                            for (var i = 0; i < myData.length; i++){ 
                                 $scope.person.personID = "";
                                 $scope.objects[i] = myData[i];
                                 $scope.objects[i].schema = JSON.parse(myData[i].scheme);
                             } 
                         }
                     });
+                    //popup based on response
+                    if (i = response.length - 1){
+                        if (idUsed > 0){
+                            var alertPopup = $ionicPopup.alert({
+                                title: 'ID uživatele již zaregistrováno',
+                                template: 'Použijte prosím jiné ID'
+                            });
+                        } else if (idNotFound > 0){
+                            var alertPopup = $ionicPopup.alert({
+                                title: 'ID uživatele nenalezeno',
+                                template: 'Použijte prosím jiné ID'
+                            });
+                        } else {
+                            var alertPopup = $ionicPopup.alert({
+                                title: 'OK',
+                                template: 'Uložení proběhlo v pořádku'
+                            });
+                        }
+                    }
                 }
             }
         });
