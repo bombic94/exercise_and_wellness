@@ -5,7 +5,7 @@ angular.module('app.controllers', [])
     $scope.ChangeLanguage = function(lang){
 		$translate.use(lang);
 	}
-    
+
     $scope.$on('$ionicView.beforeEnter', function(){
         cordova.plugins.diagnostic.getCameraAuthorizationStatus(function(status){
             if(status === cordova.plugins.diagnostic.permissionStatus.GRANTED){
