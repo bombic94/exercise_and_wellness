@@ -13,14 +13,18 @@ angular.module('app', ['ionic', 'app.controllers', 'app.routes', 'app.services',
     USERNAME: 'Username',
     PASSWORD: 'Password',
     LOG_IN: 'Log in',
-    GET_SECTION: 'Get section'
+    GET_SECTION: 'Get section',
+
+    LANGUAGE: 'Language'
   });
   $translateProvider.translations('cz', {
     LOGIN: 'Přihlášení',
     USERNAME: 'Jméno',
     PASSWORD: 'Heslo',
     LOG_IN: 'Přihlásit',
-    GET_SECTION: 'Načíst stanoviště'
+    GET_SECTION: 'Načíst stanoviště',
+
+    LANGUAGE: 'Jazyk'
   });
   $translateProvider.preferredLanguage('en');
 })

@@ -55,6 +55,26 @@ angular.module('app.routes', [])
       }
     }
   })
+
+  .state('menu.settings', {
+    url: '/settings',
+    views: {
+      'side-menu': {
+        templateUrl: 'templates/settings.html',
+        controller: 'settingsCtrl'
+      }
+    }
+  })
+
+  .state('menu.results', {
+    url: '/results',
+    views: {
+      'side-menu': {
+        templateUrl: 'templates/results.html',
+        controller: 'resultsCtrl'
+      }
+    }
+  })
   
   .state('menu.user_info', {
     url: '/info',

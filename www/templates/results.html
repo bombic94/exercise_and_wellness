@@ -1,7 +1,6 @@
-<ion-view title="Měření" id="experiment" style="background-color:#CECECE;" class=" ">
+<ion-view title="Výsledky" id="results" style="background-color:#CECECE;" class=" ">
     <ion-content padding="true" class="has-header">
-    <h3 align="center">{{measurement.institution}}</h3>
-    <p align="center">{{measurement.town}}, {{measurement.street}} {{measurement.number}}</p>
+    <h3 align="center">Výsledky</h3>
     <label class="item item-input">
         <span class="input-label">ID</span>
         <input type="text" placeholder="" ng-model="person.personID" >
@@ -11,7 +10,10 @@
             Scan Person ID
     </button>
 
-    <ion-list>        
+    <button id="form-button1" class="button button-positive  button-block icon ion-android-arrow-up" ng-click="showConfirm()">
+        Zobrazit výsledky
+    </button>
+    <!--ion-list>        
         <ion-item ng-repeat-start="mereni in objects" style="display:none;"></ion-item>
         
         <h4  align="center" style="color:#000000;">{{mereni.experimentName}}</h4>
@@ -67,11 +69,7 @@
         </ion-list>
         
         <ion-item ng-repeat-end="mereni in objects" style="display:none;"></ion-item>
-    </ion-list>
-
-    <button id="form-button1" class="button button-positive  button-block icon ion-android-arrow-up" ng-click="showConfirm()">
-        Uložit
-    </button>
+    </ion-list-->
 
     </ion-content>
 </ion-view>
