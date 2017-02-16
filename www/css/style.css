@@ -5,3 +5,14 @@
   -o-background-size: cover;
   background-size: cover;
 }
+
+.loading{
+  background-color: rgba(0, 0, 0, 0) !important;
+}
+
+.spinner svg {
+  width: 56px;
+  height: 56px;
+  stroke: #000;
+  fill: #000;
+}

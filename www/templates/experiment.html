@@ -1,4 +1,4 @@
-<ion-view title="Měření" id="experiment" style="background-color:#CECECE;" class=" ">
+<ion-view title="{{ 'MEASUREMENT' | translate }}" id="experiment" style="background-color:#CECECE;" class=" ">
     <ion-content padding="true" class="has-header">
     <h3 align="center">{{measurement.institution}}</h3>
     <p align="center">{{measurement.town}}, {{measurement.street}} {{measurement.number}}</p>
@@ -8,7 +8,7 @@
     </label>
     <button class="button button-positive  button-block icon ion-qr-scanner"
                 ng-click="scanBarcode()">
-            Scan Person ID
+            {{ 'SCAN_ID' | translate }}
     </button>
 
     <ion-list>        
@@ -23,12 +23,12 @@
                 <ion-col ng-if="dotaznik.units != ''">[{{dotaznik.units}}]</ion-col>
                 <ion-col class="assertive" ng-if="dotaznik.required">* &nbsp</ion-col>
                 
-                <ion-col ng-if="dotaznik.formType == 'file'">
+                <!--ion-col ng-if="dotaznik.formType == 'file'">
                     <button class="text-right button button-small button-positive icon icon-left ion-arrow-round-up" 
                             ng-click="">
                         Nahrát soubor
                     </button>
-                </ion-col>
+                </ion-col-->
             </ion-row>
 
             <label class="item item-input" ng-if="dotaznik.formType == 'integer'">
@@ -70,7 +70,7 @@
     </ion-list>
 
     <button id="form-button1" class="button button-positive  button-block icon ion-android-arrow-up" ng-click="showConfirm()">
-        Uložit
+        {{ 'SAVE' | translate }}
     </button>
 
     </ion-content>

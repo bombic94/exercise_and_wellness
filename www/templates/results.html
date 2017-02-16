@@ -1,17 +1,16 @@
-<ion-view title="Výsledky" id="results" style="background-color:#CECECE;" class=" ">
+<ion-view title="{{ 'RESULTS' | translate }}" id="results" style="background-color:#CECECE;" class=" ">
     <ion-content padding="true" class="has-header">
-    <h3 align="center">Výsledky</h3>
     <label class="item item-input">
         <span class="input-label">ID</span>
         <input type="text" placeholder="" ng-model="person.personID" >
     </label>
     <button class="button button-positive  button-block icon ion-qr-scanner"
                 ng-click="scanBarcode()">
-            Scan Person ID
+            {{ 'SCAN_ID' | translate }}
     </button>
 
     <button id="form-button1" class="button button-positive  button-block icon ion-android-arrow-up" ng-click="showConfirm()">
-        Zobrazit výsledky
+        {{ 'SHOW_RESULTS' | translate }}
     </button>
     <!--ion-list>        
         <ion-item ng-repeat-start="mereni in objects" style="display:none;"></ion-item>

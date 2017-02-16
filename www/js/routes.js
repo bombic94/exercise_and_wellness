@@ -46,16 +46,6 @@ angular.module('app.routes', [])
     }
   })
 
-  .state('menu.form_motivation', {
-    url: '/form',
-    views: {
-      'side-menu': {
-        templateUrl: 'templates/form_motivation.html',
-        controller: 'form_motivationCtrl'
-      }
-    }
-  })
-
   .state('menu.settings', {
     url: '/settings',
     views: {
@@ -72,16 +62,6 @@ angular.module('app.routes', [])
       'side-menu': {
         templateUrl: 'templates/results.html',
         controller: 'resultsCtrl'
-      }
-    }
-  })
-  
-  .state('menu.user_info', {
-    url: '/info',
-    views: {
-      'side-menu': {
-        templateUrl: 'templates/user_info.html',
-        controller: 'user_infoCtrl'
       }
     }
   })

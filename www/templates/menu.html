@@ -10,26 +10,20 @@
     </ion-side-menu-content>
     <ion-side-menu side="left" id="side-menu">
         <ion-header-bar class="bar-stable">
-            <div class="title">Menu</div>
+            <div class="title">{{ 'MENU' | translate }}</div>
         </ion-header-bar>
         <ion-content padding="false" class="side-menu-left has-header">
             <ion-list id="menu-list" class=" ">
-                <ion-item id="menu-list-item1" ui-sref="menu.experimentList" menu-close="" class =" ">Měření
+                <ion-item id="menu-list-item1" ui-sref="menu.experimentList" menu-close="" class =" ">{{ 'MEASURE_LIST' | translate }}
                 <i class="icon ion-erlenmeyer-flask"></i>
                 </ion-item>
-                <!--ion-item id="menu-list-item2" ui-sref="menu.form_motivation" menu-close="" class="">Formulář motivace
-                <i class="icon ion-clipboard"></i>
-                </ion-item>
-                <ion-item id="menu-list-item3" ui-sref="menu.user_info" menu-close="" class=" ">Informace o uživateli
-                <i class="icon ion-android-checkbox-outline"></i>
-                </ion-item-->
-                <ion-item id="menu-list-item6" ui-sref="menu.results" menu-close="" class=" ">Výsledky
+                <ion-item id="menu-list-item6" ui-sref="menu.results" menu-close="" class=" ">{{ 'RESULTS' | translate }}
                 <i class="icon ion-ribbon-a"></i>
                 </ion-item>  
-                <ion-item id="menu-list-item5" ui-sref="menu.settings" menu-close="" class=" ">Nastavení
+                <ion-item id="menu-list-item5" ui-sref="menu.settings" menu-close="" class=" ">{{ 'SETTINGS' | translate }}
                 <i class="icon ion-android-options"></i>
                 </ion-item>    
-                <ion-item id="menu-list-item4" ui-sref="login" menu-close="" class=" ">Odhlásit se
+                <ion-item id="menu-list-item4" ui-sref="login" menu-close="" class=" ">{{ 'LOGOUT' | translate }}
                 <i class="icon ion-android-exit"></i>
                 </ion-item>
             </ion-list>

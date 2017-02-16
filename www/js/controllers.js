@@ -1,10 +1,8 @@
 angular.module('app.controllers', [])
 
-.controller('loginCtrl', function($scope, $cordovaBarcodeScanner, $state, $http, $ionicPopup, $translate) {
+.controller('loginCtrl', function($scope, $cordovaBarcodeScanner, $state, $http, $ionicPopup, $translate, $ionicLoading, $filter) {
 
-    $scope.ChangeLanguage = function(lang){
-		$translate.use(lang);
-	}
+    $scope.user = {};
 
     $scope.$on('$ionicView.enter', function(){
         cordova.plugins.diagnostic.getCameraAuthorizationStatus(function(status){
@@ -22,23 +20,50 @@ angular.module('app.controllers', [])
         });
     });
 
-    $scope.user = {};
+    $scope.ChangeLanguage = function(lang){
+		$translate.use(lang);
+	}
+
+    $scope.scanBarcode = function() {
+        $cordovaBarcodeScanner.scan().then(function(imageData) {
+            $scope.user.username = imageData.text;
+        },
+        function(error) { 
+            var alertPopup = $ionicPopup.alert({
+                title: $filter('translate')('ERROR'),
+                template: "{{ 'QR_FAIL' | translate }}"
+            });
+        });
+    };
 
     $scope.login = function() {
         window.localStorage.setItem("username", $scope.user.username);
         window.localStorage.setItem("password", $scope.user.password);       
 
         var url = 'http://147.228.63.49:80/app/mobile-services/login';
-        var data = {'client_username': $scope.user.username, 'client_passwd': $scope.user.password};
+        var data = {'client_username': $scope.user.username, 
+                    'client_passwd': $scope.user.password
+                   };
+
+
+        $ionicLoading.show({
+            //noBackdrop: true,
+            template: '<ion-spinner icon="circles"></ion-spinner>',
+        });
+
+        console.log(data);
         $http.post(url, data)
         .then(function(response){
+
+            $ionicLoading.hide();
+
             var myData = response;
             console.log(myData);
             
             if (myData.data == 'authorization failed'){
                 var alertPopup = $ionicPopup.alert({
-                    title: 'Chyba',
-                    template: 'Neúspěšné přihlášení'
+                    title: $filter('translate')('ERROR'),
+                    template: "{{ 'AUTH_FAIL' | translate }}"
                 });
                 $scope.user = {};
             }
@@ -51,26 +76,20 @@ angular.module('app.controllers', [])
 
                 $state.go('menu.experimentList');
             }
-        }, function(error) { 
-            console.log(error);
-        });
-    };
- 
-    $scope.scanBarcode = function() {
-        $cordovaBarcodeScanner.scan().then(function(imageData) {
-            $scope.user.username = imageData.text;
-        }, function(error) { 
-        });
-    };
+        }, function(error){
 
-    //$scope.logout = function() {
-    //    window.localStorage.clear();
-    //    $scope.user = {};
-    //};
+            $ionicLoading.hide();
+
+            var alertPopup = $ionicPopup.alert({
+                title: $filter('translate')('ERROR'),
+                template: "{{ 'CONNECT_FAIL' | translate }}"
+            });
+        });
+    };
 })
 
 
-.controller('experimentListCtrl', function($scope, $state, $ionicLoading, $http) {
+.controller('experimentListCtrl', function($scope, $state, $http, $translate, $ionicLoading, $filter) {
 
 
     $scope.$on('$ionicView.beforeEnter', function(){
@@ -85,7 +104,6 @@ angular.module('app.controllers', [])
 
     });
 
-
     $scope.showExperiment = function(measurement) {
         window.localStorage.setItem("measurement", JSON.stringify(measurement))
           
@@ -93,22 +111,42 @@ angular.module('app.controllers', [])
         $scope.username = window.localStorage.getItem("username");
 
         var url = 'http://147.228.63.49:80/app/mobile-services/scheme';
-        var data = {'client_username': $scope.username, 'token': $scope.token, 'measurementID': measurement.id};
+        var data = {'client_username': $scope.username, 
+                    'token': $scope.token, 
+                    'measurementID': measurement.id
+                   };
+
+        $ionicLoading.show({
+            template: '<ion-spinner icon="circles"></ion-spinner>',
+        });
+
         console.log(data);
         $http.post(url, data).then(function(response){
+
+            $ionicLoading.hide();
+
             var myData = response;
             console.log("received scheme"); 
             console.log(myData);
             
             window.localStorage.setItem("measurement_scheme", JSON.stringify(myData.data))
             $state.go('menu.experiment');   
+        },
+        function(error){
+
+            $ionicLoading.hide();
+
+            var alertPopup = $ionicPopup.alert({
+                title: $filter('translate')('ERROR'),
+                template: "{{ 'CONNECT_FAIL' | translate }}"
+            });
         }); 
         
     };
 
 })
 
-.controller('experimentCtrl', function($scope, $cordovaBarcodeScanner, $ionicPopup, $ionicLoading, $http) {
+.controller('experimentCtrl', function($scope, $cordovaBarcodeScanner, $ionicPopup, $http, $translate, $ionicLoading, $filter) {
 
     $scope.objects = [];
     $scope.person = {};
@@ -120,13 +158,8 @@ angular.module('app.controllers', [])
         $scope.username = window.localStorage.getItem("username");
         
         for (var i = 0; i < myData.length; i++){
-                $scope.objects[i] = myData[i];
-                $scope.objects[i].schema = JSON.parse(myData[i].scheme);
-                for (var j = 0; j < $scope.objects[i].schema.length; j++){
-                    if ($scope.objects[i].schema[j].formType == 'checkbox'){
-                        
-                    }
-                }
+            $scope.objects[i] = myData[i];
+            $scope.objects[i].schema = JSON.parse(myData[i].scheme);
         }
 
     });
@@ -136,18 +169,28 @@ angular.module('app.controllers', [])
             var str = imageData.text;
             str = str.substring(str.lastIndexOf("/") + 1);
             $scope.person.personID = str;
-        }, function(error) { 
+        },
+        function(error) { 
+            var alertPopup = $ionicPopup.alert({
+                title: $filter('translate')('ERROR'),
+                template: "{{ 'QR_FAIL' | translate }}"
+            });
         });
     };
 
     $scope.showConfirm = function() {
         var confirmPopup = $ionicPopup.confirm({
-            title: 'Uložit experiment',
-            template: 'Opravdu chcete uložit změřené hodnoty?'
+            title: $filter('translate')('SAVE_CONFIRM1'),
+            template: "{{ 'SAVE_CONFIRM2' | translate }}"
         });
 
         confirmPopup.then(function(res) {
             if(res) {
+
+                $ionicLoading.show({
+                    template: '<ion-spinner icon="circles"></ion-spinner>',
+                });
+
                 //creating array empty
                 var response = new Array($scope.objects.length);
                 for (var i = 0; i < $scope.objects.length; i++) {
@@ -180,53 +223,40 @@ angular.module('app.controllers', [])
                         }
                     }
                 } 
-                // sending to server
-                var ok = 0;
-                var idUsed = 0;
-                var idNotFound = 0;
 
                 for(var i = 0; i < response.length; i++){
-                    console.log(JSON.stringify({'client_username':$scope.username,
-                            'token':$scope.token,
-                            'personID':$scope.person.personID,
-                            'measurementID':$scope.measurement.id,
-                            'experimentID':$scope.objects[i].experimentID,
-                            'data':response[i]
+                    var url = 'http://147.228.63.49:80/app/mobile-services/recieve-data';
+                    var data = {'client_username':$scope.username,
+                                'token':$scope.token,
+                                'personID':$scope.person.personID,
+                                'measurementID':$scope.measurement.id,
+                                'experimentID':$scope.objects[i].experimentID,
+                                'data':response[i]    
+                               };
                             
-                    }))
-                    console.log(JSON.stringify(response[i]));
-                    $http.post('http://147.228.63.49:80/app/mobile-services/recieve-data',
-                            {'client_username':$scope.username,
-                            'token':$scope.token,
-                            'personID':$scope.person.personID,
-                            'measurementID':$scope.measurement.id,
-                            'experimentID':$scope.objects[i].experimentID,
-                            'data':response[i]
-                            
-                    }).then(function(response){
+                    console.log(data);
+                    $http.post(url, data).then(function(response){
+                        
                         var myData = response;
                         console.log(myData);
                         
                         if (myData.data == 'Registration failed. Use another ID!'){
-                            //idUsed++;
                             var alertPopup = $ionicPopup.alert({
-                                title: 'ID uživatele již zaregistrováno',
-                                template: 'Použijte prosím jiné ID'
+                                title: $filter('translate')('REG_FAIL1'),
+                                template: "{{ 'REG_FAIL2' | translate }}"
                             });
                             $scope.person.personID = "";
                         } else if (myData.data == 'ID not found.'){                            
-                            //idNotFound++;
-                            
                             var alertPopup = $ionicPopup.alert({
-                                title: 'ID uživatele nenalezeno',
-                                template: 'Použijte prosím jiné ID'
+                                title: $filter('translate')('SAVE_FAIL1'),
+                                template: "{{ 'SAVE_FAIL2' | translate }}"
                             });
                             $scope.person.personID = "";
                         }
                         else {
                             var alertPopup = $ionicPopup.alert({
-                                title: 'OK',
-                                template: 'Uložení proběhlo v pořádku'
+                                title: $filter('translate')('SAVE_OK1'),
+                                template: "{{ 'SAVE_OK2' | translate }}"
                             });
                             //clean up
                             var myData = JSON.parse(window.localStorage.getItem("measurement_scheme"));
@@ -234,190 +264,104 @@ angular.module('app.controllers', [])
                             for (var i = 0; i < myData.length; i++){ 
                                 $scope.person.personID = "";
                                 $scope.objects[i] = myData[i];
-                                $scope.objects[i].schema = JSON.parse(myData[i].scheme);
-                                
+                                $scope.objects[i].schema = JSON.parse(myData[i].scheme);    
                             } 
                         }
-                    });/*.finally(function(){
+                    }, 
+                    function(error){
 
-                        if (idUsed > 0){
-                            var alertPopup = $ionicPopup.alert({
-                                title: 'ID uživatele již zaregistrováno',
-                                template: 'Použijte prosím jiné ID'
-                            });
-                        } else if (idNotFound > 0){
-                            var alertPopup = $ionicPopup.alert({
-                                title: 'ID uživatele nenalezeno',
-                                template: 'Použijte prosím jiné ID'
-                            });
-                        } else {
-                            var alertPopup = $ionicPopup.alert({
-                                title: 'OK',
-                                template: 'Uložení proběhlo v pořádku'
-                            });
-                        }
+                        $ionicLoading.hide();
+
+                        var alertPopup = $ionicPopup.alert({
+                            title: $filter('translate')('ERROR'),
+                            template: "{{ 'CONNECT_FAIL' | translate }}"
+                        });
                     });
-                    //popup based on response
-                        
-                    }*/
                 }
             }
         });
     };
 })
 
-.controller('resultsCtrl', function($scope, $cordovaBarcodeScanner, $ionicPopup, $ionicLoading, $http) {
 
+/** Results page - scan or input person ID and then get results from server */
+.controller('resultsCtrl', function($scope, $cordovaBarcodeScanner, $ionicPopup, $http, $translate, $ionicLoading, $filter) {
+
+    /** Variables */
     $scope.objects = [];
     $scope.person = {};
 
+    /** Get variables before entering */
     $scope.$on('$ionicView.beforeEnter', function(){
-        $scope.measurement = JSON.parse(window.localStorage.getItem("measurement"));
         $scope.token = window.localStorage.getItem("token"); 
         $scope.username = window.localStorage.getItem("username");
-
     });
 
+    /** Scan QR */
     $scope.scanBarcode = function() {
         $cordovaBarcodeScanner.scan().then(function(imageData) {
             var str = imageData.text;
             str = str.substring(str.lastIndexOf("/") + 1);
             $scope.person.personID = str;
-        }, function(error) { 
+        },
+        function(error) { 
+            var alertPopup = $ionicPopup.alert({
+                title: $filter('translate')('ERROR'),
+                template: "{{ 'QR_FAIL' | translate }}"
+            });
         });
     };
 
+    /** After button pressed ask to confirm then get results */
     $scope.showConfirm = function() {
+
         var confirmPopup = $ionicPopup.confirm({
-            title: 'Načíst výsledky pro ID',
-            template: '{{$scope.person.personID}}'
+            title: $filter('translate')('LOAD_RESULTS1'),
+            template: "{{ 'LOAD_RESULTS2' | translate }}"
         });
 
         confirmPopup.then(function(res) {
             if(res) {
-                     console.log(JSON.stringify(
-                            {'client_username':$scope.username,
+
+                var url = 'http://147.228.63.49:80/app/mobile-services/data';
+                var data = {'client_username':$scope.username,
                             'token':$scope.token,
                             'personID':$scope.person.personID                    
-                    }))
+                           };
 
-                    $http.post('http://147.228.63.49:80/app/mobile-services/data',
-                            {'client_username':$scope.username,
-                            'token':$scope.token,
-                            'personID':$scope.person.personID                    
-                    }).then(function(response){
-                        var myData = response;
-                        console.log(myData);
+                $ionicLoading.show({
+                    template: '<ion-spinner icon="circles"></ion-spinner>',
+                });
 
-                        if (myData.data == 'ID not found.'){                            
-                            //idNotFound++;
-                            
-                            var alertPopup = $ionicPopup.alert({
-                                title: 'ID uživatele nenalezeno',
-                                template: 'Použijte prosím jiné ID'
-                            });
-                            $scope.person.personID = "";
-                        }
-                        /*if (myData.data == 'Registration failed. Use another ID!'){
-                            //idUsed++;
-                            var alertPopup = $ionicPopup.alert({
-                                title: 'ID uživatele již zaregistrováno',
-                                template: 'Použijte prosím jiné ID'
-                            });
-                            $scope.person.personID = "";
-                        } else if (myData.data == 'ID not found.'){                            
-                            //idNotFound++;
-                            
-                            var alertPopup = $ionicPopup.alert({
-                                title: 'ID uživatele nenalezeno',
-                                template: 'Použijte prosím jiné ID'
-                            });
-                            $scope.person.personID = "";
-                        }
-                        else {
-                            var alertPopup = $ionicPopup.alert({
-                                title: 'OK',
-                                template: 'Uložení proběhlo v pořádku'
-                            });
-                            //clean up
-                            var myData = JSON.parse(window.localStorage.getItem("measurement_scheme"));
-                            
-                            for (var i = 0; i < myData.length; i++){ 
-                                $scope.person.personID = "";
-                                $scope.objects[i] = myData[i];
-                                $scope.objects[i].schema = JSON.parse(myData[i].scheme);
-                                
-                            } 
-                        }*/
-                    }, function(error){
-                            var alertPopup = $ionicPopup.alert({
-                                title: 'Nepodařilo se připojit k serveru',
-                                template: 'Nepodařilo se připojit k serveru'
-                            });
+                console.log(data);
+                $http.post(url, data).then(function(response){
+
+                    $ionicLoading.hide();
+
+                    var myData = response;
+                    console.log(myData);
+
+                    if (myData.data == 'ID not found.'){                                                 
+                        var alertPopup = $ionicPopup.alert({
+                            title: $filter('translate')('SAVE_FAIL1'),
+                            template: "{{ 'SAVE_FAIL2' | translate }}"
                         });
-                
+                        $scope.person.personID = "";
+                    }
+                }, 
+                function(error){
+
+                    $ionicLoading.hide();
+
+                    var alertPopup = $ionicPopup.alert({
+                        title: $filter('translate')('ERROR'),
+                        template: "{{ 'CONNECT_FAIL' | translate }}"
+                    });
+                });
             }
         });
     };
-})
-
-.controller('form_motivationCtrl', function($scope, $cordovaBarcodeScanner, $ionicPopup, $ionicLoading, $http) {
-  
-    $scope.objects = [];
-    $scope.person = {};   
-    var dataSource = 'data/motivJSON.json';
-
-    $scope.$on('$ionicView.beforeEnter', function(){
-
-        $http.get('data/motivJSON.json').then(function(response){
-            $scope.objects = response.data;
-        }).catch(function(response){
-            
-        }).finally(function(){
-
-        });
-    });
-
-    $scope.scanBarcode = function() {
-        $cordovaBarcodeScanner.scan().then(function(imageData) {
-            var str = imageData.text;
-            str = str.substring(str.lastIndexOf("/") + 1);
-            $scope.person.personID = str;
-        }, function(error) {
-        });
-    };
-
-
-    $scope.showConfirm = function() {
-        var confirmPopup = $ionicPopup.confirm({
-            title: 'Uložit formulář',
-            template: 'Opravdu chcete uložit vyplněný formulář?'
-        });
-
-        confirmPopup.then(function(res) {
-            if(res) {
-
-                $http.post('motivation',{'username':$scope.username,
-                                          'token':$scope.token,
-                                          'personID':$scope.person.personID,
-                                          'form':objects});
-
-                var alertPopup = $ionicPopup.alert({
-                    title: 'Uložit formulář',
-                    template: 'Formulář úspěšně uložen'
-                });
-
-                alertPopup.then(function(res) {
-                    
-                });
-            } else {
-          
-            }
-        });
-    };
-})
-   
-
+})   
 
 .controller('signupCtrl', function($scope) {
 
@@ -430,28 +374,3 @@ angular.module('app.controllers', [])
 	}
 
 })
-   
-.controller('user_infoCtrl', function($scope, $ionicPopup) {
-    $scope.showConfirm = function() {
-        var confirmPopup = $ionicPopup.confirm({
-          title: 'Uložit informace',
-          template: 'Opravdu chcete uložit informace?'
-        });
-
-        confirmPopup.then(function(res) {
-          if(res) {
-
-            var alertPopup = $ionicPopup.alert({
-              title: 'Uložit informace',
-              template: 'Informace úspěšně uloženy'
-            });
-
-            alertPopup.then(function(res) {
-              
-            });
-          } else {
-            
-          }
-        });
-      };
-    });

@@ -1,7 +1,7 @@
-<ion-view title="Seznam měření" id="experimentList" style="background-color:#CECECE;" class=" ">
+<ion-view title="{{ 'MEASURE_LIST' | translate }}" id="experimentList" style="background-color:#CECECE;" class=" ">
     <ion-content padding="true" class="has-header">
     
-        <h3 ng-if="experiments.length <= 0" align="center">Neprobíhá žádné měření</h3>
+        <h3 ng-if="experiments.length <= 0" align="center">{{ 'NO_MEASUREMENT' | translate }}</h3>
         <ion-list ng-if="experiments.length > 0">
             <ion-item class="item" style="color:#000000;" ng-repeat="experiment in experiments" ng-click="showExperiment({{experiment}})" href="#">
                     {{experiment.institution}} <br>
