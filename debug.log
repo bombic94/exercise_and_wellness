@@ -1,0 +1,4 @@
+[0217/143849.745:ERROR:process_reader_win.cc(142)] SuspendThread: Pøístup byl odepøen. (0x5)
+[0217/143849.749:ERROR:exception_snapshot_win.cc(87)] thread ID 7380 not found in process
+[0217/143849.749:WARNING:crash_report_exception_handler.cc(60)] ProcessSnapshotWin::Initialize failed
+[0217/143849.749:ERROR:scoped_process_suspend.cc(38)] NtResumeProcess: Došlo k pokusu o pøístup ke konèícímu procesu.  (0xc000010a)
