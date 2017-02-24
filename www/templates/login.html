@@ -1,13 +1,11 @@
-<ion-view cache-view="false" title="{{ 'LOGIN' | translate }}" id="page4" class=" ">
+<ion-view cache-view="false" title="{{ 'LOGIN' | translate }}" id="page4" style="background-color:#CECECE;" class=" ">
     <ion-content padding="true" class="has-header">
-                <!--div class="EWbackground"></div-->
-            <ion-fab top right>
+
+            <!--ion-fab top right>
                 <button ion-fab ng-click="ChangeLanguage('en')">EN</button>
                 <button ion-fab ng-click="ChangeLanguage('cz')">DE</button>
                 <button ion-fab ng-click="ChangeLanguage('cz')">CZ</button>
-            </ion-fab>
-        <!--button class="button button-positive" ng-click="ChangeLanguage('en')">EN</button>
-        <button class="button button-positive" ng-click="ChangeLanguage('cz')">CZ</button-->
+            </ion-fab-->
         
         <form id="login-form1" class="list ">
             <ion-list id="login-list1" class=" ">
@@ -27,7 +25,6 @@
             <div class="spacer" style="height: 40px;"></div>
             
             <button id="login-button1" class=" button button-block button-positive" ng-click="login()">{{ 'LOG_IN' | translate }}</button>
-            <!--button ui-sref="signup" id="login-button2" class=" button button-positive  button-block button-clear ">Or create an account</button-->
         </form>
     </ion-content>
 </ion-view>

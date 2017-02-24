@@ -1,13 +1,14 @@
 <ion-view title="{{ 'RESULTS' | translate }}" id="results" style="background-color:#CECECE;" class=" ">
     <ion-content padding="true" class="has-header">
+    
+    <button class="button button-positive button-clear button-block icon ion-qr-scanner" ng-click="scanBarcode()">
+            {{ 'SCAN_ID' | translate }}
+    </button>
+
     <label class="item item-input">
         <span class="input-label">ID</span>
         <input type="text" placeholder="" ng-model="person.personID" >
     </label>
-    <button class="button button-positive  button-block icon ion-qr-scanner"
-                ng-click="scanBarcode()">
-            {{ 'SCAN_ID' | translate }}
-    </button>
 
     <button id="form-button1" class="button button-positive  button-block icon ion-android-arrow-up" ng-click="showConfirm()">
         {{ 'SHOW_RESULTS' | translate }}

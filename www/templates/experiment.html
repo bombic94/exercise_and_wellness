@@ -1,15 +1,18 @@
 <ion-view title="{{ 'MEASUREMENT' | translate }}" id="experiment" style="background-color:#CECECE;" class=" ">
     <ion-content padding="true" class="has-header">
+
     <h3 align="center">{{measurement.institution}}</h3>
     <p align="center">{{measurement.town}}, {{measurement.street}} {{measurement.number}}</p>
+    
+    <button class="button button-positive button-clear button-block icon ion-qr-scanner" ng-click="scanBarcode()">
+            {{ 'SCAN_ID' | translate }}
+    </button>
+    
     <label class="item item-input">
         <span class="input-label">ID</span>
         <input type="text" placeholder="" ng-model="person.personID" >
     </label>
-    <button class="button button-positive  button-block icon ion-qr-scanner"
-                ng-click="scanBarcode()">
-            {{ 'SCAN_ID' | translate }}
-    </button>
+
 
     <ion-list>        
         <ion-item ng-repeat-start="mereni in objects" style="display:none;"></ion-item>
@@ -23,12 +26,6 @@
                 <ion-col ng-if="dotaznik.units != ''">[{{dotaznik.units}}]</ion-col>
                 <ion-col class="assertive" ng-if="dotaznik.required">* &nbsp</ion-col>
                 
-                <!--ion-col ng-if="dotaznik.formType == 'file'">
-                    <button class="text-right button button-small button-positive icon icon-left ion-arrow-round-up" 
-                            ng-click="">
-                        Nahrát soubor
-                    </button>
-                </ion-col-->
             </ion-row>
 
             <label class="item item-input" ng-if="dotaznik.formType == 'integer'">
