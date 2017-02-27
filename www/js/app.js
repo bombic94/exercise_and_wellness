@@ -112,6 +112,7 @@ angular.module('app', ['ionic', 'app.controllers', 'app.routes', 'app.services',
     LOGOUT: 'Odhlásit se'
   });
   $translateProvider.preferredLanguage('en');
+  $translateProvider.useSanitizeValueStrategy(null);
 })
 
 .run(function($ionicPlatform) {

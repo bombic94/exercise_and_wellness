@@ -379,6 +379,10 @@ angular.module('app.controllers', [])
                     var myData = response;
                     console.log(myData);
 
+                    for (var i = 0; i < myData.data.length; i++){
+                        $scope.object[i] = myData.data[i];
+                    }
+
                     /** invalid ID */
                     if (myData.data == 'ID not found.'){                                                 
                         var alertPopup = $ionicPopup.alert({
@@ -417,6 +421,7 @@ angular.module('app.controllers', [])
     
     $scope.ChangeLanguage = function(lang){
 		  $translate.use(lang);
+          $translate.use();
 	  }
     
 })
