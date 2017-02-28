@@ -9,8 +9,7 @@
     
     <h3 ng-if="objects.length <= 0" style="color:#000000;font-weight:300;text-align:center;">{{'NO_INPUT' | translate}}</h3>
     
-    <a ng-if="objects.length > 0">
-    <form id="measurement-form5" class="list">
+    <form ng-if="objects.length > 0" id="measurement-form5" class="list">
       <button id="measurement-button8" 
               style="font-weight:300;" 
               class="button button-positive  button-block button-clear icon ion-qr-scanner"
@@ -24,7 +23,7 @@
       </label>
     </form>
 
-    <ion-list>        
+    <ion-list ng-if="objects.length > 0">        
         <ion-item ng-repeat-start="mereni in objects" style="display:none;"></ion-item>
         
         <h3 align="center" style="color:#000000;font-weight:300;">{{mereni.experimentName}}</h3>
@@ -77,13 +76,12 @@
         <ion-item ng-repeat-end="mereni in objects" style="display:none;"></ion-item>
     </ion-list>
 
-    <button id="measurement-button10" 
+    <button ng-if="objects.length > 0" id="measurement-button10" 
             style="font-weight:300;border-radius:-22px -22px -22px -22px;" 
             class="button button-positive  button-block icon ion-android-arrow-up"
             ng-click="showConfirm()">
               {{ 'SAVE' | translate }}
     </button>
-    </a>
   
   </ion-content>
 </ion-view>

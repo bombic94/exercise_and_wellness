@@ -452,7 +452,21 @@ angular.module('app.controllers', [])
       {name: 'DEUTSCH', short:'de'},
       {name: 'CZECH', short:'cz'}
     ];
-    $scope.myLang = $scope.languages[0];
+
+    for (var i = 0; i < $scope.languages.length; i++){
+        if ($translate.use() === $scope.languages[i].short){
+            $scope.myLang = $scope.languages[i];
+            break;
+        }
+    }
+    /*if ($translate.use() === 'en'){
+        $scope.myLang = $scope.languages[0];
+    } else if ($translate.use() === 'de'){
+        $scope.myLang = $scope.languages[1];
+    }else if ($translate.use() === 'cz'){
+        $scope.myLang = $scope.languages[2];
+    }*/
+
 
     $scope.ChangeLanguage = function(lang){
 		  $translate.use(lang);
