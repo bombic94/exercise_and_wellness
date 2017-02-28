@@ -1,27 +1,37 @@
-<ion-view title="{{ 'MEASUREMENT' | translate }}" id="experiment" style="background-color:#CECECE;" class=" ">
-    <ion-content padding="true" class="has-header">
-
-    <h3 align="center">{{measurement.institution}}</h3>
-    <p align="center">{{measurement.town}}, {{measurement.street}} {{measurement.number}}</p>
+<ion-view id="page5" style="background-color:#CECECE;">
+  <ion-nav-title>
+        {{ 'MEASUREMENT' | translate }}
+  </ion-nav-title>
+  <ion-content padding="true" class="has-header">
     
-    <button class="button button-positive button-clear button-block icon ion-qr-scanner" ng-click="scanBarcode()">
-            {{ 'SCAN_ID' | translate }}
-    </button>
+    <h3 id="measurement-heading1" style="color:#000000;font-weight:300;text-align:center;">{{measurement.institution}}</h3>
+    <h4 id="measurement-heading2" style="color:#000000;font-weight:300;text-align:center;">{{measurement.town}}, {{measurement.street}} {{measurement.number}}</h4>
     
-    <label class="item item-input">
+    <h3 ng-if="objects.length <= 0" style="color:#000000;font-weight:300;text-align:center;">Nothing to show</h3>
+    
+    <a ng-if="objects.length > 0">
+    <form id="measurement-form5" class="list">
+      <button id="measurement-button8" 
+              style="font-weight:300;" 
+              class="button button-positive  button-block button-clear icon ion-qr-scanner"
+              ng-click="scanBarcode()">
+                {{ 'SCAN_ID' | translate }}
+      </button>
+     
+      <label class="item item-input" id="measurement-textarea1">
         <span class="input-label">ID</span>
         <input type="text" placeholder="" ng-model="person.personID" >
-    </label>
-
+      </label>
+    </form>
 
     <ion-list>        
         <ion-item ng-repeat-start="mereni in objects" style="display:none;"></ion-item>
         
-        <h4  align="center" style="color:#000000;">{{mereni.experimentName}}</h4>
+        <h3 align="center" style="color:#000000;font-weight:300;">{{mereni.experimentName}}</h3>
         <ion-list>        
             <ion-item ng-repeat-start="dotaznik in mereni.schema" style="display:none;"></ion-item>
             
-            <ion-row class="item" style="background-color:#0000C0;color:#FFFFFF;font-weight:400;text-align:justify;">
+            <ion-row class="item item-divider" style="font-weight:300;text-align:justify;">
                 <ion-col>{{dotaznik.name}} &nbsp</ion-col>
                 <ion-col ng-if="dotaznik.units != ''">[{{dotaznik.units}}]</ion-col>
                 <ion-col class="assertive" ng-if="dotaznik.required">* &nbsp</ion-col>
@@ -63,12 +73,17 @@
             <ion-item ng-repeat-end="dotaznik in mereni" style="display:none;"></ion-item>
         </ion-list>
         
+        <div class="spacer" style="height: 20px;"></div>
         <ion-item ng-repeat-end="mereni in objects" style="display:none;"></ion-item>
     </ion-list>
 
-    <button id="form-button1" class="button button-positive  button-block icon ion-android-arrow-up" ng-click="showConfirm()">
-        {{ 'SAVE' | translate }}
+    <button id="measurement-button10" 
+            style="font-weight:300;border-radius:-22px -22px -22px -22px;" 
+            class="button button-positive  button-block icon ion-android-arrow-up"
+            ng-click="showConfirm()">
+              {{ 'SAVE' | translate }}
     </button>
-
-    </ion-content>
+    </a>
+  
+  </ion-content>
 </ion-view>

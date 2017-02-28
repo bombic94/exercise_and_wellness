@@ -6,6 +6,7 @@ angular.module('app.controllers', [])
     /** Variables */
     $scope.user = {};
 
+
     /** After launch verify that use of camera is authorized (Android 6+) */
     $scope.$on('$ionicView.enter', function(){
         cordova.plugins.diagnostic.getCameraAuthorizationStatus(function(status){
@@ -54,7 +55,7 @@ angular.module('app.controllers', [])
 
         /** Show loading */
         $ionicLoading.show({
-            //noBackdrop: true,
+            noBackdrop: true,
             template: '<ion-spinner icon="circles"></ion-spinner>',
         });
 
@@ -83,7 +84,8 @@ angular.module('app.controllers', [])
                 window.localStorage.setItem("measurement_array", JSON.stringify(myData.data.data))
                 
                 /** Go to measurement list*/
-                $state.go('menu.experimentList');
+                $scope.user = {};
+                $state.go('menu.listOfMeasurements');
             }
         },
         /** http ERROR */
@@ -100,17 +102,13 @@ angular.module('app.controllers', [])
 })
 
 /** Measurement list page - choose one measurement */
-.controller('experimentListCtrl', function($scope, $state, $http, $translate, $ionicLoading, $filter) {
+.controller('listOfMeasurementsCtrl', function($scope, $state, $http, $translate, $ionicLoading, $filter) {
 
     /** Get variables before entering */
     $scope.$on('$ionicView.beforeEnter', function(){   
         $scope.experiments = JSON.parse(window.localStorage.getItem("measurement_array"));
         $scope.token = window.localStorage.getItem("token");
         $scope.username = window.localStorage.getItem("username");
-        //if ($scope.experiments.length == 1){
-         //   $scope.showExperiment($scope.experiments[0]);
-        //}
-
     });
 
     /** Choose one measurement */
@@ -119,15 +117,33 @@ angular.module('app.controllers', [])
         /** Save data */
         window.localStorage.setItem("measurement", JSON.stringify(measurement))
 
+    }
+
+})
+
+/** Measurement page - scan or input person ID, put measured values and send them to server */
+.controller('measurementCtrl', function($scope, $cordovaBarcodeScanner, $ionicPopup, $http, $translate, $ionicLoading, $filter) {
+
+    /** Variables */
+    $scope.objects = [];
+    $scope.person = {};
+
+    /** Get variables before entering from server */
+    $scope.$on('$ionicView.beforeEnter', function(){
+        $scope.measurement = JSON.parse(window.localStorage.getItem("measurement"));
+        $scope.token = window.localStorage.getItem("token"); 
+        $scope.username = window.localStorage.getItem("username");
+        
         /** Data for server */
         var url = 'http://147.228.63.49:80/app/mobile-services/scheme';
         var data = {'client_username': $scope.username, 
                     'token': $scope.token, 
-                    'measurementID': measurement.id
+                    'measurementID': $scope.measurement.id
                    };
 
         /** Show loading */
         $ionicLoading.show({
+            noBackdrop: true,
             template: '<ion-spinner icon="circles"></ion-spinner>',
         });
 
@@ -139,14 +155,11 @@ angular.module('app.controllers', [])
             $ionicLoading.hide();
 
             /** parse data */
-            var myData = response;
-            console.log(myData);
-          
-            /** Save data */
-            window.localStorage.setItem("measurement_scheme", JSON.stringify(myData.data));
-            
-            /** Go to chosen measurement */
-            $state.go('menu.experiment');   
+            console.log(response);
+            for (var i = 0; i < response.data.length; i++){
+                $scope.objects[i] = response.data[i];
+                $scope.objects[i].schema = JSON.parse(response.data[i].scheme);
+            }  
         },
         /** http ERROR */
         function(error){
@@ -158,29 +171,6 @@ angular.module('app.controllers', [])
                 template: "{{ 'CONNECT_FAIL' | translate }}"
             });
         }); 
-        
-    };
-
-})
-
-/** Measurement page - scan or input person ID, put measured values and send them to server */
-.controller('experimentCtrl', function($scope, $cordovaBarcodeScanner, $ionicPopup, $http, $translate, $ionicLoading, $filter) {
-
-    /** Variables */
-    $scope.objects = [];
-    $scope.person = {};
-
-    /** Get variables before entering */
-    $scope.$on('$ionicView.beforeEnter', function(){
-        var myData = JSON.parse(window.localStorage.getItem("measurement_scheme"));
-        $scope.measurement = JSON.parse(window.localStorage.getItem("measurement"));
-        $scope.token = window.localStorage.getItem("token"); 
-        $scope.username = window.localStorage.getItem("username");
-        
-        for (var i = 0; i < myData.length; i++){
-            $scope.objects[i] = myData[i];
-            $scope.objects[i].schema = JSON.parse(myData[i].scheme);
-        }
 
     });
 
@@ -203,7 +193,9 @@ angular.module('app.controllers', [])
     $scope.showConfirm = function() {
         var confirmPopup = $ionicPopup.confirm({
             title: $filter('translate')('SAVE_CONFIRM1'),
-            template: "{{ 'SAVE_CONFIRM2' | translate }}"
+            template: "{{ 'SAVE_CONFIRM2' | translate }}",
+            cancelText: $filter('translate')('CANCEL'),
+            okText: $filter('translate')('CONFIRM'),
         });
 
         confirmPopup.then(function(res) {
@@ -211,6 +203,7 @@ angular.module('app.controllers', [])
 
                 /** Show loading */
                 $ionicLoading.show({
+                    noBackdrop: true,
                     template: '<ion-spinner icon="circles"></ion-spinner>',
                 });
 
@@ -317,7 +310,7 @@ angular.module('app.controllers', [])
 
 
 /** Results page - scan or input person ID and then get results from server */
-.controller('resultsCtrl', function($scope, $cordovaBarcodeScanner, $ionicPopup, $http, $translate, $ionicLoading, $filter) {
+.controller('resultsCtrl', function($scope, $state, $cordovaBarcodeScanner, $ionicPopup, $http, $translate, $ionicLoading, $filter) {
 
     /** Variables */
     $scope.objects = [];
@@ -350,7 +343,9 @@ angular.module('app.controllers', [])
         /** Confirm popup window */
         var confirmPopup = $ionicPopup.confirm({
             title: $filter('translate')('LOAD_RESULTS1'),
-            template: "{{ 'LOAD_RESULTS2' | translate }}"
+            template: "{{ 'LOAD_RESULTS2' | translate }}",
+            cancelText: $filter('translate')('CANCEL'),
+            okText: $filter('translate')('CONFIRM'),
         });
 
         confirmPopup.then(function(res) {
@@ -365,6 +360,7 @@ angular.module('app.controllers', [])
 
                 /** Show loading */
                 $ionicLoading.show({
+                    noBackdrop: true,
                     template: '<ion-spinner icon="circles"></ion-spinner>',
                 });
 
@@ -393,7 +389,12 @@ angular.module('app.controllers', [])
                     } 
                     /** valid ID, parse results */
                     else {
-
+                        /** Save data */
+                        window.localStorage.setItem("result_data", JSON.stringify(myData.data))
+                        window.localStorage.setItem("personID", $scope.person.personID);
+                        /** Go to measurement list*/
+                        $scope.person.personID = "";
+                        $state.go('menu.resultsID');
                     }  
                 }, 
                 /** http ERROR */
@@ -412,16 +413,57 @@ angular.module('app.controllers', [])
 })   
 
 /** Sign up page - not implemented yet */
-.controller('signupCtrl', function($scope) {
-    //registration of user??
+.controller('resultsIDCtrl', function($scope) {
+
+    /** Variables */
+    $scope.objects = [];
+
+    /** Get variables before entering */
+    $scope.$on('$ionicView.beforeEnter', function(){
+        $scope.result = JSON.parse(window.localStorage.getItem("result_data")); 
+        $scope.personID = window.localStorage.getItem("personID");
+
+        for (var i = 0; i < $scope.result.experiments.length; i++){
+            $scope.objects[i] = {
+                experiments: null,
+                names: [],
+                units: [],
+                values: []
+            };
+        }
+
+        for (var i = 0; i < $scope.result.experiments.length; i++){
+            $scope.objects[i].experiments = $scope.result.experiments[i];
+            $scope.objects[i].names = $scope.result.names[i];
+            $scope.objects[i].units = $scope.result.units[i];
+            $scope.objects[i].values = $scope.result.values[i];
+        }  
+    });
 })
 
 /** Settings page - so far implemented change of language */
-.controller('settingsCtrl', function($scope, $translate) {
+.controller('settingsCtrl', function($scope, $translate, $filter, $state) {
     
+    $scope.languages = [
+      {name: $filter('translate')('ENGLISH'), short:'en'},
+      {name: $filter('translate')('DEUTSCH'), short:'de'},
+      {name: $filter('translate')('CZECH'), short:'cz'}
+    ];
+    $scope.myLang = $scope.languages[0];
+
     $scope.ChangeLanguage = function(lang){
 		  $translate.use(lang);
-          $translate.use();
+          console.log("Language changed");
+          console.log(lang);
 	  }
     
 })
+
+
+.controller('menuCtrl', ['$scope', '$stateParams', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
+// You can include any angular dependencies as parameters for this function
+// TIP: Access Route Parameters for your page via $stateParams.parameterName
+function ($scope, $stateParams) {
+
+
+}])

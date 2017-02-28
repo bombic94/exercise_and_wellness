@@ -1,0 +1,32 @@
+<ion-view id="page6" style="background-color:#CECECE;">
+  <ion-nav-title>
+        {{'RESULTS_ID' | translate}}
+  </ion-nav-title>
+  <ion-content padding="true" class="has-header">
+     
+    <h3 align="center" style="color:#000000;font-weight:300;">ID: {{personID}}</h3>
+
+    <h3 ng-if="objects.length <= 0" style="color:#000000;font-weight:300;text-align:center;">Nothing to show</h3>
+
+    <ion-list ng-if="objects.length > 0">        
+        <ion-item ng-repeat-start="vysledek in objects" style="display:none;"></ion-item>
+        
+        <ion-item class="item item-divider" style="font-weight:300;text-align:justify;">{{vysledek.experiments}}</ion-item>
+        <ion-list>        
+            <ion-item ng-repeat-start="nazev in vysledek.names" style="display:none;"></ion-item>
+            
+            <ion-row class="item " style="font-weight:300;text-align:justify;">
+                <ion-col>{{nazev}}: &nbsp</ion-col>
+                <ion-col> {{vysledek.values[$index]}} </ion-col>
+                <ion-col ng-if="vysledek.units != ''"> {{vysledek.units[$index]}}</ion-col>
+            </ion-row>
+
+            <ion-item ng-repeat-end="dotaznik in mereni" style="display:none;"></ion-item>
+        </ion-list>
+        
+        <div class="spacer" style="height: 20px;"></div>
+        <ion-item ng-repeat-end="mereni in objects" style="display:none;"></ion-item>
+    </ion-list>
+
+  </ion-content>
+</ion-view>

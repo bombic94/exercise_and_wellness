@@ -7,51 +7,36 @@ angular.module('app.routes', [])
   // Set up the various states which the app can be in.
   // Each state's controller can be found in controllers.js
   $stateProvider
-
-  .state('menu', {
-    url: '/side-menu',
-    templateUrl: 'templates/menu.html',
-    abstract:true
-  })
-            
+    
   .state('login', {
     url: '/login',
     templateUrl: 'templates/login.html',
     controller: 'loginCtrl'
   })
 
-  .state('signup', {
-    url: '/signup',
-    templateUrl: 'templates/signup.html',
-    controller: 'signupCtrl'
+  .state('menu', {
+    url: '/side-menu21',
+    templateUrl: 'templates/menu.html',
+    controller: 'menuCtrl',
+    abstract:true
   })
 
-  .state('menu.experiment', {
-    url: '/experiment',
+  .state('menu.listOfMeasurements', {
+    url: '/listMeasurements',
     views: {
-      'side-menu': {
-        templateUrl: 'templates/experiment.html',
-        controller: 'experimentCtrl',
-      }
-    }
-  }) 
-
-  .state('menu.experimentList', {
-    url: '/experimentList',
-    views: {
-      'side-menu': {
-        templateUrl: 'templates/experimentList.html',
-        controller: 'experimentListCtrl',
+      'side-menu21': {
+        templateUrl: 'templates/listOfMeasurements.html',
+        controller: 'listOfMeasurementsCtrl'
       }
     }
   })
 
-  .state('menu.settings', {
-    url: '/settings',
+  .state('menu.measurement', {
+    url: '/measurement',
     views: {
-      'side-menu': {
-        templateUrl: 'templates/settings.html',
-        controller: 'settingsCtrl'
+      'side-menu21': {
+        templateUrl: 'templates/measurement.html',
+        controller: 'measurementCtrl'
       }
     }
   })
@@ -59,13 +44,33 @@ angular.module('app.routes', [])
   .state('menu.results', {
     url: '/results',
     views: {
-      'side-menu': {
+      'side-menu21': {
         templateUrl: 'templates/results.html',
         controller: 'resultsCtrl'
       }
     }
   })
 
-  $urlRouterProvider.otherwise('/login')
+  .state('menu.resultsID', {
+    url: '/resultsID',
+    views: {
+      'side-menu21': {
+        templateUrl: 'templates/resultsID.html',
+        controller: 'resultsIDCtrl'
+      }
+    }
+  })
+
+  .state('menu.settings', {
+    url: '/settings',
+    views: {
+      'side-menu21': {
+        templateUrl: 'templates/settings.html',
+        controller: 'settingsCtrl'
+      }
+    }
+  })
+
+$urlRouterProvider.otherwise('/login')
 
 });

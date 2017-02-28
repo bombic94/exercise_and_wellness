@@ -1,32 +1,17 @@
-<ion-view title="{{ 'SETTINGS' | translate }}" id="settings" style="background-color:#CECECE;" class=" ">
-    <ion-content padding="true" class="has-header">
-        
-        <!--ion-item>
-            <ion-label>{{ 'LANGUAGE' | translate }}</ion-label>
-            <ion-select>
-                <ion-option ng-click="ChangeLanguage('en')">EN</ion-option>
-                <ion-option ng-click="ChangeLanguage('cz')">DE</ion-option>
-                <ion-option ng-click="ChangeLanguage('cz')">CZ</ion-option>
-            </ion-select>
-        </ion-item-->
+<ion-view id="page3" style="background-color:#CECECE;">
+  <ion-nav-title>
+        {{'SETTINGS' | translate}}
+  </ion-nav-title>
+  <ion-content padding="true" class="has-header">
+    <form id="settings-form2" class="list">
+      <label class="item item-select" id="settings-select4" name="language">
+        <span class="input-label">{{ 'LANGUAGE' | translate }}</span>
 
-        <!--label class = "item item-input item-select">
-            <div class = "input-label">
-                {{ 'LANGUAGE' | translate }}
-            </div>
-	
-            <select>
-                <option ng-selected="ChangeLanguage('en')">EN</option>
-                <option ng-selected="ChangeLanguage('cz')">DE</option>
-                <option ng-selected="ChangeLanguage('cz')">CZ</option>
-            </select>
-        </label-->
-
-        <ion-fab top right>
-                <button ion-fab ng-click="ChangeLanguage('en')">EN</button>
-                <button ion-fab ng-click="ChangeLanguage('cz')">DE</button>
-                <button ion-fab ng-click="ChangeLanguage('cz')">CZ</button>
-            </ion-fab>
-            
-    </ion-content>
+        <select ng-model="myLang"
+          ng-options="language.name for language in languages"
+          ng-change="ChangeLanguage(myLang.short)">
+        </select>
+      </label>
+    </form>
+  </ion-content>
 </ion-view>

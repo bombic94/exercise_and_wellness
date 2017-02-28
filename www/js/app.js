@@ -5,9 +5,14 @@
 // the 2nd parameter is an array of 'requires'
 // 'starter.services' is found in services.js
 // 'starter.controllers' is found in controllers.js
-angular.module('app', ['ionic', 'app.controllers', 'app.routes', 'app.services', 'app.directives', 'ngCordova', 'pascalprecht.translate'])
+angular.module('app', ['ionic', 'app.controllers', 'app.routes', 'app.directives','app.services', 'ngCordova', 'pascalprecht.translate'])
 
-.config(function ($translateProvider) {
+.config(function($ionicConfigProvider, $sceDelegateProvider, $translateProvider) {
+  
+  $sceDelegateProvider.resourceUrlWhitelist([ 'self','*://www.youtube.com/**', '*://player.vimeo.com/video/**']);
+  
+  $ionicConfigProvider.navBar.alignTitle('center');
+
   $translateProvider.translations('en', {
 
     //login html
@@ -19,6 +24,8 @@ angular.module('app', ['ionic', 'app.controllers', 'app.routes', 'app.services',
 
     //login ctrl
     ERROR: 'Error',
+    CANCEL: 'Cancel',
+    CONFIRM: 'OK',
     QR_FAIL: 'Failed to load QR code',
     AUTH_FAIL: 'Authorization failed',
     CONNECT_FAIL: 'Connection to server failed',
@@ -44,6 +51,7 @@ angular.module('app', ['ionic', 'app.controllers', 'app.routes', 'app.services',
 
     //results html
     RESULTS: 'Results',
+    RESULTS_ID: 'Personal results',
     SHOW_RESULTS: 'Show results',
 
     //results ctrl
@@ -53,6 +61,9 @@ angular.module('app', ['ionic', 'app.controllers', 'app.routes', 'app.services',
     //settings html
     SETTINGS: 'Settings',
     LANGUAGE: 'Language',
+    ENGLISH: 'English',
+    DEUTSCH: 'Deutsch',
+    CZECH: 'Czech',
 
     //menu
     MENU: 'Menu',
@@ -60,6 +71,11 @@ angular.module('app', ['ionic', 'app.controllers', 'app.routes', 'app.services',
     //logout
     LOGOUT: 'Log out'
   });
+
+  $translateProvider.translations('de', {
+    //
+  })
+
   $translateProvider.translations('cz', {
     //login html
     LOGIN: 'Přihlášení',
@@ -70,6 +86,8 @@ angular.module('app', ['ionic', 'app.controllers', 'app.routes', 'app.services',
 
     //login ctrl
     ERROR: 'Chyba',
+    CANCEL: 'Zrušit',
+    CONFIRM: 'Potvrdit',
     QR_FAIL: 'Nepodařilo se načíst QR kód',
     AUTH_FAIL: 'Autorizace se nezdařila',
     CONNECT_FAIL: 'Nepodařilo se spojit se serverem',
@@ -95,6 +113,7 @@ angular.module('app', ['ionic', 'app.controllers', 'app.routes', 'app.services',
 
     //results html
     RESULTS: 'Výsledky',
+    RESULTS_ID: 'Výsledky osoby',
     SHOW_RESULTS: 'Zobrazit výsledky',
 
     //results ctrl
@@ -104,30 +123,94 @@ angular.module('app', ['ionic', 'app.controllers', 'app.routes', 'app.services',
     //settings html
     SETTINGS: 'Nastavení',
     LANGUAGE: 'Jazyk',
+    ENGLISH: 'Angličtina',
+    DEUTSCH: 'Němčina',
+    CZECH: 'Čeština',
 
     //menu
     MENU: 'Nabídka',
 
     //logout
     LOGOUT: 'Odhlásit se'
-  });
-  $translateProvider.preferredLanguage('en');
+  })
+
+  .registerAvailableLanguageKeys(['en', 'de', 'cz'], {
+    'en_*': 'en',
+    'de_*': 'de',
+    'cs_*': 'cz',
+    '*': 'en'
+  })
+  .determinePreferredLanguage();
+  //$translateProvider.preferredLanguage('en');
   $translateProvider.useSanitizeValueStrategy(null);
+
 })
 
 .run(function($ionicPlatform) {
   $ionicPlatform.ready(function() {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
-    // for form inputss)
+    // for form inputs)
     if (window.cordova && window.cordova.plugins && window.cordova.plugins.Keyboard) {
-        cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
-        cordova.plugins.Keyboard.disableScroll(true);
+      cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
+      cordova.plugins.Keyboard.disableScroll(true);
     }
     if (window.StatusBar) {
-        // org.apache.cordova.statusbar required
-        StatusBar.styleDefault();
+      // org.apache.cordova.statusbar required
+      StatusBar.styleDefault();
     }
   });
-
-  
 })
+
+/*
+  This directive is used to disable the "drag to open" functionality of the Side-Menu
+  when you are dragging a Slider component.
+*/
+.directive('disableSideMenuDrag', ['$ionicSideMenuDelegate', '$rootScope', function($ionicSideMenuDelegate, $rootScope) {
+    return {
+        restrict: "A",  
+        controller: ['$scope', '$element', '$attrs', function ($scope, $element, $attrs) {
+
+            function stopDrag(){
+              $ionicSideMenuDelegate.canDragContent(false);
+            }
+
+            function allowDrag(){
+              $ionicSideMenuDelegate.canDragContent(true);
+            }
+
+            $rootScope.$on('$ionicSlides.slideChangeEnd', allowDrag);
+            $element.on('touchstart', stopDrag);
+            $element.on('touchend', allowDrag);
+            $element.on('mousedown', stopDrag);
+            $element.on('mouseup', allowDrag);
+
+        }]
+    };
+}])
+
+/*
+  This directive is used to open regular and dynamic href links inside of inappbrowser.
+*/
+.directive('hrefInappbrowser', function() {
+  return {
+    restrict: 'A',
+    replace: false,
+    transclude: false,
+    link: function(scope, element, attrs) {
+      var href = attrs['hrefInappbrowser'];
+
+      attrs.$observe('hrefInappbrowser', function(val){
+        href = val;
+      });
+      
+      element.bind('click', function (event) {
+
+        window.open(href, '_system', 'location=yes');
+
+        event.preventDefault();
+        event.stopPropagation();
+
+      });
+    }
+  };
+});
