@@ -170,6 +170,9 @@ angular.module('app.controllers', [])
                 title: $filter('translate')('ERROR'),
                 template: "{{ 'CONNECT_FAIL' | translate }}"
             });
+            //return back
+            $state.go('menu.listOfMeasurements');
+
         }); 
 
     });

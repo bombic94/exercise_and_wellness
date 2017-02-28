@@ -36,6 +36,7 @@ angular.module('app', ['ionic', 'app.controllers', 'app.routes', 'app.directives
 
     //experiment html
     MEASUREMENT: 'Measurements',
+    NO_INPUT: 'There are no data to input',
     SCAN_ID: 'Scan person ID',
     SAVE: 'Save',
 
@@ -52,6 +53,7 @@ angular.module('app', ['ionic', 'app.controllers', 'app.routes', 'app.directives
     //results html
     RESULTS: 'Results',
     RESULTS_ID: 'Personal results',
+    NO_RESULTS: 'There are no results to show',
     SHOW_RESULTS: 'Show results',
 
     //results ctrl
@@ -98,6 +100,7 @@ angular.module('app', ['ionic', 'app.controllers', 'app.routes', 'app.directives
 
     //experiment html
     MEASUREMENT: 'Měření',
+    NO_INPUT: 'Nelze zadávat žádná data',
     SCAN_ID: 'Načíst ID osoby',
     SAVE: 'Uložit',
 
@@ -114,6 +117,7 @@ angular.module('app', ['ionic', 'app.controllers', 'app.routes', 'app.directives
     //results html
     RESULTS: 'Výsledky',
     RESULTS_ID: 'Výsledky osoby',
+    NO_RESULTS: 'Nejsou k zobrazení žádné výsledky',
     SHOW_RESULTS: 'Zobrazit výsledky',
 
     //results ctrl

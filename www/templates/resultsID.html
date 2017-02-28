@@ -6,7 +6,7 @@
      
     <h3 align="center" style="color:#000000;font-weight:300;">ID: {{personID}}</h3>
 
-    <h3 ng-if="objects.length <= 0" style="color:#000000;font-weight:300;text-align:center;">Nothing to show</h3>
+    <h3 ng-if="objects.length <= 0" style="color:#000000;font-weight:300;text-align:center;">{{'NO_RESULTS' | translate}}</h3>
 
     <ion-list ng-if="objects.length > 0">        
         <ion-item ng-repeat-start="vysledek in objects" style="display:none;"></ion-item>
