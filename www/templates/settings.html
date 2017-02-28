@@ -8,7 +8,7 @@
         <span class="input-label">{{ 'LANGUAGE' | translate }}</span>
 
         <select ng-model="myLang"
-          ng-options="language.name for language in languages"
+          ng-options="language.name | translate for language in languages"
           ng-change="ChangeLanguage(myLang.short)">
         </select>
       </label>

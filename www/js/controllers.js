@@ -445,9 +445,9 @@ angular.module('app.controllers', [])
 .controller('settingsCtrl', function($scope, $translate, $filter, $state) {
     
     $scope.languages = [
-      {name: $filter('translate')('ENGLISH'), short:'en'},
-      {name: $filter('translate')('DEUTSCH'), short:'de'},
-      {name: $filter('translate')('CZECH'), short:'cz'}
+      {name: 'ENGLISH', short:'en'},
+      {name: 'DEUTSCH', short:'de'},
+      {name: 'CZECH', short:'cz'}
     ];
     $scope.myLang = $scope.languages[0];
 
