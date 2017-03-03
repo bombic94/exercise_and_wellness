@@ -28,6 +28,7 @@ angular.module('app', ['ionic', 'app.controllers', 'app.routes', 'app.directives
     CONFIRM: 'OK',
     QR_FAIL: 'Failed to load QR code',
     AUTH_FAIL: 'Authorization failed',
+    AUTH_EXP: 'Token expired',
     CONNECT_FAIL: 'Connection to server failed',
 
     //home html
@@ -94,6 +95,7 @@ angular.module('app', ['ionic', 'app.controllers', 'app.routes', 'app.directives
     CONFIRM: 'Bestätigen',
     QR_FAIL: 'Fehlgeschlagen den QR-Code zu laden',
     AUTH_FAIL: 'Autorisierung fehlgeschlagen',
+    AUTH_EXP: 'Token abgelaufen',
     CONNECT_FAIL: 'Verbindung zum server fehlgeschlagen',
    
     //home html
@@ -159,6 +161,7 @@ angular.module('app', ['ionic', 'app.controllers', 'app.routes', 'app.directives
     CANCEL: 'Zrušit',
     CONFIRM: 'Potvrdit',
     QR_FAIL: 'Nepodařilo se načíst QR kód',
+    AUTH_EXP: 'Platnost tokenu vypršela',
     AUTH_FAIL: 'Autorizace se nezdařila',
     CONNECT_FAIL: 'Nepodařilo se spojit se serverem',
 
