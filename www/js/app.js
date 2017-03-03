@@ -58,7 +58,7 @@ angular.module('app', ['ionic', 'app.controllers', 'app.routes', 'app.directives
 
     //results ctrl
     LOAD_RESULTS1: 'Load results',
-    LOAD_RESULTS2: 'Do you want to load results for this person',
+    LOAD_RESULTS2: 'Do you want to load results for this person?',
 
     //settings html
     SETTINGS: 'Settings',
@@ -75,8 +75,64 @@ angular.module('app', ['ionic', 'app.controllers', 'app.routes', 'app.directives
   });
 
   $translateProvider.translations('de', {
-    //
-  })
+    //login html
+    LOGIN: 'Anmeldung',
+    USERNAME: 'Benutzername',
+    PASSWORD: 'Passwort',
+    LOG_IN: 'Einloggen',
+    GET_SECTION: 'Erhalten abteilung',
+
+    //login ctrl
+    ERROR: 'Fehler',
+    CANCEL: 'Stornieren',
+    CONFIRM: 'Bestätigen',
+    QR_FAIL: 'Fehlgeschlagen den QR-Code zu laden',
+    AUTH_FAIL: 'Autorisierung fehlgeschlagen',
+    CONNECT_FAIL: 'Verbindung zum server fehlgeschlagen',
+
+    //experimentList html
+    MEASURE_LIST: 'Liste der messungen',
+    NO_MEASUREMENT: 'Keine messung vorhanden',
+
+    //experiment html
+    MEASUREMENT: 'Messungen',
+    NO_INPUT: 'Es liegen keine daten zur eingabe vor',
+    SCAN_ID: 'Scannen sie Person ID',
+    SAVE: 'Speichern',
+
+    //experiment ctrl
+    SAVE_CONFIRM1: 'Werte speichern',
+    SAVE_CONFIRM2: 'Möchten sie die messwerte wirklich speichern?',
+    REG_FAIL1: 'Person ID bereits registriert',
+    REG_FAIL2: 'Bitte benutzen sie andere ID',
+    SAVE_FAIL1: 'Person ID nicht gefunden',
+    SAVE_FAIL2: 'Bitte benutzen sie andere ID',
+    SAVE_OK1: 'OK',
+    SAVE_OK2: 'Die daten wurden erfolgreich gespeichert',
+
+    //results html
+    RESULTS: 'Ergebnisse',
+    RESULTS_ID: 'Persönliche ergebnisse',
+    NO_RESULTS: 'Es gibt keine ergebnisse zu zeigen',
+    SHOW_RESULTS: 'Zeige ergebnisse',
+
+    //results ctrl
+    LOAD_RESULTS1: 'Laden sie die ergebnisse',
+    LOAD_RESULTS2: 'Möchten Sie Ergebnisse für diese Person laden?',
+
+    //settings html
+    SETTINGS: 'Einstellungen',
+    LANGUAGE: 'Sprache',
+    ENGLISH: 'Englisch',
+    DEUTSCH: 'Deutsch',
+    CZECH: 'Tschechisch',
+
+    //menu
+    MENU: 'Menü',
+
+    //logout
+    LOGOUT: 'Ausloggen'
+  });
 
   $translateProvider.translations('cz', {
     //login html
