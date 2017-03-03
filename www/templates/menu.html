@@ -15,12 +15,16 @@
     </ion-header-bar>
     <ion-content padding="false" class="side-menu-left has-header ">
       <ion-list id="menu-list1">
+        <ion-item class="item-icon-left item-dark" id="menu-list-item0" ui-sref="menu.home" menu-close="">
+          <i class="icon ion-home"></i>{{ 'HOME' | translate }}</ion-item>
         <ion-item class="item-icon-left item-dark" id="menu-list-item1" ui-sref="menu.listOfMeasurements" menu-close="">
           <i class="icon ion-erlenmeyer-flask"></i>{{ 'MEASURE_LIST' | translate }}</ion-item>
         <ion-item class="item-icon-left item-dark" id="menu-list-item2" ui-sref="menu.results" menu-close="">
           <i class="icon ion-android-checkbox-outline"></i>{{ 'RESULTS' | translate }}</ion-item>
         <ion-item class="item-icon-left item-dark" id="menu-list-item3" ui-sref="menu.settings" menu-close="">
           <i class="icon ion-android-settings"></i>{{ 'SETTINGS' | translate }}</ion-item>
+        <ion-item class="item-icon-left item-dark" id="menu-list-item10" ui-sref="menu.about" menu-close="">
+          <i class="icon ion-information-circled"></i>{{ 'ABOUT' | translate }}</ion-item>
         <ion-item class="item-icon-left item-dark" id="menu-list-item11" ui-sref="login" menu-close="">
           <i class="icon ion-log-out"></i>{{ 'LOGOUT' | translate }}</ion-item>
       </ion-list>

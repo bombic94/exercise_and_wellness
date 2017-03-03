@@ -459,14 +459,6 @@ angular.module('app.controllers', [])
             break;
         }
     }
-    /*if ($translate.use() === 'en'){
-        $scope.myLang = $scope.languages[0];
-    } else if ($translate.use() === 'de'){
-        $scope.myLang = $scope.languages[1];
-    }else if ($translate.use() === 'cz'){
-        $scope.myLang = $scope.languages[2];
-    }*/
-
 
     $scope.ChangeLanguage = function(lang){
 		  $translate.use(lang);
@@ -482,5 +474,19 @@ angular.module('app.controllers', [])
 // TIP: Access Route Parameters for your page via $stateParams.parameterName
 function ($scope, $stateParams) {
 
+
+}])
+
+.controller('homeCtrl', ['$scope', '$stateParams', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
+// You can include any angular dependencies as parameters for this function
+// TIP: Access Route Parameters for your page via $stateParams.parameterName
+function ($scope, $stateParams) {
+
+}])
+
+.controller('aboutCtrl', ['$scope', '$stateParams', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
+// You can include any angular dependencies as parameters for this function
+// TIP: Access Route Parameters for your page via $stateParams.parameterName
+function ($scope, $stateParams) {
 
 }])

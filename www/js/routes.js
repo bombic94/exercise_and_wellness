@@ -21,6 +21,16 @@ angular.module('app.routes', [])
     abstract:true
   })
 
+  .state('menu.home', {
+    url: '/home',
+    views: {
+      'side-menu21': {
+        templateUrl: 'templates/home.html',
+        controller: 'homeCtrl'
+      }
+    }
+  })
+
   .state('menu.listOfMeasurements', {
     url: '/listMeasurements',
     views: {
@@ -67,6 +77,16 @@ angular.module('app.routes', [])
       'side-menu21': {
         templateUrl: 'templates/settings.html',
         controller: 'settingsCtrl'
+      }
+    }
+  })
+
+  .state('menu.about', {
+    url: '/about',
+    views: {
+      'side-menu21': {
+        templateUrl: 'templates/about.html',
+        controller: 'aboutCtrl'
       }
     }
   })

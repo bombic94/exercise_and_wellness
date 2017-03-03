@@ -30,6 +30,12 @@ angular.module('app', ['ionic', 'app.controllers', 'app.routes', 'app.directives
     AUTH_FAIL: 'Authorization failed',
     CONNECT_FAIL: 'Connection to server failed',
 
+    //home html
+    HOME: 'Homepage',
+
+    //about html
+    ABOUT: 'About',
+
     //experimentList html
     MEASURE_LIST: 'List of measurements',
     NO_MEASUREMENT: 'No measurement available',
@@ -89,6 +95,12 @@ angular.module('app', ['ionic', 'app.controllers', 'app.routes', 'app.directives
     QR_FAIL: 'Fehlgeschlagen den QR-Code zu laden',
     AUTH_FAIL: 'Autorisierung fehlgeschlagen',
     CONNECT_FAIL: 'Verbindung zum server fehlgeschlagen',
+   
+    //home html
+    HOME: 'Homepage',
+
+    //about html
+    ABOUT: 'Über die anwendung',
 
     //experimentList html
     MEASURE_LIST: 'Liste der messungen',
@@ -149,6 +161,12 @@ angular.module('app', ['ionic', 'app.controllers', 'app.routes', 'app.directives
     QR_FAIL: 'Nepodařilo se načíst QR kód',
     AUTH_FAIL: 'Autorizace se nezdařila',
     CONNECT_FAIL: 'Nepodařilo se spojit se serverem',
+
+    //home html
+    HOME: 'Úvodní obrazovka',
+
+    //about html
+    ABOUT: 'O aplikaci',
 
     //experimentList html
     MEASURE_LIST: 'Seznam měření',
