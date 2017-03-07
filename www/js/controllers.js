@@ -81,7 +81,7 @@ angular.module('app.controllers', [])
             else {
                 /** Save data */
                 window.localStorage.setItem("token", myData.data.token);
-                window.localStorage.setItem("measurement_array", JSON.stringify(myData.data.data));
+                //window.localStorage.setItem("measurement_array", JSON.stringify(myData.data.data));
                 
                 /** Go to homepage*/
                 $scope.user = {};
@@ -111,55 +111,54 @@ angular.module('app.controllers', [])
         $scope.username = window.localStorage.getItem("username");
 
 
-//         /** Data for server */
-//         var url = 'http://147.228.63.49:80/app/mobile-services/measurement_list';
-//         var data = {'client_username': $scope.user.username, 
-//                     'token': $scope.token, 
-//                    };
-// 
-//         /** Show loading */
-//         $ionicLoading.show({
-//             noBackdrop: true,
-//             template: '<ion-spinner icon="circles"></ion-spinner>',
-//         });
-// 
-//         /** Send data */
-//         console.log(data);
-//         $http.post(url, data).then(function(response){
-// 
-//             /** Hide loading */
-//             $ionicLoading.hide();
-// 
-//             /** parse data */
-//             var myData = response;
-//             console.log(myData);
-//             
-//             /** Token expired */
-//             if (myData.data == 'authorization failed'){
-//                 var alertPopup = $ionicPopup.alert({
-//                     title: $filter('translate')('ERROR'),
-//                     template: "{{ 'AUTH_FAIL' | translate }}"
-//                 });
-//                 $scope.user = {};
-//                 $state.go('login');
-//             }
-//             else {
-//                 /** Save data */
-//                 $scope.experiments = myData.data.data;
-//                 window.localStorage.setItem("measurement_array", JSON.stringify(myData.data.data));
-//                 /** Go to homepage*/
-//             }
-//         },
-//         /** http ERROR */
-//         function(error){
-// 
-//             $ionicLoading.hide();
-// 
-//             var alertPopup = $ionicPopup.alert({
-//                 title: $filter('translate')('ERROR'),
-//                 template: "{{ 'CONNECT_FAIL' | translate }}"
-//             });
-//         });
+         /** Data for server */
+         var url = 'http://147.228.63.49:80/app/mobile-services/measurement-list';
+         var data = {'client_username': $scope.username, 
+                     'token': $scope.token, 
+                    };
+ 
+         /** Show loading */
+         $ionicLoading.show({
+             noBackdrop: true,
+             template: '<ion-spinner icon="circles"></ion-spinner>',
+         });
+ 
+         /** Send data */
+         console.log(data);
+       //  $http.post(url, data).then(function(response){*/
+ 
+             /** Hide loading */
+             $ionicLoading.hide();
+ 
+             /** parse data */
+       /*      var myData = response;
+             console.log(myData);*/
+            
+             /** Token expired */
+       /*      if (myData.data == 'authorization failed'){
+                 var alertPopup = $ionicPopup.alert({
+                     title: $filter('translate')('ERROR'),
+                     template: "{{ 'AUTH_FAIL' | translate }}"
+                 });
+                 $scope.user = {};
+                 $state.go('login');
+             }
+             else {*/
+                 /** Save data */
+      /*           $scope.experiments = myData.data.data;
+                 window.localStorage.setItem("measurement_array", JSON.stringify(myData.data.data));
+             }
+         },*/
+         /** http ERROR */
+ /*        function(error){
+ 
+             $ionicLoading.hide();
+ 
+             var alertPopup = $ionicPopup.alert({
+                 title: $filter('translate')('ERROR'),
+                 template: "{{ 'CONNECT_FAIL' | translate }}"
+             });
+         });*/
     });
 
     /** Choose one measurement */
@@ -208,7 +207,7 @@ angular.module('app.controllers', [])
             /** parse data */
             console.log(response);
              /** Token expired */
-            if (myData.data == 'authorization failed'){
+            if (response.data == 'authorization failed'){
                 var alertPopup = $ionicPopup.alert({
                     title: $filter('translate')('ERROR'),
                     template: "{{ 'AUTH_FAIL' | translate }}"
@@ -222,6 +221,7 @@ angular.module('app.controllers', [])
                     $scope.objects[i].schema = JSON.parse(response.data[i].scheme);
                 }  
             }
+            console.log($scope.objects.length);
         },
         /** http ERROR */
         function(error){
@@ -286,10 +286,16 @@ angular.module('app.controllers', [])
                             response[i][j].values[0] = new Array(Object.keys($scope.objects[i].schema[j].values).length);
                         }
                         else {
-                            response[i][j].values = new Array(Object.keys($scope.objects[i].schema[j].values).length);
+                            if (typeof $scope.objects[i].schema[j].values === 'undefined' || typeof $scope.objects[i].schema[j].values === 'null'){
+                                response[i][j].values = [-1];
+                                console.log(response);
+                            } else {
+                                response[i][j].values = new Array(Object.keys($scope.objects[i].schema[j].values).length);
+                            }
                         }
                     }
                 }
+
                 /** filling array with data */
                 for (var i = 0; i < $scope.objects.length; i++){
                     for (var j = 0; j < $scope.objects[i].schema.length; j++){
@@ -307,7 +313,7 @@ angular.module('app.controllers', [])
 
                 /** Data for server */
                 for(var i = 0; i < response.length; i++){
-                    var url = 'http://147.228.63.49:80/app/mobile-services/recieve-data';
+                    var url = 'http://147.228.63.49:80/app/mobile-services/receive-data';
                     var data = {'client_username':$scope.username,
                                 'token':$scope.token,
                                 'personID':$scope.person.personID,
@@ -425,7 +431,7 @@ angular.module('app.controllers', [])
             if(res) {
                 
                 /** Data for server */
-                var url = 'http://147.228.63.49:80/app/mobile-services/data';
+                var url = 'http://147.228.63.49:80/app/mobile-services/measured-data';
                 var data = {'client_username':$scope.username,
                             'token':$scope.token,
                             'personID':$scope.person.personID                    
@@ -547,16 +553,45 @@ angular.module('app.controllers', [])
 })
 
 
-.controller('menuCtrl', ['$scope', '$stateParams', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
-// You can include any angular dependencies as parameters for this function
-// TIP: Access Route Parameters for your page via $stateParams.parameterName
-function ($scope, $stateParams, $state) {
+.controller('menuCtrl', function ($scope, $state, $ionicPopup, $http, $translate, $ionicLoading, $filter) {
+    
     $scope.logout = function(){
-        //execute logout
-		  $state.go('login');
-	  }
 
-}])
+          /** Data for server */
+        var url = 'http://147.228.63.49:80/app/mobile-services/logout';
+        var data = {};
+
+        /** Show loading */
+        $ionicLoading.show({
+            noBackdrop: true,
+            template: '<ion-spinner icon="circles"></ion-spinner>',
+        });
+
+        /** Send data */
+        console.log(data);
+        $http.post(url, data).then(function(response){
+
+            /** Hide loading */
+            $ionicLoading.hide();
+
+            /** parse data */
+            console.log(response);
+        },
+        /** http ERROR */
+        function(error){
+
+            $ionicLoading.hide();
+
+            var alertPopup = $ionicPopup.alert({
+                title: $filter('translate')('ERROR'),
+                template: "{{ 'CONNECT_FAIL' | translate }}"
+            });
+            //return back
+            $state.go('login');
+
+        }); 
+	  }
+})
 
 .controller('homeCtrl', ['$scope', '$stateParams', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
 // You can include any angular dependencies as parameters for this function
