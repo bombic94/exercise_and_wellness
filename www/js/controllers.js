@@ -272,26 +272,47 @@ angular.module('app.controllers', [])
                     template: '<ion-spinner icon="circles"></ion-spinner>',
                 });
 
+                /** Catch if personID is blank */
+                if (typeof $scope.person.personID === 'undefined' || typeof $scope.person.personID === 'null'){
+                    /** Hide loading */
+                    $ionicLoading.hide();
+                    
+                    var alertPopup = $ionicPopup.alert({
+                        title: $filter('translate')('FORGOT_ID1'),
+                        template: "{{ 'FORGOT_ID2' | translate }}"
+                    });
+                    return;
+                }
+
                 /** creating array empty */
                 var response = new Array($scope.objects.length);
                 for (var i = 0; i < $scope.objects.length; i++) {
                     response[i] = new Array($scope.objects[i].schema.length);
                     for (var j = 0; j < $scope.objects[i].schema.length; j++){
+
+                        /** Catch if some input is missing */
+                        if (typeof $scope.objects[i].schema[j].values === 'undefined' || typeof $scope.objects[i].schema[j].values === 'null'){
+                            /** Hide loading */
+                            $ionicLoading.hide();
+                            
+                            var alertPopup = $ionicPopup.alert({
+                                title: $filter('translate')('FORGOT_INPUT1'),
+                                template: "{{ 'FORGOT_INPUT2' | translate }}"
+                            });
+                            return;
+                        }
+
                         response[i][j] = {
                             values: {},
                             id: ""
                         };
+
                         if ($scope.objects[i].schema[j].formType == 'checkbox'){
                             response[i][j].values = new Array(1);
                             response[i][j].values[0] = new Array(Object.keys($scope.objects[i].schema[j].values).length);
                         }
                         else {
-                            if (typeof $scope.objects[i].schema[j].values === 'undefined' || typeof $scope.objects[i].schema[j].values === 'null'){
-                                response[i][j].values = [-1];
-                                console.log(response);
-                            } else {
-                                response[i][j].values = new Array(Object.keys($scope.objects[i].schema[j].values).length);
-                            }
+                            response[i][j].values = new Array(Object.keys($scope.objects[i].schema[j].values).length);    
                         }
                     }
                 }
@@ -340,12 +361,14 @@ angular.module('app.controllers', [])
                                 template: "{{ 'REG_FAIL2' | translate }}"
                             });
                             $scope.person.personID = "";
+                            return;
                         } else if (myData.data == 'ID not found.'){                            
                             var alertPopup = $ionicPopup.alert({
                                 title: $filter('translate')('SAVE_FAIL1'),
                                 template: "{{ 'SAVE_FAIL2' | translate }}"
                             });
                             $scope.person.personID = ""; 
+                            return;
                         /* token expired */
                         } else if (myData.data == 'authorization failed'){
                             var alertPopup = $ionicPopup.alert({
@@ -354,21 +377,13 @@ angular.module('app.controllers', [])
                             });
                             $scope.user = {};
                             $state.go('login');
+                            return;
                         }
                       
                         /** valid ID, successfully saved */
                         else {
-                            var alertPopup = $ionicPopup.alert({
-                                title: $filter('translate')('SAVE_OK1'),
-                                template: "{{ 'SAVE_OK2' | translate }}"
-                            });
-                            /** clean up */
-                            var myData = JSON.parse(window.localStorage.getItem("measurement_scheme"));
-                            for (var i = 0; i < myData.length; i++){ 
-                                $scope.person.personID = "";
-                                $scope.objects[i] = myData[i];
-                                $scope.objects[i].schema = JSON.parse(myData[i].scheme);    
-                            } 
+                            //OK
+                             
                         }
                     }, 
                     /** http ERROR */
@@ -381,6 +396,17 @@ angular.module('app.controllers', [])
                             template: "{{ 'CONNECT_FAIL' | translate }}"
                         });
                     });
+                }
+                var alertPopup = $ionicPopup.alert({
+                    title: $filter('translate')('SAVE_OK1'),
+                    template: "{{ 'SAVE_OK2' | translate }}"
+                });
+                /** clean up */
+                var myData = JSON.parse(window.localStorage.getItem("measurement_scheme"));
+                for (var i = 0; i < myData.length; i++){ 
+                    $scope.person.personID = "";
+                    $scope.objects[i] = myData[i];
+                    $scope.objects[i].schema = JSON.parse(myData[i].scheme);    
                 }
             }
         });
@@ -430,18 +456,30 @@ angular.module('app.controllers', [])
         confirmPopup.then(function(res) {
             if(res) {
                 
+                /** Show loading */
+                $ionicLoading.show({
+                    noBackdrop: true,
+                    template: '<ion-spinner icon="circles"></ion-spinner>',
+                });
+
+                /** Catch if personID is blank */
+                if (typeof $scope.person.personID === 'undefined' || typeof $scope.person.personID === 'null'){
+                    /** Hide loading */
+                    $ionicLoading.hide();
+                    
+                    var alertPopup = $ionicPopup.alert({
+                        title: $filter('translate')('FORGOT_ID1'),
+                        template: "{{ 'FORGOT_ID2' | translate }}"
+                    });
+                    return;
+                }
+
                 /** Data for server */
                 var url = 'http://147.228.63.49:80/app/mobile-services/measured-data';
                 var data = {'client_username':$scope.username,
                             'token':$scope.token,
                             'personID':$scope.person.personID                    
                            };
-
-                /** Show loading */
-                $ionicLoading.show({
-                    noBackdrop: true,
-                    template: '<ion-spinner icon="circles"></ion-spinner>',
-                });
 
                 /** Send data */
                 console.log(data);

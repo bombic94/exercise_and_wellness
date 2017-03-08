@@ -46,6 +46,10 @@ angular.module('app', ['ionic', 'app.controllers', 'app.routes', 'app.directives
     NO_INPUT: 'There are no data to input',
     SCAN_ID: 'Scan person ID',
     SAVE: 'Save',
+    FORGOT_INPUT1: 'Input missing',
+    FORGOT_INPIT2: 'Please fill in data to every input field',
+    FORGOT_ID1: 'Person ID missing',
+    FORGOT_ID2: 'Please fill in Person ID',
 
     //experiment ctrl
     SAVE_CONFIRM1: 'Save values',
@@ -113,6 +117,10 @@ angular.module('app', ['ionic', 'app.controllers', 'app.routes', 'app.directives
     NO_INPUT: 'Es liegen keine daten zur eingabe vor',
     SCAN_ID: 'Scannen sie Person ID',
     SAVE: 'Speichern',
+    FORGOT_INPUT1: 'Input missing',
+    FORGOT_INPIT2: 'Please fill in data to every input field',
+    FORGOT_ID1: 'Person ID missing',
+    FORGOT_ID2: 'Please fill in Person ID',
 
     //experiment ctrl
     SAVE_CONFIRM1: 'Werte speichern',
@@ -180,6 +188,10 @@ angular.module('app', ['ionic', 'app.controllers', 'app.routes', 'app.directives
     NO_INPUT: 'Nelze zadávat žádná data',
     SCAN_ID: 'Načíst ID osoby',
     SAVE: 'Uložit',
+    FORGOT_INPUT1: 'Nejsou vyplněna data',
+    FORGOT_INPIT2: 'Vyplňte prosím všechna datová pole',
+    FORGOT_ID1: 'Není vyplněno ID osoby',
+    FORGOT_ID2: 'Vyplňte prosím ID osoby',
 
     //experiment ctrl
     SAVE_CONFIRM1: 'Uložit hodnoty',
