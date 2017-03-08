@@ -6,7 +6,6 @@ angular.module('app.controllers', [])
     /** Variables */
     $scope.user = {};
 
-
     /** After launch verify that use of camera is authorized (Android 6+) */
     $scope.$on('$ionicView.enter', function(){
         cordova.plugins.diagnostic.getCameraAuthorizationStatus(function(status){
@@ -26,8 +25,8 @@ angular.module('app.controllers', [])
 
     /** Change language */
     $scope.ChangeLanguage = function(lang){
-		    $translate.use(lang);
-	  }
+		$translate.use(lang);
+	}
 
     /** Scan QR */
     $scope.scanBarcode = function() {
@@ -43,6 +42,37 @@ angular.module('app.controllers', [])
     };
 
     $scope.login = function() {
+        
+        /** Show loading */
+        $ionicLoading.show({
+            noBackdrop: true,
+            template: '<ion-spinner icon="circles"></ion-spinner>',
+        });
+
+        /** Catch if username is blank */
+        if (typeof $scope.user.username === 'undefined' || typeof $scope.user.username === 'null'){
+            /** Hide loading */
+            $ionicLoading.hide();
+            
+            var alertPopup = $ionicPopup.alert({
+                title: $filter('translate')('FORGOT_NAME1'),
+                template: "{{ 'FORGOT_NAME2' | translate }}"
+            });
+            return;
+        }
+
+        /** Catch if password is blank */
+        if (typeof $scope.user.password === 'undefined' || typeof $scope.user.password === 'null'){
+            /** Hide loading */
+            $ionicLoading.hide();
+            
+            var alertPopup = $ionicPopup.alert({
+                title: $filter('translate')('FORGOT_PASS1'),
+                template: "{{ 'FORGOT_PASS2' | translate }}"
+            });
+            return;
+        }
+
         /** Save data */
         window.localStorage.setItem("username", $scope.user.username);
         window.localStorage.setItem("password", $scope.user.password);       
@@ -51,13 +81,7 @@ angular.module('app.controllers', [])
         var url = 'http://147.228.63.49:80/app/mobile-services/login';
         var data = {'client_username': $scope.user.username, 
                     'client_passwd': $scope.user.password
-                   };
-
-        /** Show loading */
-        $ionicLoading.show({
-            noBackdrop: true,
-            template: '<ion-spinner icon="circles"></ion-spinner>',
-        });
+                   };   
 
         /** Send data */
         console.log(data);
@@ -81,7 +105,7 @@ angular.module('app.controllers', [])
             else {
                 /** Save data */
                 window.localStorage.setItem("token", myData.data.token);
-                //window.localStorage.setItem("measurement_array", JSON.stringify(myData.data.data));
+                window.localStorage.setItem("measurement_array", JSON.stringify(myData.data.data));
                 
                 /** Go to homepage*/
                 $scope.user = {};
@@ -101,6 +125,8 @@ angular.module('app.controllers', [])
     };
 })
 
+
+
 /** Measurement list page - choose one measurement */
 .controller('listOfMeasurementsCtrl', function($scope, $state, $http, $translate, $ionicLoading, $filter) {
 
@@ -110,6 +136,11 @@ angular.module('app.controllers', [])
         $scope.token = window.localStorage.getItem("token");
         $scope.username = window.localStorage.getItem("username");
 
+        /** Show loading */
+         $ionicLoading.show({
+             noBackdrop: true,
+             template: '<ion-spinner icon="circles"></ion-spinner>',
+         });
 
          /** Data for server */
          var url = 'http://147.228.63.49:80/app/mobile-services/measurement-list';
@@ -117,15 +148,9 @@ angular.module('app.controllers', [])
                      'token': $scope.token, 
                     };
  
-         /** Show loading */
-         $ionicLoading.show({
-             noBackdrop: true,
-             template: '<ion-spinner icon="circles"></ion-spinner>',
-         });
- 
          /** Send data */
          console.log(data);
-       //  $http.post(url, data).then(function(response){*/
+       /*  $http.post(url, data).then(function(response){*/
  
              /** Hide loading */
              $ionicLoading.hide();
@@ -138,7 +163,7 @@ angular.module('app.controllers', [])
        /*      if (myData.data == 'authorization failed'){
                  var alertPopup = $ionicPopup.alert({
                      title: $filter('translate')('ERROR'),
-                     template: "{{ 'AUTH_FAIL' | translate }}"
+                     template: "{{ 'AUTH_EXP' | translate }}"
                  });
                  $scope.user = {};
                  $state.go('login');
@@ -147,6 +172,11 @@ angular.module('app.controllers', [])
                  /** Save data */
       /*           $scope.experiments = myData.data.data;
                  window.localStorage.setItem("measurement_array", JSON.stringify(myData.data.data));
+                 if ($scope.objects.length == 0){
+                    var alertPopup = $ionicPopup.alert({
+                    title: $filter('translate')('ERROR'),
+                    template: "{{ 'NO_MEASUREMENT' | translate }}"
+                });
              }
          },*/
          /** http ERROR */
@@ -184,18 +214,18 @@ angular.module('app.controllers', [])
         $scope.token = window.localStorage.getItem("token"); 
         $scope.username = window.localStorage.getItem("username");
         
+        /** Show loading */
+        $ionicLoading.show({
+            noBackdrop: true,
+            template: '<ion-spinner icon="circles"></ion-spinner>',
+        });
+
         /** Data for server */
         var url = 'http://147.228.63.49:80/app/mobile-services/scheme';
         var data = {'client_username': $scope.username, 
                     'token': $scope.token, 
                     'measurementID': $scope.measurement.id
                    };
-
-        /** Show loading */
-        $ionicLoading.show({
-            noBackdrop: true,
-            template: '<ion-spinner icon="circles"></ion-spinner>',
-        });
 
         /** Send data */
         console.log(data);
@@ -210,7 +240,7 @@ angular.module('app.controllers', [])
             if (response.data == 'authorization failed'){
                 var alertPopup = $ionicPopup.alert({
                     title: $filter('translate')('ERROR'),
-                    template: "{{ 'AUTH_FAIL' | translate }}"
+                    template: "{{ 'AUTH_EXP' | translate }}"
                 });
                 $scope.user = {};
                 $state.go('login');
@@ -219,9 +249,14 @@ angular.module('app.controllers', [])
                 for (var i = 0; i < response.data.length; i++){
                     $scope.objects[i] = response.data[i];
                     $scope.objects[i].schema = JSON.parse(response.data[i].scheme);
+                }
+                if ($scope.objects.length == 0){
+                    var alertPopup = $ionicPopup.alert({
+                    title: $filter('translate')('ERROR'),
+                    template: "{{ 'NO_INPUT' | translate }}"
+                });
                 }  
             }
-            console.log($scope.objects.length);
         },
         /** http ERROR */
         function(error){
@@ -370,14 +405,14 @@ angular.module('app.controllers', [])
                             $scope.person.personID = ""; 
                             return;
                         /* token expired */
-                        } else if (myData.data == 'authorization failed'){
+                        /*} else if (myData.data == 'authorization failed'){
                             var alertPopup = $ionicPopup.alert({
                                 title: $filter('translate')('ERROR'),
                                 template: "{{ 'AUTH_EXP' | translate }}"
                             });
                             $scope.user = {};
                             $state.go('login');
-                            return;
+                            return;*/
                         }
                       
                         /** valid ID, successfully saved */
@@ -562,7 +597,14 @@ angular.module('app.controllers', [])
             $scope.objects[i].names = $scope.result.names[i];
             $scope.objects[i].units = $scope.result.units[i];
             $scope.objects[i].values = $scope.result.values[i];
-        }  
+        }
+
+        if ($scope.objects.length == 0){
+            var alertPopup = $ionicPopup.alert({
+                title: $filter('translate')('ERROR'),
+                template: "{{ 'NO_RESULTS' | translate }}"
+            });
+        } 
     });
 })
 

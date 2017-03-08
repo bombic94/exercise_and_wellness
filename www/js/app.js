@@ -17,10 +17,14 @@ angular.module('app', ['ionic', 'app.controllers', 'app.routes', 'app.directives
 
     //login html
     LOGIN: 'Login',
-    USERNAME: 'Username',
+    USERNAME: 'Section name',
     PASSWORD: 'Password',
     LOG_IN: 'Log in',
     GET_SECTION: 'Get section',
+    FORGOT_NAME1: 'Section name missing',
+    FORGOT_NAME2: 'Please fill in section name',
+    FORGOT_PASS1: 'Password missing',
+    FORGOT_PASS2: 'Please fill in password',
 
     //login ctrl
     ERROR: 'Error',
@@ -88,10 +92,14 @@ angular.module('app', ['ionic', 'app.controllers', 'app.routes', 'app.directives
   $translateProvider.translations('de', {
     //login html
     LOGIN: 'Anmeldung',
-    USERNAME: 'Benutzername',
+    USERNAME: '...',
     PASSWORD: 'Passwort',
     LOG_IN: 'Einloggen',
     GET_SECTION: 'Erhalten abteilung',
+    FORGOT_NAME1: '...',
+    FORGOT_NAME2: '...',
+    FORGOT_PASS1: '...',
+    FORGOT_PASS2: '...',
 
     //login ctrl
     ERROR: 'Fehler',
@@ -117,10 +125,10 @@ angular.module('app', ['ionic', 'app.controllers', 'app.routes', 'app.directives
     NO_INPUT: 'Es liegen keine daten zur eingabe vor',
     SCAN_ID: 'Scannen sie Person ID',
     SAVE: 'Speichern',
-    FORGOT_INPUT1: 'Input missing',
-    FORGOT_INPIT2: 'Please fill in data to every input field',
-    FORGOT_ID1: 'Person ID missing',
-    FORGOT_ID2: 'Please fill in Person ID',
+    FORGOT_INPUT1: '...',
+    FORGOT_INPIT2: '...',
+    FORGOT_ID1: '...',
+    FORGOT_ID2: '...',
 
     //experiment ctrl
     SAVE_CONFIRM1: 'Werte speichern',
@@ -159,10 +167,14 @@ angular.module('app', ['ionic', 'app.controllers', 'app.routes', 'app.directives
   $translateProvider.translations('cz', {
     //login html
     LOGIN: 'Přihlášení',
-    USERNAME: 'Jméno',
+    USERNAME: 'Jméno stanoviště',
     PASSWORD: 'Heslo',
     LOG_IN: 'Přihlásit',
     GET_SECTION: 'Načíst stanoviště',
+    FORGOT_NAME1: 'Není vyplněn název stanoviště',
+    FORGOT_NAME2: 'Vyplňte prosím název stanoviště',
+    FORGOT_PASS1: 'Není vyplněno heslo',
+    FORGOT_PASS2: 'Vyplňtě prosím heslo',
 
     //login ctrl
     ERROR: 'Chyba',

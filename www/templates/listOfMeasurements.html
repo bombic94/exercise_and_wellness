@@ -4,7 +4,7 @@
   </ion-nav-title>
   <ion-content padding="true" class="has-header">
     
-    <h3 ng-if="experiments.length <= 0" style="color:#000000;font-weight:300;text-align:center;">{{ 'NO_MEASUREMENT' | translate }}</h3>
+    <!--h3 ng-if="experiments.length <= 0" style="color:#000000;font-weight:300;text-align:center;">{{ 'NO_MEASUREMENT' | translate }}</h3-->
 
     <ion-list id="listOfMeasurements-list3" ng-if="experiments.length > 0">
       <ion-item ui-sref="menu.measurement" class="item" style="color:#000000;" ng-repeat="experiment in experiments" ng-click="showExperiment({{experiment}})" href="#">
