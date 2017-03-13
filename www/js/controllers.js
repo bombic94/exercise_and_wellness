@@ -95,7 +95,7 @@ angular.module('app.controllers', [])
             console.log(myData);
             
             /** Wrong name or password */
-            if (myData.data == 'authorization failed'){
+            if (myData.data == 'authentication failed'){
                 var alertPopup = $ionicPopup.alert({
                     title: $filter('translate')('ERROR'),
                     template: "{{ 'AUTH_FAIL' | translate }}"
@@ -132,7 +132,7 @@ angular.module('app.controllers', [])
 
     /** Get variables before entering */
     $scope.$on('$ionicView.beforeEnter', function(){   
-        $scope.experiments = JSON.parse(window.localStorage.getItem("measurement_array"));
+        //$scope.experiments = JSON.parse(window.localStorage.getItem("measurement_array"));
         $scope.token = window.localStorage.getItem("token");
         $scope.username = window.localStorage.getItem("username");
 
@@ -150,17 +150,17 @@ angular.module('app.controllers', [])
  
          /** Send data */
          console.log(data);
-       /*  $http.post(url, data).then(function(response){*/
+         $http.post(url, data).then(function(response){
  
              /** Hide loading */
              $ionicLoading.hide();
  
              /** parse data */
-       /*      var myData = response;
-             console.log(myData);*/
+             var myData = response;
+             console.log(myData);
             
              /** Token expired */
-       /*      if (myData.data == 'authorization failed'){
+             if (myData.data == 'authorization failed'){
                  var alertPopup = $ionicPopup.alert({
                      title: $filter('translate')('ERROR'),
                      template: "{{ 'AUTH_EXP' | translate }}"
@@ -168,19 +168,20 @@ angular.module('app.controllers', [])
                  $scope.user = {};
                  $state.go('login');
              }
-             else {*/
+             else {
                  /** Save data */
-      /*           $scope.experiments = myData.data.data;
-                 window.localStorage.setItem("measurement_array", JSON.stringify(myData.data.data));
-                 if ($scope.objects.length == 0){
+                 $scope.experiments = myData.data.list;
+                 window.localStorage.setItem("measurement_array", JSON.stringify(myData.data.list));
+                 if ($scope.experiments.length == 0){
                     var alertPopup = $ionicPopup.alert({
-                    title: $filter('translate')('ERROR'),
-                    template: "{{ 'NO_MEASUREMENT' | translate }}"
-                });
+                        title: $filter('translate')('ERROR'),
+                        template: "{{ 'NO_MEASUREMENT' | translate }}"
+                    });
+                 }
              }
-         },*/
+         },
          /** http ERROR */
- /*        function(error){
+         function(error){
  
              $ionicLoading.hide();
  
@@ -188,15 +189,13 @@ angular.module('app.controllers', [])
                  title: $filter('translate')('ERROR'),
                  template: "{{ 'CONNECT_FAIL' | translate }}"
              });
-         });*/
+         });
     });
 
     /** Choose one measurement */
     $scope.showExperiment = function(measurement) {
-        
         /** Save data */
         window.localStorage.setItem("measurement", JSON.stringify(measurement))
-
     }
 
 })
@@ -404,21 +403,10 @@ angular.module('app.controllers', [])
                             });
                             $scope.person.personID = ""; 
                             return;
-                        /* token expired */
-                        /*} else if (myData.data == 'authorization failed'){
-                            var alertPopup = $ionicPopup.alert({
-                                title: $filter('translate')('ERROR'),
-                                template: "{{ 'AUTH_EXP' | translate }}"
-                            });
-                            $scope.user = {};
-                            $state.go('login');
-                            return;*/
                         }
-                      
                         /** valid ID, successfully saved */
                         else {
-                            //OK
-                             
+                            //OK            
                         }
                     }, 
                     /** http ERROR */
@@ -479,95 +467,82 @@ angular.module('app.controllers', [])
 
     /** After button pressed ask to confirm then get results */
     $scope.showConfirm = function() {
-
-        /** Confirm popup window */
-        var confirmPopup = $ionicPopup.confirm({
-            title: $filter('translate')('LOAD_RESULTS1'),
-            template: "{{ 'LOAD_RESULTS2' | translate }}",
-            cancelText: $filter('translate')('CANCEL'),
-            okText: $filter('translate')('CONFIRM'),
+                
+        /** Show loading */
+        $ionicLoading.show({
+            noBackdrop: true,
+            template: '<ion-spinner icon="circles"></ion-spinner>',
         });
 
-        confirmPopup.then(function(res) {
-            if(res) {
-                
-                /** Show loading */
-                $ionicLoading.show({
-                    noBackdrop: true,
-                    template: '<ion-spinner icon="circles"></ion-spinner>',
-                });
+        /** Catch if personID is blank */
+        if (typeof $scope.person.personID === 'undefined' || typeof $scope.person.personID === 'null'){
+            /** Hide loading */
+            $ionicLoading.hide();
+            
+            var alertPopup = $ionicPopup.alert({
+                title: $filter('translate')('FORGOT_ID1'),
+                template: "{{ 'FORGOT_ID2' | translate }}"
+            });
+            return;
+        }
 
-                /** Catch if personID is blank */
-                if (typeof $scope.person.personID === 'undefined' || typeof $scope.person.personID === 'null'){
-                    /** Hide loading */
-                    $ionicLoading.hide();
-                    
-                    var alertPopup = $ionicPopup.alert({
-                        title: $filter('translate')('FORGOT_ID1'),
-                        template: "{{ 'FORGOT_ID2' | translate }}"
-                    });
-                    return;
-                }
+        /** Data for server */
+        var url = 'http://147.228.63.49:80/app/mobile-services/measured-data';
+        var data = {'client_username':$scope.username,
+                    'token':$scope.token,
+                    'personID':$scope.person.personID                    
+                    };
 
-                /** Data for server */
-                var url = 'http://147.228.63.49:80/app/mobile-services/measured-data';
-                var data = {'client_username':$scope.username,
-                            'token':$scope.token,
-                            'personID':$scope.person.personID                    
-                           };
+        /** Send data */
+        console.log(data);
+        $http.post(url, data).then(function(response){
 
-                /** Send data */
-                console.log(data);
-                $http.post(url, data).then(function(response){
+            /** Hide loading */
+            $ionicLoading.hide();
 
-                    /** Hide loading */
-                    $ionicLoading.hide();
+            /** parse data */
+            var myData = response;
+            console.log(myData);
 
-                    /** parse data */
-                    var myData = response;
-                    console.log(myData);
-
-                    for (var i = 0; i < myData.data.length; i++){
-                        $scope.object[i] = myData.data[i];
-                    }
-
-                    /** invalid ID */
-                    if (myData.data == 'ID not found.'){                                                 
-                        var alertPopup = $ionicPopup.alert({
-                            title: $filter('translate')('SAVE_FAIL1'),
-                            template: "{{ 'SAVE_FAIL2' | translate }}"
-                        });
-                        $scope.person.personID = "";
-                    /* token expired */
-                    } else if (myData.data == 'authorization failed'){
-                        var alertPopup = $ionicPopup.alert({
-                            title: $filter('translate')('ERROR'),
-                            template: "{{ 'AUTH_EXP' | translate }}"
-                        });
-                        $scope.user = {};
-                        $state.go('login');
-                    }
-                    /** valid ID, parse results */
-                    else {
-                        /** Save data */
-                        window.localStorage.setItem("result_data", JSON.stringify(myData.data))
-                        window.localStorage.setItem("personID", $scope.person.personID);
-                        /** Go to measurement list*/
-                        $scope.person.personID = "";
-                        $state.go('menu.resultsID');
-                    }  
-                }, 
-                /** http ERROR */
-                function(error){
-
-                    $ionicLoading.hide();
-
-                    var alertPopup = $ionicPopup.alert({
-                        title: $filter('translate')('ERROR'),
-                        template: "{{ 'CONNECT_FAIL' | translate }}"
-                    });
-                });
+            for (var i = 0; i < myData.data.length; i++){
+                $scope.object[i] = myData.data[i];
             }
+
+            /** invalid ID */
+            if (myData.data == 'ID not found.'){                                                 
+                var alertPopup = $ionicPopup.alert({
+                    title: $filter('translate')('SAVE_FAIL1'),
+                    template: "{{ 'SAVE_FAIL2' | translate }}"
+                });
+                $scope.person.personID = "";
+            /* token expired */
+            } else if (myData.data == 'authorization failed'){
+                var alertPopup = $ionicPopup.alert({
+                    title: $filter('translate')('ERROR'),
+                    template: "{{ 'AUTH_EXP' | translate }}"
+                });
+                $scope.user = {};
+                $state.go('login');
+            }
+            /** valid ID, parse results */
+            else {
+                /** Save data */
+                window.localStorage.setItem("result_data", JSON.stringify(myData.data))
+                window.localStorage.setItem("personID", $scope.person.personID);
+                /** Go to measurement list*/
+                $scope.person.personID = "";
+                $state.go('menu.resultsID');
+            }  
+        }, 
+        /** http ERROR */
+        function(error){
+
+            $ionicLoading.hide();
+
+            var alertPopup = $ionicPopup.alert({
+                title: $filter('translate')('ERROR'),
+                template: "{{ 'CONNECT_FAIL' | translate }}"
+            });
         });
     };
 })   
@@ -634,12 +609,15 @@ angular.module('app.controllers', [])
 
 
 .controller('menuCtrl', function ($scope, $state, $ionicPopup, $http, $translate, $ionicLoading, $filter) {
-    
-    $scope.logout = function(){
 
+    $scope.logout = function(){
+        $scope.token = window.localStorage.getItem("token"); 
+        $scope.username = window.localStorage.getItem("username");
           /** Data for server */
         var url = 'http://147.228.63.49:80/app/mobile-services/logout';
-        var data = {};
+        var data = {'client_username': $scope.username, 
+                    'token': $scope.token, 
+                   };
 
         /** Show loading */
         $ionicLoading.show({
@@ -656,6 +634,17 @@ angular.module('app.controllers', [])
 
             /** parse data */
             console.log(response);
+
+             /** Token expired */
+            if (response.data == 'Logout failed'){
+
+                $scope.user = {};
+                $state.go('login');
+            }
+            else {
+                window.localStorage.clear();
+                $state.go('login');
+            }
         },
         /** http ERROR */
         function(error){
