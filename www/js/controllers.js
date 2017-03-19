@@ -251,10 +251,11 @@ angular.module('app.controllers', [])
                 }
                 if ($scope.objects.length == 0){
                     var alertPopup = $ionicPopup.alert({
-                    title: $filter('translate')('ERROR'),
-                    template: "{{ 'NO_INPUT' | translate }}"
-                });
+                        title: $filter('translate')('ERROR'),
+                        template: "{{ 'NO_INPUT' | translate }}"
+                    });
                 }  
+                window.localStorage.setItem("measurement_scheme", JSON.stringify($scope.objects))
             }
         },
         /** http ERROR */
@@ -365,7 +366,7 @@ angular.module('app.controllers', [])
                         }
                     }
                 } 
-
+                var ok = true;
                 /** Data for server */
                 for(var i = 0; i < response.length; i++){
                     var url = 'http://147.228.63.49:80/app/mobile-services/receive-data';
@@ -395,18 +396,33 @@ angular.module('app.controllers', [])
                                 template: "{{ 'REG_FAIL2' | translate }}"
                             });
                             $scope.person.personID = "";
+                            ok = false;
                             return;
-                        } else if (myData.data == 'ID not found.'){                            
+                        } else if (myData.data == 'ID not found'){                            
                             var alertPopup = $ionicPopup.alert({
                                 title: $filter('translate')('SAVE_FAIL1'),
                                 template: "{{ 'SAVE_FAIL2' | translate }}"
                             });
                             $scope.person.personID = ""; 
+                            ok = false;
                             return;
                         }
                         /** valid ID, successfully saved */
                         else {
-                            //OK            
+                            /** clean up */
+                            var myData = JSON.parse(window.localStorage.getItem("measurement_scheme"));
+                            for (var j = 0; j < myData.length; j++){ 
+                                $scope.person.personID = "";
+                                $scope.objects[j] = myData[j];
+                                $scope.objects[j].schema = JSON.parse(myData[j].scheme);    
+                            }
+                            if (ok == true && i == ($scope.objects.length)){
+                                var alertPopup = $ionicPopup.alert({
+                                    title: $filter('translate')('SAVE_OK1'),
+                                    template: "{{ 'SAVE_OK2' | translate }}"
+                                });
+                                
+                            } 
                         }
                     }, 
                     /** http ERROR */
@@ -418,19 +434,10 @@ angular.module('app.controllers', [])
                             title: $filter('translate')('ERROR'),
                             template: "{{ 'CONNECT_FAIL' | translate }}"
                         });
+                        ok = false;
                     });
                 }
-                var alertPopup = $ionicPopup.alert({
-                    title: $filter('translate')('SAVE_OK1'),
-                    template: "{{ 'SAVE_OK2' | translate }}"
-                });
-                /** clean up */
-                var myData = JSON.parse(window.localStorage.getItem("measurement_scheme"));
-                for (var i = 0; i < myData.length; i++){ 
-                    $scope.person.personID = "";
-                    $scope.objects[i] = myData[i];
-                    $scope.objects[i].schema = JSON.parse(myData[i].scheme);    
-                }
+                
             }
         });
     };

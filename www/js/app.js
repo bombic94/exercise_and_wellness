@@ -51,7 +51,7 @@ angular.module('app', ['ionic', 'app.controllers', 'app.routes', 'app.directives
     SCAN_ID: 'Scan person ID',
     SAVE: 'Save',
     FORGOT_INPUT1: 'Input missing',
-    FORGOT_INPIT2: 'Please fill in data to every input field',
+    FORGOT_INPUT2: 'Please fill in data to every input field',
     FORGOT_ID1: 'Person ID missing',
     FORGOT_ID2: 'Please fill in Person ID',
 
@@ -126,7 +126,7 @@ angular.module('app', ['ionic', 'app.controllers', 'app.routes', 'app.directives
     SCAN_ID: 'Scannen sie Person ID',
     SAVE: 'Speichern',
     FORGOT_INPUT1: '...',
-    FORGOT_INPIT2: '...',
+    FORGOT_INPUT2: '...',
     FORGOT_ID1: '...',
     FORGOT_ID2: '...',
 
@@ -167,7 +167,7 @@ angular.module('app', ['ionic', 'app.controllers', 'app.routes', 'app.directives
   $translateProvider.translations('cz', {
     //login html
     LOGIN: 'Přihlášení',
-    USERNAME: 'Jméno stanoviště',
+    USERNAME: 'Stanoviště',
     PASSWORD: 'Heslo',
     LOG_IN: 'Přihlásit',
     GET_SECTION: 'Načíst stanoviště',
@@ -201,7 +201,7 @@ angular.module('app', ['ionic', 'app.controllers', 'app.routes', 'app.directives
     SCAN_ID: 'Načíst ID osoby',
     SAVE: 'Uložit',
     FORGOT_INPUT1: 'Nejsou vyplněna data',
-    FORGOT_INPIT2: 'Vyplňte prosím všechna datová pole',
+    FORGOT_INPUT2: 'Vyplňte prosím všechna datová pole',
     FORGOT_ID1: 'Není vyplněno ID osoby',
     FORGOT_ID2: 'Vyplňte prosím ID osoby',
 
