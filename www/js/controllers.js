@@ -366,9 +366,12 @@ angular.module('app.controllers', [])
                         }
                     }
                 } 
+
+
+                var iterNum = 0;
                 var ok = true;
                 /** Data for server */
-                for(var i = 0; i < response.length; i++){
+                for(var i = 0; i < $scope.objects.length; i++){
                     var url = 'http://147.228.63.49:80/app/mobile-services/receive-data';
                     var data = {'client_username':$scope.username,
                                 'token':$scope.token,
@@ -389,23 +392,28 @@ angular.module('app.controllers', [])
                         var myData = response;
                         console.log(myData);
                         
+                        iterNum++;
+
                         /** invalid ID */
                         if (myData.data == 'Registration failed. Use another ID!'){
-                            var alertPopup = $ionicPopup.alert({
-                                title: $filter('translate')('REG_FAIL1'),
-                                template: "{{ 'REG_FAIL2' | translate }}"
-                            });
-                            $scope.person.personID = "";
                             ok = false;
-                            return;
-                        } else if (myData.data == 'ID not found'){                            
-                            var alertPopup = $ionicPopup.alert({
-                                title: $filter('translate')('SAVE_FAIL1'),
-                                template: "{{ 'SAVE_FAIL2' | translate }}"
-                            });
-                            $scope.person.personID = ""; 
+                            if (iterNum == ($scope.objects.length)){
+                                var alertPopup = $ionicPopup.alert({
+                                    title: $filter('translate')('REG_FAIL1'),
+                                    template: "{{ 'REG_FAIL2' | translate }}"
+                                });
+                                $scope.person.personID = "";
+                            }     
+                            
+                        } else if (myData.data == 'ID not found'){ 
                             ok = false;
-                            return;
+                            if (iterNum == ($scope.objects.length)){
+                                var alertPopup = $ionicPopup.alert({
+                                    title: $filter('translate')('SAVE_FAIL1'),
+                                    template: "{{ 'SAVE_FAIL2' | translate }}"
+                                });
+                                $scope.person.personID = ""; 
+                            }
                         }
                         /** valid ID, successfully saved */
                         else {
@@ -416,7 +424,9 @@ angular.module('app.controllers', [])
                                 $scope.objects[j] = myData[j];
                                 $scope.objects[j].schema = JSON.parse(myData[j].scheme);    
                             }
-                            if (ok == true && i == ($scope.objects.length)){
+                            
+                            console.log(iterNum);
+                            if (ok == true && iterNum == ($scope.objects.length)){
                                 var alertPopup = $ionicPopup.alert({
                                     title: $filter('translate')('SAVE_OK1'),
                                     template: "{{ 'SAVE_OK2' | translate }}"
@@ -430,12 +440,17 @@ angular.module('app.controllers', [])
 
                         $ionicLoading.hide();
 
-                        var alertPopup = $ionicPopup.alert({
-                            title: $filter('translate')('ERROR'),
-                            template: "{{ 'CONNECT_FAIL' | translate }}"
-                        });
+                        iterNum++;
                         ok = false;
+                        if (iterNum == ($scope.objects.length)){
+                            var alertPopup = $ionicPopup.alert({
+                                title: $filter('translate')('ERROR'),
+                                template: "{{ 'CONNECT_FAIL' | translate }}"
+                            });
+                        }
+
                     });
+
                 }
                 
             }
