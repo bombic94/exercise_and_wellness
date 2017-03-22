@@ -418,29 +418,8 @@ angular.module('app.controllers', [])
 
                         iterNum++;
 
-                        /** invalid ID */
-                        if (myData.data == 'Registration failed. Use another ID!'){
-                            ok = false;
-                            if (iterNum == ($scope.objects.length)){
-                                var alertPopup = $ionicPopup.alert({
-                                    title: $filter('translate')('REG_FAIL1'),
-                                    template: "{{ 'REG_FAIL2' | translate }}"
-                                });
-                                $scope.person.personID = "";
-                            }     
-                            
-                        } else if (myData.data == 'ID not found'){ 
-                            ok = false;
-                            if (iterNum == ($scope.objects.length)){
-                                var alertPopup = $ionicPopup.alert({
-                                    title: $filter('translate')('SAVE_FAIL1'),
-                                    template: "{{ 'SAVE_FAIL2' | translate }}"
-                                });
-                                $scope.person.personID = ""; 
-                            }
-                        }
                         /** valid ID, successfully saved */
-                        else {
+                        if  (myData.data == 'Save success'){
                             /** clean up */
                             var myData = JSON.parse(window.localStorage.getItem("measurement_scheme"));
                             for (var j = 0; j < myData.length; j++){ 
@@ -453,9 +432,41 @@ angular.module('app.controllers', [])
                                 var alertPopup = $ionicPopup.alert({
                                     title: $filter('translate')('SAVE_OK1'),
                                     template: "{{ 'SAVE_OK2' | translate }}"
-                                });
-                                
+                                });    
                             } 
+                        }
+
+                        /** invalid ID */
+                        else if (myData.data == 'Registration failed. Use another ID!'){
+                            ok = false;
+                            if (iterNum == ($scope.objects.length)){
+                                var alertPopup = $ionicPopup.alert({
+                                    title: $filter('translate')('REG_FAIL1'),
+                                    template: "{{ 'REG_FAIL2' | translate }}"
+                                });
+                                $scope.person.personID = "";
+                            }     
+                            
+                        } 
+                        else if (myData.data == 'ID not found'){ 
+                            ok = false;
+                            if (iterNum == ($scope.objects.length)){
+                                var alertPopup = $ionicPopup.alert({
+                                    title: $filter('translate')('SAVE_FAIL1'),
+                                    template: "{{ 'SAVE_FAIL2' | translate }}"
+                                });
+                                $scope.person.personID = ""; 
+                            }
+                        }
+                        
+                        else {
+                            ok = false;
+                            if (iterNum == ($scope.objects.length)){
+                                var alertPopup = $ionicPopup.alert({
+                                    title: $filter('translate')('ERROR'),
+                                    template: "{{ 'ERR_UNSP' | translate }}"
+                                });
+                            }
                         }
                     }, 
                     /** http ERROR */
