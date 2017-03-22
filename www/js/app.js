@@ -34,6 +34,7 @@ angular.module('app', ['ionic', 'app.controllers', 'app.routes', 'app.directives
     AUTH_FAIL: 'Authorization failed',
     AUTH_EXP: 'Token expired',
     CONNECT_FAIL: 'Connection to server failed',
+    ERR_UNSP: 'Unspecified error happened',
 
     //home html
     HOME: 'Homepage',
@@ -109,7 +110,8 @@ angular.module('app', ['ionic', 'app.controllers', 'app.routes', 'app.directives
     AUTH_FAIL: 'Autorisierung fehlgeschlagen',
     AUTH_EXP: 'Token abgelaufen',
     CONNECT_FAIL: 'Verbindung zum server fehlgeschlagen',
-   
+    ERR_UNSP: 'Unspezifizierter fehler ist passiert',
+
     //home html
     HOME: 'Homepage',
 
@@ -184,6 +186,7 @@ angular.module('app', ['ionic', 'app.controllers', 'app.routes', 'app.directives
     AUTH_EXP: 'Platnost tokenu vypršela',
     AUTH_FAIL: 'Autorizace se nezdařila',
     CONNECT_FAIL: 'Nepodařilo se spojit se serverem',
+    ERR_UNSP: 'Vyskytla se nespecifikovaná chyba',
 
     //home html
     HOME: 'Úvodní obrazovka',

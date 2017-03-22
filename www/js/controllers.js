@@ -113,7 +113,10 @@ angular.module('app.controllers', [])
                 $scope.user = {};
             }
             else {
-                console.log("some different error happened");
+                var alertPopup = $ionicPopup.alert({
+                    title: $filter('translate')('ERROR'),
+                    template: "{{ 'ERR_UNSP' | translate }}"
+                });
             }
         },
         /** http ERROR */
@@ -185,7 +188,10 @@ angular.module('app.controllers', [])
              }
 
              else {
-                console.log("some different error happened");
+                var alertPopup = $ionicPopup.alert({
+                    title: $filter('translate')('ERROR'),
+                    template: "{{ 'ERR_UNSP' | translate }}"
+                });
              }
          },
          /** http ERROR */
@@ -270,7 +276,10 @@ angular.module('app.controllers', [])
                 $state.go('login');
             }
             else {
-                console.log("some different error happened");
+                var alertPopup = $ionicPopup.alert({
+                    title: $filter('translate')('ERROR'),
+                    template: "{{ 'ERR_UNSP' | translate }}"
+                });
             }
         },
         /** http ERROR */
@@ -574,7 +583,10 @@ angular.module('app.controllers', [])
             }
            
             else {
-                console.log("some different error happened");
+                var alertPopup = $ionicPopup.alert({
+                    title: $filter('translate')('ERROR'),
+                    template: "{{ 'ERR_UNSP' | translate }}"
+                });
             }  
         }, 
         /** http ERROR */
