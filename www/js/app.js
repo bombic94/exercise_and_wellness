@@ -41,6 +41,8 @@ angular.module('app', ['ionic', 'app.controllers', 'app.routes', 'app.directives
 
     //about html
     ABOUT: 'About',
+    ABOUT_HEAD: 'About this application',
+    ABOUT_TEXT: 'Unwillingness of many people to assume responsibilities for a personal health, fitness and wellness seems to be widespread. This can be partially remedied by individualized exercise and wellness program that integrates the basic knowledge domains: lifestyle, sports and fitness, and nutrition and personal/environmental health. However, collection, management and analysis of data and metadata related to these domains is demanding and time consuming task. Moreover, the appropriate annotation of raw data is crucial for their next processing. To promote such a program a software infrastructure for collection, storage, management, analysis and interpretation of health related data and metadata has been proposed and part of this infrastructure has been developed and tested outside laboratory conditions. This software prototype allows experimenters to collect various heterogeneous health related data in a~highly organized and efficient way. Data are then evaluated and users can view relevant information related to their health and fitness.',
 
     //experimentList html
     MEASURE_LIST: 'List of measurements',
@@ -117,6 +119,8 @@ angular.module('app', ['ionic', 'app.controllers', 'app.routes', 'app.directives
 
     //about html
     ABOUT: 'Über die anwendung',
+    ABOUT_HEAD: '...',
+    ABOUT_TEXT: '...',
 
     //experimentList html
     MEASURE_LIST: 'Liste der messungen',
@@ -193,6 +197,8 @@ angular.module('app', ['ionic', 'app.controllers', 'app.routes', 'app.directives
 
     //about html
     ABOUT: 'O aplikaci',
+    ABOUT_HEAD: 'O této aplikaci',
+    ABOUT_TEXT: '...',
 
     //experimentList html
     MEASURE_LIST: 'Seznam měření',
