@@ -34,10 +34,11 @@ angular.module('app.controllers', [])
             $scope.user.username = imageData.text;
         },
         function(error) { 
-            var alertPopup = $ionicPopup.alert({
+            /*var alertPopup = $ionicPopup.alert({
                 title: $filter('translate')('ERROR'),
                 template: "{{ 'QR_FAIL' | translate }}"
-            });
+            });*/
+            console.log("error while scanning: " + error);
         });
     };
 
@@ -94,8 +95,17 @@ angular.module('app.controllers', [])
             var myData = response;
             console.log(myData);
             
+            if(myData.data.token !== undefined){
+                /** Save data */
+                window.localStorage.setItem("token", myData.data.token);
+                
+                /** Go to homepage*/
+                $scope.user = {};
+                $state.go('menu.home');
+            }
+
             /** Wrong name or password */
-            if (myData.data == 'authentication failed'){
+            else if (myData.data == 'authentication failed'){
                 var alertPopup = $ionicPopup.alert({
                     title: $filter('translate')('ERROR'),
                     template: "{{ 'AUTH_FAIL' | translate }}"
@@ -103,13 +113,7 @@ angular.module('app.controllers', [])
                 $scope.user = {};
             }
             else {
-                /** Save data */
-                window.localStorage.setItem("token", myData.data.token);
-                window.localStorage.setItem("measurement_array", JSON.stringify(myData.data.data));
-                
-                /** Go to homepage*/
-                $scope.user = {};
-                $state.go('menu.home');
+                console.log("some different error happened");
             }
         },
         /** http ERROR */
@@ -132,7 +136,6 @@ angular.module('app.controllers', [])
 
     /** Get variables before entering */
     $scope.$on('$ionicView.beforeEnter', function(){   
-        //$scope.experiments = JSON.parse(window.localStorage.getItem("measurement_array"));
         $scope.token = window.localStorage.getItem("token");
         $scope.username = window.localStorage.getItem("username");
 
@@ -159,16 +162,7 @@ angular.module('app.controllers', [])
              var myData = response;
              console.log(myData);
             
-             /** Token expired */
-             if (myData.data == 'authorization failed'){
-                 var alertPopup = $ionicPopup.alert({
-                     title: $filter('translate')('ERROR'),
-                     template: "{{ 'AUTH_EXP' | translate }}"
-                 });
-                 $scope.user = {};
-                 $state.go('login');
-             }
-             else {
+             if(myData.data.list !== undefined){
                  /** Save data */
                  $scope.experiments = myData.data.list;
                  window.localStorage.setItem("measurement_array", JSON.stringify(myData.data.list));
@@ -178,6 +172,20 @@ angular.module('app.controllers', [])
                         template: "{{ 'NO_MEASUREMENT' | translate }}"
                     });
                  }
+            }
+
+             /** Token expired */
+             else if (myData.data == 'authorization failed'){
+                 var alertPopup = $ionicPopup.alert({
+                     title: $filter('translate')('ERROR'),
+                     template: "{{ 'AUTH_EXP' | translate }}"
+                 });
+                 $scope.user = {};
+                 $state.go('login');
+             }
+
+             else {
+                console.log("some different error happened");
              }
          },
          /** http ERROR */
@@ -234,9 +242,26 @@ angular.module('app.controllers', [])
             $ionicLoading.hide();
 
             /** parse data */
-            console.log(response);
+            var myData = response;
+            console.log(myData);
+
+            if(myData.data instanceof Array){
+                /** Save data */
+                for (var i = 0; i < myData.data.length; i++){
+                    $scope.objects[i] = myData.data[i];
+                    $scope.objects[i].schema = JSON.parse(myData.data[i].scheme);
+                }
+                if ($scope.objects.length == 0){
+                    var alertPopup = $ionicPopup.alert({
+                        title: $filter('translate')('ERROR'),
+                        template: "{{ 'NO_INPUT' | translate }}"
+                    });
+                }  
+                window.localStorage.setItem("measurement_scheme", JSON.stringify($scope.objects));
+            }
+
              /** Token expired */
-            if (response.data == 'authorization failed'){
+            else if (myData.data == 'authorization failed'){
                 var alertPopup = $ionicPopup.alert({
                     title: $filter('translate')('ERROR'),
                     template: "{{ 'AUTH_EXP' | translate }}"
@@ -245,17 +270,7 @@ angular.module('app.controllers', [])
                 $state.go('login');
             }
             else {
-                for (var i = 0; i < response.data.length; i++){
-                    $scope.objects[i] = response.data[i];
-                    $scope.objects[i].schema = JSON.parse(response.data[i].scheme);
-                }
-                if ($scope.objects.length == 0){
-                    var alertPopup = $ionicPopup.alert({
-                        title: $filter('translate')('ERROR'),
-                        template: "{{ 'NO_INPUT' | translate }}"
-                    });
-                }  
-                window.localStorage.setItem("measurement_scheme", JSON.stringify($scope.objects))
+                console.log("some different error happened");
             }
         },
         /** http ERROR */
@@ -269,7 +284,6 @@ angular.module('app.controllers', [])
             });
             //return back
             $state.go('menu.listOfMeasurements');
-
         }); 
 
     });
@@ -282,10 +296,11 @@ angular.module('app.controllers', [])
             $scope.person.personID = str;
         },
         function(error) { 
-            var alertPopup = $ionicPopup.alert({
+            /*var alertPopup = $ionicPopup.alert({
                 title: $filter('translate')('ERROR'),
                 template: "{{ 'QR_FAIL' | translate }}"
-            });
+            });*/
+            console.log("error while scanning: " + error);
         });
     };
 
@@ -391,7 +406,7 @@ angular.module('app.controllers', [])
                         /** parse data */
                         var myData = response;
                         console.log(myData);
-                        
+
                         iterNum++;
 
                         /** invalid ID */
@@ -425,7 +440,6 @@ angular.module('app.controllers', [])
                                 $scope.objects[j].schema = JSON.parse(myData[j].scheme);    
                             }
                             
-                            console.log(iterNum);
                             if (ok == true && iterNum == ($scope.objects.length)){
                                 var alertPopup = $ionicPopup.alert({
                                     title: $filter('translate')('SAVE_OK1'),
@@ -480,10 +494,11 @@ angular.module('app.controllers', [])
             $scope.person.personID = str;
         },
         function(error) { 
-            var alertPopup = $ionicPopup.alert({
+            /*var alertPopup = $ionicPopup.alert({
                 title: $filter('translate')('ERROR'),
                 template: "{{ 'QR_FAIL' | translate }}"
-            });
+            });*/
+            console.log("error while scanning: " + error);
         });
     };
 
@@ -526,19 +541,30 @@ angular.module('app.controllers', [])
             var myData = response;
             console.log(myData);
 
-            for (var i = 0; i < myData.data.length; i++){
-                $scope.object[i] = myData.data[i];
+            /** valid ID, parse results */
+            if (myData.data.experiments !== undefined){
+                /** Save data */
+                for (var i = 0; i < myData.data.length; i++){
+                    $scope.object[i] = myData.data[i];
+                }
+
+                window.localStorage.setItem("result_data", JSON.stringify(myData.data))
+                window.localStorage.setItem("personID", $scope.person.personID);
+                /** Go to results for ID*/
+                $scope.person.personID = "";
+                $state.go('menu.resultsID');
             }
 
             /** invalid ID */
-            if (myData.data == 'ID not found.'){                                                 
+            else if (myData.data == 'ID not found'){                                                 
                 var alertPopup = $ionicPopup.alert({
                     title: $filter('translate')('SAVE_FAIL1'),
                     template: "{{ 'SAVE_FAIL2' | translate }}"
                 });
                 $scope.person.personID = "";
+            } 
             /* token expired */
-            } else if (myData.data == 'authorization failed'){
+            else if (myData.data == 'authorization failed'){
                 var alertPopup = $ionicPopup.alert({
                     title: $filter('translate')('ERROR'),
                     template: "{{ 'AUTH_EXP' | translate }}"
@@ -546,14 +572,9 @@ angular.module('app.controllers', [])
                 $scope.user = {};
                 $state.go('login');
             }
-            /** valid ID, parse results */
+           
             else {
-                /** Save data */
-                window.localStorage.setItem("result_data", JSON.stringify(myData.data))
-                window.localStorage.setItem("personID", $scope.person.personID);
-                /** Go to measurement list*/
-                $scope.person.personID = "";
-                $state.go('menu.resultsID');
+                console.log("some different error happened");
             }  
         }, 
         /** http ERROR */
