@@ -95,14 +95,14 @@ angular.module('app', ['ionic', 'app.controllers', 'app.routes', 'app.directives
   $translateProvider.translations('de', {
     //login html
     LOGIN: 'Anmeldung',
-    USERNAME: '...',
+    USERNAME: 'Abschnittsname',
     PASSWORD: 'Passwort',
     LOG_IN: 'Einloggen',
     GET_SECTION: 'Erhalten abteilung',
-    FORGOT_NAME1: '...',
-    FORGOT_NAME2: '...',
-    FORGOT_PASS1: '...',
-    FORGOT_PASS2: '...',
+    FORGOT_NAME1: 'Abschnittsname fehlt',
+    FORGOT_NAME2: 'Bitte füllen sie den abschnittsnamen aus',
+    FORGOT_PASS1: 'Passwort fehlt',
+    FORGOT_PASS2: 'Bitte füllen Sie das passwort aus',
 
     //login ctrl
     ERROR: 'Fehler',
@@ -119,8 +119,8 @@ angular.module('app', ['ionic', 'app.controllers', 'app.routes', 'app.directives
 
     //about html
     ABOUT: 'Über die anwendung',
-    ABOUT_HEAD: '...',
-    ABOUT_TEXT: '...',
+    ABOUT_HEAD: 'Über diese anwendung',
+    ABOUT_TEXT: 'Unwillen vieler Menschen, Verantwortung für eine persönliche Gesundheit, Fitness und Wellness zu übernehmen, scheint weit verbreitet zu sein. Dies kann teilweise durch ein individuelles Übungs- und Wellnessprogramm behoben werden, das die grundlegenden Wissensdomänen integriert: Lifestyle, Sport und Fitness sowie Ernährung und persönliche / umweltfreundliche Gesundheit. Allerdings ist die Erfassung, Verwaltung und Analyse von Daten und Metadaten im Zusammenhang mit diesen Domains anspruchsvolle und zeitaufwändige Aufgabe. Darüber hinaus ist die entsprechende Annotation von Rohdaten für ihre nächste Verarbeitung entscheidend. Zur Förderung eines solchen Programms wurde eine Software-Infrastruktur für die Erhebung, Speicherung, Verwaltung, Analyse und Interpretation von gesundheitsbezogenen Daten und Metadaten vorgeschlagen und ein Teil dieser Infrastruktur wurde außerhalb der Laborbedingungen entwickelt und getestet. Dieser Software-Prototyp ermöglicht es den Experimentatoren, verschiedene heterogene gesundheitsbezogene Daten in einer hochgradig organisierten und effizienten Weise zu sammeln. Die Daten werden dann ausgewertet und die Nutzer können relevante Informationen über ihre Gesundheit und Fitness anzeigen.',
 
     //experimentList html
     MEASURE_LIST: 'Liste der messungen',
@@ -131,10 +131,10 @@ angular.module('app', ['ionic', 'app.controllers', 'app.routes', 'app.directives
     NO_INPUT: 'Es liegen keine daten zur eingabe vor',
     SCAN_ID: 'Scannen sie Person ID',
     SAVE: 'Speichern',
-    FORGOT_INPUT1: '...',
-    FORGOT_INPUT2: '...',
-    FORGOT_ID1: '...',
-    FORGOT_ID2: '...',
+    FORGOT_INPUT1: 'Eingabe fehlt',
+    FORGOT_INPUT2: 'Bitte füllen sie bitte daten in jedes eingabefeld ein',
+    FORGOT_ID1: 'Person ID fehlt',
+    FORGOT_ID2: 'Bitte füllen sie die Person ID aus',
 
     //experiment ctrl
     SAVE_CONFIRM1: 'Werte speichern',
@@ -198,7 +198,7 @@ angular.module('app', ['ionic', 'app.controllers', 'app.routes', 'app.directives
     //about html
     ABOUT: 'O aplikaci',
     ABOUT_HEAD: 'O této aplikaci',
-    ABOUT_TEXT: '...',
+    ABOUT_TEXT: 'Unwillingness of many people to assume responsibilities for a personal health, fitness and wellness seems to be widespread. This can be partially remedied by individualized exercise and wellness program that integrates the basic knowledge domains: lifestyle, sports and fitness, and nutrition and personal/environmental health. However, collection, management and analysis of data and metadata related to these domains is demanding and time consuming task. Moreover, the appropriate annotation of raw data is crucial for their next processing. To promote such a~program a~software infrastructure for collection, storage, management, analysis and interpretation of health related data and metadata has been proposed and part of this infrastructure has been developed and tested outside laboratory conditions. This software prototype allows experimenters to collect various heterogeneous health related data in a~highly organized and efficient way. Data are then evaluated and users can view relevant information related to their health and fitness.',
 
     //experimentList html
     MEASURE_LIST: 'Seznam měření',
