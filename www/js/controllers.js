@@ -51,7 +51,7 @@ angular.module('app.controllers', [])
         });
 
         /** Catch if username is blank */
-        if (typeof $scope.user.username === 'undefined' || typeof $scope.user.username === 'null'){
+        if (typeof $scope.user.username === 'undefined' || typeof $scope.user.username === 'null' || $scope.user.username == ""){
             /** Hide loading */
             $ionicLoading.hide();
             
@@ -63,7 +63,7 @@ angular.module('app.controllers', [])
         }
 
         /** Catch if password is blank */
-        if (typeof $scope.user.password === 'undefined' || typeof $scope.user.password === 'null'){
+        if (typeof $scope.user.password === 'undefined' || typeof $scope.user.password === 'null' || $scope.user.password == ""){
             /** Hide loading */
             $ionicLoading.hide();
             
@@ -332,7 +332,7 @@ angular.module('app.controllers', [])
                 });
 
                 /** Catch if personID is blank */
-                if (typeof $scope.person.personID === 'undefined' || typeof $scope.person.personID === 'null'){
+                if (typeof $scope.person.personID === 'undefined' || typeof $scope.person.personID === 'null'  || $scope.user.personID == ""){
                     /** Hide loading */
                     $ionicLoading.hide();
                     
@@ -350,7 +350,7 @@ angular.module('app.controllers', [])
                     for (var j = 0; j < $scope.objects[i].schema.length; j++){
 
                         /** Catch if some input is missing */
-                        if (typeof $scope.objects[i].schema[j].values === 'undefined' || typeof $scope.objects[i].schema[j].values === 'null'){
+                        if (typeof $scope.objects[i].schema[j].values === 'undefined' || typeof $scope.objects[i].schema[j].values === 'null' || $scope.objects[i].schema[j].values == ""){
                             /** Hide loading */
                             $ionicLoading.hide();
                             
@@ -521,7 +521,7 @@ angular.module('app.controllers', [])
         });
 
         /** Catch if personID is blank */
-        if (typeof $scope.person.personID === 'undefined' || typeof $scope.person.personID === 'null'){
+        if (typeof $scope.person.personID === 'undefined' || typeof $scope.person.personID === 'null' || $scope.person.personID == ""){
             /** Hide loading */
             $ionicLoading.hide();
             
