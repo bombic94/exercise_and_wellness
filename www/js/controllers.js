@@ -332,7 +332,7 @@ angular.module('app.controllers', [])
                 });
 
                 /** Catch if personID is blank */
-                if (typeof $scope.person.personID === 'undefined' || typeof $scope.person.personID === 'null'  || $scope.user.personID == ""){
+                if (typeof $scope.person.personID === 'undefined' || typeof $scope.person.personID === 'null'  || $scope.person.personID == ""){
                     /** Hide loading */
                     $ionicLoading.hide();
                     
