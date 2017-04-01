@@ -30,12 +30,12 @@
         <ion-list>        
             <ion-item ng-repeat-start="dotaznik in mereni.schema" style="display:none;"></ion-item>
             
-            <ion-row class="item item-divider" style="font-weight:300;text-align:justify;">
-                <ion-col>{{dotaznik.name}} &nbsp</ion-col>
+            <div class="item item-divider item-text-wrap"" align="justify" style="font-weight:300;text-align:justify;">
+                <ion-col align="justify" style="text-align:justify;">{{dotaznik.name}} &nbsp</ion-col>
                 <ion-col ng-if="dotaznik.units != ''">[{{dotaznik.units}}]</ion-col>
                 <ion-col class="assertive" ng-if="dotaznik.required">* &nbsp</ion-col>
                 
-            </ion-row>
+            </div>
 
             <label class="item item-input" ng-if="dotaznik.formType == 'integer'">
                 <input type="number" placeholder="{{dotaznik.formLabels[0]}}" ng-model="dotaznik.values[0]" >
