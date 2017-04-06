@@ -13,6 +13,7 @@ angular.module('app', ['ionic', 'app.controllers', 'app.routes', 'app.directives
   
   //$ionicConfigProvider.navBar.alignTitle('center');
 
+  //contains translations for all provided languages
   $translateProvider.translations('en', {
 
     //login html
@@ -198,7 +199,7 @@ angular.module('app', ['ionic', 'app.controllers', 'app.routes', 'app.directives
     //about html
     ABOUT: 'O aplikaci',
     ABOUT_HEAD: 'O této aplikaci',
-    ABOUT_TEXT: 'Unwillingness of many people to assume responsibilities for a personal health, fitness and wellness seems to be widespread. This can be partially remedied by individualized exercise and wellness program that integrates the basic knowledge domains: lifestyle, sports and fitness, and nutrition and personal/environmental health. However, collection, management and analysis of data and metadata related to these domains is demanding and time consuming task. Moreover, the appropriate annotation of raw data is crucial for their next processing. To promote such a~program a~software infrastructure for collection, storage, management, analysis and interpretation of health related data and metadata has been proposed and part of this infrastructure has been developed and tested outside laboratory conditions. This software prototype allows experimenters to collect various heterogeneous health related data in a~highly organized and efficient way. Data are then evaluated and users can view relevant information related to their health and fitness.',
+    ABOUT_TEXT: 'Neochota mnoha lidí přijmout zodpovědnost za svoje osobní zdraví, kondici a životosprávu se stále rozšiřuje. Toto lze být částečně napraveno individuálním programem zaměřeným na cvičení a životosprávu, který zahrnuje základní znalosti z těchto odvětví: životní styl, sport, cvičení, stravování a osobní zdraví. Je nutné podotknout, že sběr, správa a analýza dat a metadat z těchto odvětví je obtížný a časově náročný úkol. Správné ohodnocení je naprosto nezbytné pro další výzkum. K rozšíření takového programu byla navrhnuta softwarová infrastruktura pro sběr, ukládání, spravování, analýzu a vyhodnocení zdravotnických dat a metadat. Část této infrastruktury byla otestována mimo laboratorní podmínky. Tento software umožňuje experimentátorům velmi efektivně sbírat různá zdravotně zaměřená data ve strukturalizované formě. Data jsou následně ohodnocena a uživatelé si mohou zobrazit důležité informace ohledně svého zdraví a kondice.',
 
     //experimentList html
     MEASURE_LIST: 'Seznam měření',
@@ -248,6 +249,7 @@ angular.module('app', ['ionic', 'app.controllers', 'app.routes', 'app.directives
     LOGOUT: 'Odhlásit se'
   })
 
+  /** Tries to get native language of device and start app in that language, if language not supported, start in EN */
   .registerAvailableLanguageKeys(['en', 'de', 'cz'], {
     'en_*': 'en',
     'de_*': 'de',
@@ -260,6 +262,7 @@ angular.module('app', ['ionic', 'app.controllers', 'app.routes', 'app.directives
 
 })
 
+/** on start of app run following commands */
 .run(function($ionicPlatform) {
   $ionicPlatform.ready(function() {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard

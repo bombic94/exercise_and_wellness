@@ -112,6 +112,7 @@ angular.module('app.controllers', [])
                 });
                 $scope.user = {};
             }
+            /** Unspecified error */
             else {
                 var alertPopup = $ionicPopup.alert({
                     title: $filter('translate')('ERROR'),
@@ -186,7 +187,7 @@ angular.module('app.controllers', [])
                  $scope.user = {};
                  $state.go('login');
              }
-
+             /** Unspecified error */
              else {
                 var alertPopup = $ionicPopup.alert({
                     title: $filter('translate')('ERROR'),
@@ -275,6 +276,7 @@ angular.module('app.controllers', [])
                 $scope.user = {};
                 $state.go('login');
             }
+            /** Unspecified error */
             else {
                 var alertPopup = $ionicPopup.alert({
                     title: $filter('translate')('ERROR'),
@@ -360,7 +362,7 @@ angular.module('app.controllers', [])
                             });
                             return;
                         }
-
+                        /** create object for response, if checkbox, create array of objects */
                         response[i][j] = {
                             values: {},
                             id: ""
@@ -427,7 +429,7 @@ angular.module('app.controllers', [])
                                 $scope.objects[j] = myData[j];
                                 $scope.objects[j].schema = JSON.parse(myData[j].scheme);    
                             }
-                            
+                            /** Last iteration, all ok */
                             if (ok == true && iterNum == ($scope.objects.length)){
                                 var alertPopup = $ionicPopup.alert({
                                     title: $filter('translate')('SAVE_OK1'),
@@ -436,9 +438,10 @@ angular.module('app.controllers', [])
                             } 
                         }
 
-                        /** invalid ID */
+                        /** invalid ID in registration */
                         else if (myData.data == 'Registration failed. Use another ID!'){
                             ok = false;
+                            /** Last iteration */
                             if (iterNum == ($scope.objects.length)){
                                 var alertPopup = $ionicPopup.alert({
                                     title: $filter('translate')('REG_FAIL1'),
@@ -448,8 +451,10 @@ angular.module('app.controllers', [])
                             }     
                             
                         } 
+                         /** invalid ID */
                         else if (myData.data == 'ID not found'){ 
                             ok = false;
+                            /** Last iteration */
                             if (iterNum == ($scope.objects.length)){
                                 var alertPopup = $ionicPopup.alert({
                                     title: $filter('translate')('SAVE_FAIL1'),
@@ -458,9 +463,10 @@ angular.module('app.controllers', [])
                                 $scope.person.personID = ""; 
                             }
                         }
-                        
+                        /** Unspecified error */
                         else {
                             ok = false;
+                            /** Last iteration */
                             if (iterNum == ($scope.objects.length)){
                                 var alertPopup = $ionicPopup.alert({
                                     title: $filter('translate')('ERROR'),
@@ -476,6 +482,7 @@ angular.module('app.controllers', [])
 
                         iterNum++;
                         ok = false;
+                         /** Last iteration */
                         if (iterNum == ($scope.objects.length)){
                             var alertPopup = $ionicPopup.alert({
                                 title: $filter('translate')('ERROR'),
@@ -592,7 +599,7 @@ angular.module('app.controllers', [])
                 $scope.user = {};
                 $state.go('login');
             }
-           
+            /** Uspecified error */
             else {
                 var alertPopup = $ionicPopup.alert({
                     title: $filter('translate')('ERROR'),
@@ -624,6 +631,7 @@ angular.module('app.controllers', [])
         $scope.result = JSON.parse(window.localStorage.getItem("result_data")); 
         $scope.personID = window.localStorage.getItem("personID");
 
+         /** create empty array */
         for (var i = 0; i < $scope.result.experiments.length; i++){
             $scope.objects[i] = {
                 experiments: null,
@@ -633,6 +641,7 @@ angular.module('app.controllers', [])
             };
         }
 
+        /** fill array with received values */
         for (var i = 0; i < $scope.result.experiments.length; i++){
             $scope.objects[i].experiments = $scope.result.experiments[i];
             $scope.objects[i].names = $scope.result.names[i];
@@ -640,6 +649,7 @@ angular.module('app.controllers', [])
             $scope.objects[i].values = $scope.result.values[i];
         }
 
+         /** no results */
         if ($scope.objects.length == 0){
             var alertPopup = $ionicPopup.alert({
                 title: $filter('translate')('ERROR'),
@@ -652,12 +662,14 @@ angular.module('app.controllers', [])
 /** Settings page - so far implemented change of language */
 .controller('settingsCtrl', function($scope, $translate, $filter, $state) {
     
+     /** list of supported languages */
     $scope.languages = [
       {name: 'ENGLISH', short:'en'},
       {name: 'DEUTSCH', short:'de'},
       {name: 'CZECH', short:'cz'}
     ];
 
+    /** set language */
     for (var i = 0; i < $scope.languages.length; i++){
         if ($translate.use() === $scope.languages[i].short){
             $scope.myLang = $scope.languages[i];
@@ -665,6 +677,7 @@ angular.module('app.controllers', [])
         }
     }
 
+    /** change language */
     $scope.ChangeLanguage = function(lang){
 		  $translate.use(lang);
           console.log("Language changed");
@@ -673,9 +686,10 @@ angular.module('app.controllers', [])
     
 })
 
-
+/** Menu - controls logout */
 .controller('menuCtrl', function ($scope, $state, $ionicPopup, $http, $translate, $ionicLoading, $filter) {
 
+    /** logout from app */
     $scope.logout = function(){
         $scope.token = window.localStorage.getItem("token"); 
         $scope.username = window.localStorage.getItem("username");
@@ -707,6 +721,7 @@ angular.module('app.controllers', [])
                 $scope.user = {};
                 $state.go('login');
             }
+            /** logout ok */
             else {
                 window.localStorage.clear();
                 $state.go('login');
@@ -728,6 +743,7 @@ angular.module('app.controllers', [])
 	  }
 })
 
+//EMPTY
 .controller('homeCtrl', ['$scope', '$stateParams', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
 // You can include any angular dependencies as parameters for this function
 // TIP: Access Route Parameters for your page via $stateParams.parameterName
@@ -735,6 +751,7 @@ function ($scope, $stateParams) {
 
 }])
 
+//EMPTY
 .controller('aboutCtrl', ['$scope', '$stateParams', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
 // You can include any angular dependencies as parameters for this function
 // TIP: Access Route Parameters for your page via $stateParams.parameterName
