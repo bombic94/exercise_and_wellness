@@ -363,6 +363,7 @@ angular.module('app.controllers', [])
                 /** creating array empty */
                 var response = new Array($scope.objects.length);
                 for (var i = 0; i < $scope.objects.length; i++) {
+                
                     response[i] = new Array($scope.objects[i].schema.length);
                     for (var j = 0; j < $scope.objects[i].schema.length; j++){
 
@@ -413,13 +414,17 @@ angular.module('app.controllers', [])
                 var ok = true;
                 /** Data for server */
                 for(var i = 0; i < $scope.objects.length; i++){
+                  (function(ind){      
+                    setTimeout(function(){
+                      console.log(ind);
+                      
                     var url = 'http://147.228.63.49:' + $scope.server.port + '/app/mobile-services/receive-data';
                     var data = {'client_username':$scope.username,
                                 'token':$scope.token,
                                 'personID':$scope.person.personID,
                                 'measurementID':$scope.measurement.id,
-                                'experimentID':$scope.objects[i].experimentID,
-                                'data':response[i]    
+                                'experimentID':$scope.objects[ind].experimentID,
+                                'data':response[ind]    
                                };
                   
                     /** Send data */        
@@ -441,13 +446,13 @@ angular.module('app.controllers', [])
                             /** clean up */
                             var myData = JSON.parse(window.localStorage.getItem("measurement_scheme"));
                             for (var j = 0; j < myData.length; j++){ 
-                                $scope.person.personID = "";
                                 $scope.objects[j] = myData[j];
                                 $scope.objects[j].schema = JSON.parse(myData[j].scheme);    
                             }
                             /** Last iteration, all ok */
                             if (ok == true && iterNum == ($scope.objects.length)){
-                                var alertPopup = $ionicPopup.alert({
+                                $scope.person.personID = "";
+                                var alertPopup = $ionicPopup.alert({ 
                                     title: $filter('translate')('SAVE_OK1'),
                                     template: "{{ 'SAVE_OK2' | translate }}"
                                 });    
@@ -507,7 +512,8 @@ angular.module('app.controllers', [])
                         }
 
                     });
-
+                   }, (500 * ind));
+                  })(i);
                 }
                 
             }
