@@ -44,7 +44,10 @@ angular.module('app', ['ionic', 'app.controllers', 'app.routes', 'app.directives
     ABOUT: 'About',
     ABOUT_HEAD: 'About this application',
     ABOUT_TEXT: 'Unwillingness of many people to assume responsibilities for a personal health, fitness and wellness seems to be widespread. This can be partially remedied by individualized exercise and wellness program that integrates the basic knowledge domains: lifestyle, sports and fitness, and nutrition and personal/environmental health. However, collection, management and analysis of data and metadata related to these domains is demanding and time consuming task. Moreover, the appropriate annotation of raw data is crucial for their next processing. To promote such a program a software infrastructure for collection, storage, management, analysis and interpretation of health related data and metadata has been proposed and part of this infrastructure has been developed and tested outside laboratory conditions. This software prototype allows experimenters to collect various heterogeneous health related data in a~highly organized and efficient way. Data are then evaluated and users can view relevant information related to their health and fitness.',
-
+    VERSION: 'Version',
+    AUTHOR: 'Author',
+    COMPANY: 'Company',
+    
     //experimentList html
     MEASURE_LIST: 'List of measurements',
     NO_MEASUREMENT: 'No measurement available',
@@ -122,7 +125,10 @@ angular.module('app', ['ionic', 'app.controllers', 'app.routes', 'app.directives
     ABOUT: 'Über die anwendung',
     ABOUT_HEAD: 'Über diese anwendung',
     ABOUT_TEXT: 'Unwillen vieler Menschen, Verantwortung für eine persönliche Gesundheit, Fitness und Wellness zu übernehmen, scheint weit verbreitet zu sein. Dies kann teilweise durch ein individuelles Übungs- und Wellnessprogramm behoben werden, das die grundlegenden Wissensdomänen integriert: Lifestyle, Sport und Fitness sowie Ernährung und persönliche / umweltfreundliche Gesundheit. Allerdings ist die Erfassung, Verwaltung und Analyse von Daten und Metadaten im Zusammenhang mit diesen Domains anspruchsvolle und zeitaufwändige Aufgabe. Darüber hinaus ist die entsprechende Annotation von Rohdaten für ihre nächste Verarbeitung entscheidend. Zur Förderung eines solchen Programms wurde eine Software-Infrastruktur für die Erhebung, Speicherung, Verwaltung, Analyse und Interpretation von gesundheitsbezogenen Daten und Metadaten vorgeschlagen und ein Teil dieser Infrastruktur wurde außerhalb der Laborbedingungen entwickelt und getestet. Dieser Software-Prototyp ermöglicht es den Experimentatoren, verschiedene heterogene gesundheitsbezogene Daten in einer hochgradig organisierten und effizienten Weise zu sammeln. Die Daten werden dann ausgewertet und die Nutzer können relevante Informationen über ihre Gesundheit und Fitness anzeigen.',
-
+    VERSION: 'Version',
+    AUTHOR: 'Author',
+    COMPANY: 'Company',
+    
     //experimentList html
     MEASURE_LIST: 'Liste der messungen',
     NO_MEASUREMENT: 'Keine messung vorhanden',
@@ -200,7 +206,10 @@ angular.module('app', ['ionic', 'app.controllers', 'app.routes', 'app.directives
     ABOUT: 'O aplikaci',
     ABOUT_HEAD: 'O této aplikaci',
     ABOUT_TEXT: 'Neochota mnoha lidí přijmout zodpovědnost za svoje osobní zdraví, kondici a životosprávu se stále rozšiřuje. Toto lze být částečně napraveno individuálním programem zaměřeným na cvičení a životosprávu, který zahrnuje základní znalosti z těchto odvětví: životní styl, sport, cvičení, stravování a osobní zdraví. Je nutné podotknout, že sběr, správa a analýza dat a metadat z těchto odvětví je obtížný a časově náročný úkol. Správné ohodnocení je naprosto nezbytné pro další výzkum. K rozšíření takového programu byla navrhnuta softwarová infrastruktura pro sběr, ukládání, spravování, analýzu a vyhodnocení zdravotnických dat a metadat. Část této infrastruktury byla otestována mimo laboratorní podmínky. Tento software umožňuje experimentátorům velmi efektivně sbírat různá zdravotně zaměřená data ve strukturalizované formě. Data jsou následně ohodnocena a uživatelé si mohou zobrazit důležité informace ohledně svého zdraví a kondice.',
-
+    VERSION: 'Veerze',
+    AUTHOR: 'Autor',
+    COMPANY: 'Společnost',
+    
     //experimentList html
     MEASURE_LIST: 'Seznam měření',
     NO_MEASUREMENT: 'Není k dispozici žádné měření',

@@ -1,9 +1,12 @@
 <ion-view id="page0" style="background-color:#CECECE;">
   <ion-nav-title>
-        {{'HOME' | translate}}
+        {{ 'HOME' | translate }} 
+        <span ng-if="server.devel" style="color:red">!!Developer version!!</span>  
   </ion-nav-title>
 
+            
   <ion-content padding="true" class="has-header">
+    
     <div class="row ">
       <div class="col col-md-6 col-50">
         <ion-item class=" item item-positive" style="text-align:center;font-size: 500%;" ui-sref="menu.listOfMeasurements">
@@ -29,6 +32,6 @@
         </ion-item>
       </div>
     </div>
-
+           
 </ion-content>
 </ion-view>

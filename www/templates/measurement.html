@@ -1,7 +1,9 @@
 <ion-view id="page5" style="background-color:#CECECE;">
   <ion-nav-title>
         {{ 'MEASUREMENT' | translate }}
-  </ion-nav-title>
+        <span ng-if="server.devel" style="color:red">!!Developer version!!</span>  
+  </ion-nav-title> 
+  
   <ion-content padding="true" class="has-header">
     
     <h3 id="measurement-heading1" style="color:#000000;font-weight:300;text-align:center;">{{measurement.institution}}</h3>
