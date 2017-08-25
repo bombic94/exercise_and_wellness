@@ -1,12 +1,8 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="com.ionicframework.bc897388" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-    <name>E&amp;W</name>
-    <description>
-        Exercise &amp; Wellness
-    </description>
-    <author email="bohmannd@gmail.com" href="https://github.com/bombic94/exercise_and_wellness/">
-      David Bohmann
-    </author>
+<widget id="com.ionicframework.bc897388" version="1.2.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+    <name>BodyInNumbers</name>
+    <description>BodyInNumbers</description>
+    <author email="bohmannd@gmail.com" href="https://github.com/bombic94/exercise_and_wellness/">David Bohmann</author>
     <content src="index.html" />
     <access origin="*" />
     <preference name="webviewbounce" value="false" />

@@ -206,7 +206,7 @@ angular.module('app', ['ionic', 'app.controllers', 'app.routes', 'app.directives
     ABOUT: 'O aplikaci',
     ABOUT_HEAD: 'O této aplikaci',
     ABOUT_TEXT: 'Neochota mnoha lidí přijmout zodpovědnost za svoje osobní zdraví, kondici a životosprávu se stále rozšiřuje. Toto lze být částečně napraveno individuálním programem zaměřeným na cvičení a životosprávu, který zahrnuje základní znalosti z těchto odvětví: životní styl, sport, cvičení, stravování a osobní zdraví. Je nutné podotknout, že sběr, správa a analýza dat a metadat z těchto odvětví je obtížný a časově náročný úkol. Správné ohodnocení je naprosto nezbytné pro další výzkum. K rozšíření takového programu byla navrhnuta softwarová infrastruktura pro sběr, ukládání, spravování, analýzu a vyhodnocení zdravotnických dat a metadat. Část této infrastruktury byla otestována mimo laboratorní podmínky. Tento software umožňuje experimentátorům velmi efektivně sbírat různá zdravotně zaměřená data ve strukturalizované formě. Data jsou následně ohodnocena a uživatelé si mohou zobrazit důležité informace ohledně svého zdraví a kondice.',
-    VERSION: 'Veerze',
+    VERSION: 'Verze',
     AUTHOR: 'Autor',
     COMPANY: 'Společnost',
     

@@ -429,7 +429,7 @@ angular.module('app.controllers', [])
                   
                     /** Send data */        
                     console.log(url);
-                    console.log(data);
+                    console.log(JSON.stringify(data));
                     $http.post(url, data).then(function(response){
                         
                         /** Hide loading */
@@ -799,7 +799,7 @@ function ($scope, $stateParams) {
     $scope.$on('$ionicView.beforeEnter', function(){
         $scope.server = JSON.parse(window.localStorage.getItem("server"));
     });
-    $scope.version = "1.2.0";
+    $scope.version = "1.2.1";
     $scope.author = "David Bohmann";
     $scope.company = "Faculty of Applied Sciences at University of West Bohemia";
 }])
