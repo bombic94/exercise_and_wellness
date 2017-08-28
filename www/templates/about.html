@@ -1,12 +1,26 @@
 <ion-view id="page10" style="background-color:#CECECE;">
   <ion-nav-title>
         {{'ABOUT' | translate}}
+        <span ng-if="server.devel" style="color:red">!!Developer version!!</span>
   </ion-nav-title>
 
   <ion-content padding="true" class="has-header">
     <h3 style="color:#000000;font-weight:300;text-align:center;">{{'ABOUT_HEAD' | translate}}</h3>
     <p align="justify"> {{'ABOUT_TEXT' | translate}}</p>
     
-
+     <table style="border-spacing: 5px;">
+      <tr>
+        <td>{{'VERSION' | translate}}:&nbsp&nbsp&nbsp</td>  
+        <td>{{version}}</td>
+      </tr>
+      <tr>
+        <td>{{'AUTHOR' | translate}}:&nbsp&nbsp&nbsp</td> 
+        <td>{{author}}</td>     
+      </tr>
+       <tr>
+        <td>{{'COMPANY' | translate}}:&nbsp&nbsp&nbsp</td>
+        <td>{{company}}</td>
+      </tr>
+    </table>
 </ion-content>
 </ion-view>

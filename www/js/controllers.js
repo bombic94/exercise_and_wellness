@@ -6,6 +6,10 @@ angular.module('app.controllers', [])
     /** Variables */
     $scope.user = {};
 
+ //   var master = {devel: false, port: 80};
+ //   var devel = {devel: true, port: 8080};
+ //   $scope.server = master;
+    
     /** After launch verify that use of camera is authorized (Android 6+) */
     $scope.$on('$ionicView.enter', function(){
         cordova.plugins.diagnostic.getCameraAuthorizationStatus(function(status){
@@ -47,8 +51,8 @@ angular.module('app.controllers', [])
         /** Show loading */
         $ionicLoading.show({
             noBackdrop: true,
-            template: '<ion-spinner icon="circles"></ion-spinner>',
-        });
+            template: '<ion-spinner icon="circles"></ion-spinner>'
+        });     
 
         /** Catch if username is blank */
         if (typeof $scope.user.username === 'undefined' || typeof $scope.user.username === 'null' || $scope.user.username == ""){
@@ -74,17 +78,26 @@ angular.module('app.controllers', [])
             return;
         }
 
+    //    if ($scope.user.username.startsWith("dev:")){
+    //         $scope.user.username = $scope.user.username.substring(4);
+    //         $scope.server = devel;
+    //    } else {
+	  //        $scope.server = master;
+	  //    }    
+        
         /** Save data */
         window.localStorage.setItem("username", $scope.user.username);
-        window.localStorage.setItem("password", $scope.user.password);       
+        window.localStorage.setItem("password", $scope.user.password);  
+   //     window.localStorage.setItem("server", JSON.stringify($scope.server));     
 
         /** Data for server */
-        var url = 'http://147.228.63.49:80/app/mobile-services/login';
+        var url = 'http://147.228.63.49:8080/app/mobile-services/login';
         var data = {'client_username': $scope.user.username, 
                     'client_passwd': $scope.user.password
                    };   
 
         /** Send data */
+        console.log(url);
         console.log(data);
         $http.post(url, data).then(function(response){
 
@@ -142,20 +155,22 @@ angular.module('app.controllers', [])
     $scope.$on('$ionicView.beforeEnter', function(){   
         $scope.token = window.localStorage.getItem("token");
         $scope.username = window.localStorage.getItem("username");
+ //       $scope.server = JSON.parse(window.localStorage.getItem("server"));
 
         /** Show loading */
          $ionicLoading.show({
              noBackdrop: true,
-             template: '<ion-spinner icon="circles"></ion-spinner>',
+             template: '<ion-spinner icon="circles"></ion-spinner>'
          });
 
          /** Data for server */
-         var url = 'http://147.228.63.49:80/app/mobile-services/measurement-list';
+         var url = 'http://147.228.63.49:8080/app/mobile-services/measurement-list';
          var data = {'client_username': $scope.username, 
-                     'token': $scope.token, 
+                     'token': $scope.token
                     };
  
          /** Send data */
+         console.log(url);
          console.log(data);
          $http.post(url, data).then(function(response){
  
@@ -227,21 +242,23 @@ angular.module('app.controllers', [])
         $scope.measurement = JSON.parse(window.localStorage.getItem("measurement"));
         $scope.token = window.localStorage.getItem("token"); 
         $scope.username = window.localStorage.getItem("username");
+   //     $scope.server = JSON.parse(window.localStorage.getItem("server"));
         
         /** Show loading */
         $ionicLoading.show({
             noBackdrop: true,
-            template: '<ion-spinner icon="circles"></ion-spinner>',
+            template: '<ion-spinner icon="circles"></ion-spinner>'
         });
 
         /** Data for server */
-        var url = 'http://147.228.63.49:80/app/mobile-services/scheme';
+        var url = 'http://147.228.63.49:8080/app/mobile-services/scheme';
         var data = {'client_username': $scope.username, 
                     'token': $scope.token, 
                     'measurementID': $scope.measurement.id
                    };
 
         /** Send data */
+        console.log(url);
         console.log(data);
         $http.post(url, data).then(function(response){
 
@@ -321,7 +338,7 @@ angular.module('app.controllers', [])
             title: $filter('translate')('SAVE_CONFIRM1'),
             template: "{{ 'SAVE_CONFIRM2' | translate }}",
             cancelText: $filter('translate')('CANCEL'),
-            okText: $filter('translate')('CONFIRM'),
+            okText: $filter('translate')('CONFIRM')
         });
 
         confirmPopup.then(function(res) {
@@ -330,7 +347,7 @@ angular.module('app.controllers', [])
                 /** Show loading */
                 $ionicLoading.show({
                     noBackdrop: true,
-                    template: '<ion-spinner icon="circles"></ion-spinner>',
+                    template: '<ion-spinner icon="circles"></ion-spinner>'
                 });
 
                 /** Catch if personID is blank */
@@ -398,16 +415,20 @@ angular.module('app.controllers', [])
                 var ok = true;
                 /** Data for server */
                 for(var i = 0; i < $scope.objects.length; i++){
-                    var url = 'http://147.228.63.49:80/app/mobile-services/receive-data';
+                  (function(ind){      
+                    setTimeout(function(){
+                      console.log(ind);
+                    var url = 'http://147.228.63.49:8080/app/mobile-services/receive-data';
                     var data = {'client_username':$scope.username,
                                 'token':$scope.token,
                                 'personID':$scope.person.personID,
                                 'measurementID':$scope.measurement.id,
-                                'experimentID':$scope.objects[i].experimentID,
-                                'data':response[i]    
+                                'experimentID':$scope.objects[ind].experimentID,
+                                'data':response[ind]    
                                };
                   
-                    /** Send data */        
+                    /** Send data */   
+                    console.log(url);
                     console.log(data);
                     $http.post(url, data).then(function(response){
                         
@@ -425,12 +446,12 @@ angular.module('app.controllers', [])
                             /** clean up */
                             var myData = JSON.parse(window.localStorage.getItem("measurement_scheme"));
                             for (var j = 0; j < myData.length; j++){ 
-                                $scope.person.personID = "";
                                 $scope.objects[j] = myData[j];
                                 $scope.objects[j].schema = JSON.parse(myData[j].scheme);    
                             }
                             /** Last iteration, all ok */
                             if (ok == true && iterNum == ($scope.objects.length)){
+                                $scope.person.personID = "";
                                 var alertPopup = $ionicPopup.alert({
                                     title: $filter('translate')('SAVE_OK1'),
                                     template: "{{ 'SAVE_OK2' | translate }}"
@@ -492,6 +513,8 @@ angular.module('app.controllers', [])
 
                     });
 
+                   }, (500 * ind));
+                  })(i);
                 }
                 
             }
@@ -511,6 +534,7 @@ angular.module('app.controllers', [])
     $scope.$on('$ionicView.beforeEnter', function(){
         $scope.token = window.localStorage.getItem("token"); 
         $scope.username = window.localStorage.getItem("username");
+  //      $scope.server = JSON.parse(window.localStorage.getItem("server"));
     });
 
     /** Scan QR */
@@ -535,7 +559,7 @@ angular.module('app.controllers', [])
         /** Show loading */
         $ionicLoading.show({
             noBackdrop: true,
-            template: '<ion-spinner icon="circles"></ion-spinner>',
+            template: '<ion-spinner icon="circles"></ion-spinner>'
         });
 
         /** Catch if personID is blank */
@@ -551,13 +575,14 @@ angular.module('app.controllers', [])
         }
 
         /** Data for server */
-        var url = 'http://147.228.63.49:80/app/mobile-services/measured-data';
+       var url = 'http://147.228.63.49:8080/app/mobile-services/measured-data';
         var data = {'client_username':$scope.username,
                     'token':$scope.token,
                     'personID':$scope.person.personID                    
                     };
 
         /** Send data */
+        console.log(url);
         console.log(data);
         $http.post(url, data).then(function(response){
 
@@ -630,6 +655,7 @@ angular.module('app.controllers', [])
     $scope.$on('$ionicView.beforeEnter', function(){
         $scope.result = JSON.parse(window.localStorage.getItem("result_data")); 
         $scope.personID = window.localStorage.getItem("personID");
+  //      $scope.server = JSON.parse(window.localStorage.getItem("server"));
 
          /** create empty array */
         for (var i = 0; i < $scope.result.experiments.length; i++){
@@ -662,6 +688,11 @@ angular.module('app.controllers', [])
 /** Settings page - so far implemented change of language */
 .controller('settingsCtrl', function($scope, $translate, $filter, $state) {
     
+    /** Get variables before entering */
+    $scope.$on('$ionicView.beforeEnter', function(){
+  //      $scope.server = JSON.parse(window.localStorage.getItem("server"));
+    });
+    
      /** list of supported languages */
     $scope.languages = [
       {name: 'ENGLISH', short:'en'},
@@ -693,19 +724,22 @@ angular.module('app.controllers', [])
     $scope.logout = function(){
         $scope.token = window.localStorage.getItem("token"); 
         $scope.username = window.localStorage.getItem("username");
+   //     $scope.server = JSON.parse(window.localStorage.getItem("server"));
+        
           /** Data for server */
-        var url = 'http://147.228.63.49:80/app/mobile-services/logout';
+        var url = 'http://147.228.63.49:8080/app/mobile-services/logout';
         var data = {'client_username': $scope.username, 
-                    'token': $scope.token, 
+                    'token': $scope.token 
                    };
 
         /** Show loading */
         $ionicLoading.show({
             noBackdrop: true,
-            template: '<ion-spinner icon="circles"></ion-spinner>',
+            template: '<ion-spinner icon="circles"></ion-spinner>'
         });
 
         /** Send data */
+        console.log(url);
         console.log(data);
         $http.post(url, data).then(function(response){
 
@@ -749,6 +783,11 @@ angular.module('app.controllers', [])
 // TIP: Access Route Parameters for your page via $stateParams.parameterName
 function ($scope, $stateParams) {
 
+    /** Get variables before entering */
+    $scope.$on('$ionicView.beforeEnter', function(){
+ //       $scope.server = JSON.parse(window.localStorage.getItem("server"));
+  //      console.log($scope.server.devel);
+    });
 }])
 
 //EMPTY
@@ -756,5 +795,13 @@ function ($scope, $stateParams) {
 // You can include any angular dependencies as parameters for this function
 // TIP: Access Route Parameters for your page via $stateParams.parameterName
 function ($scope, $stateParams) {
+
+    /** Get variables before entering */
+    $scope.$on('$ionicView.beforeEnter', function(){
+  //      $scope.server = JSON.parse(window.localStorage.getItem("server"));
+    });   
+    $scope.version = "1.2.3";
+    $scope.author = "David Bohmann";
+    $scope.company = "Faculty of Applied Sciences at University of West Bohemia";
 
 }])
