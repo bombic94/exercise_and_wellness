@@ -424,7 +424,7 @@ angular.module('app.controllers', [])
                                 'personID':$scope.person.personID,
                                 'measurementID':$scope.measurement.id,
                                 'experimentID':$scope.objects[ind].experimentID,
-                                'data':response[ind]    
+                                'data':JSON.stringify(response[ind]) 
                                };
                   
                     /** Send data */   
