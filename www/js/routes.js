@@ -13,6 +13,12 @@ angular.module('app.routes', [])
     templateUrl: 'templates/login.html',
     controller: 'loginCtrl'
   })
+  
+  .state('fitbit', {
+    url: '/fitbit',
+    templateUrl: 'templates/fitbit.html',
+    controller: 'fitbitCtrl'
+  })
 
   .state('menu', {
     url: '/side-menu21',

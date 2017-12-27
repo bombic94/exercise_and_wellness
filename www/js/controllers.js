@@ -144,6 +144,40 @@ angular.module('app.controllers', [])
             });
         });
     };
+    
+    
+
+    $scope.fitbitLogin = function() {
+    
+        var accessToken = "";
+        var userId = "";
+        var clientId = "22CHZM";
+        var clientSecret = "96d9b1c10c79733ba7a525da668dffc7";
+
+        $http.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
+        var ref = window.open('https://www.fitbit.com/oauth2/authorize?response_type=token&client_id=' + clientId + '&redirect_uri=http://localhost/callback&scope=activity%20nutrition%20heartrate%20location%20nutrition%20profile%20settings%20sleep%20social%20weight&expires_in=31536000', '_blank', 'location=no');
+        ref.addEventListener('loadstart', function(event) {
+            if((event.url).startsWith("http://localhost/callback")) {  
+              accessToken = (event.url).split("access_token=")[1].split("&")[0];    
+              userId = (event.url).split("user_id=")[1].split("&")[0];        
+              ref.close();    
+              
+              /** Save fitbit token */        
+              window.localStorage.setItem("fitbitToken", accessToken); 
+              window.localStorage.setItem("fitbitUser", userId); 
+                                      
+              /** Go to homepage*/    
+              $scope.user = {};       
+              $state.go('fitbit'); 
+            } 
+        });
+    };
+
+    if (typeof String.prototype.startsWith != 'function') {
+        String.prototype.startsWith = function (str){
+            return this.indexOf(str) == 0;
+        };
+    };
 })
 
 
@@ -805,3 +839,33 @@ function ($scope, $stateParams) {
     $scope.company = "Faculty of Applied Sciences at University of West Bohemia";
 
 }])
+
+.controller('fitbitCtrl', function($scope, $http) {
+    $scope.$on('$ionicView.beforeEnter', function(){
+      $scope.token = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI1WEozRkciLCJhdWQiOiIyMkNIWk0iLCJpc3MiOiJGaXRiaXQiLCJ0eXAiOiJhY2Nlc3NfdG9rZW4iLCJzY29wZXMiOiJyc29jIHJhY3QgcnNldCBybG9jIHJ3ZWkgcmhyIHJudXQgcnBybyByc2xlIiwiZXhwIjoxNTQ1OTE0NzEzLCJpYXQiOjE1MTQzODUzMjV9.nCI0MVykbfvc_eyfxCAlBf4yG67_nbX-L2Ve3GO22S4";//window.localStorage.getItem("fitbitToken");
+      $scope.user = "5XJ3FG";//window.localStorage.getItem("fitbitUser");
+    
+      $http.defaults.headers.common.Authorization = 'Bearer ' + $scope.token;
+      var url = "https://api.fitbit.com/1/user/-/profile.json"      
+      
+      $http.get(url).then(function(response){
+              console.log(response);
+              $scope.userInfo = response.data;  
+          },
+          /** http ERROR */
+          function(error){
+  
+          }); 
+          
+      url = "https://api.fitbit.com/1/user/-/activities.json"   
+      
+      $http.get(url).then(function(response){
+              console.log(response);
+              $scope.summary = response.data;  
+          },
+          /** http ERROR */
+          function(error){
+  
+          }); 
+    })
+})

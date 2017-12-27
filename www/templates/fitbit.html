@@ -1,0 +1,48 @@
+<ion-view id="fitbit" style="background-color:#CECECE;">
+  <ion-nav-title>
+        {{'FITBIT' | translate}}
+        <span ng-if="server.devel" style="color:red">!!Developer version!!</span>
+  </ion-nav-title>
+
+  <ion-content padding="true" class="has-header">
+    
+    <style type="text/css">
+    .tg  {border-collapse:collapse;border-spacing:0;}
+    .tg td{font-family:Arial, sans-serif;font-size:14px;padding:10px 5px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;}
+    .tg th{font-family:Arial, sans-serif;font-size:14px;font-weight:normal;padding:10px 5px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;}
+    .tg .tg-9hbo{font-weight:bold;vertical-align:top}
+    .tg .tg-yw4l{vertical-align:top}
+    </style>
+
+    <table class="tg">
+      <tr>
+        <td class="tg-9hbo">Name:</td>
+        <td class="tg-yw4l">{{userInfo.user.fullName}}</td>
+      </tr>
+      <tr>
+        <td class="tg-9hbo">Age:</td>
+        <td class="tg-yw4l">{{userInfo.user.age}}</td>
+      </tr>
+      <tr>
+        <td class="tg-9hbo">Average daily steps:</td>
+        <td class="tg-yw4l">{{userInfo.user.averageDailySteps}}</td>
+      </tr>
+      <tr>
+        <td class="tg-9hbo">Lifetime distance:</td>
+        <td class="tg-yw4l">{{summary.lifetime.total.distance}} km</td>
+      </tr>
+      <tr>
+        <td class="tg-9hbo">Lifetime steps:</td>
+        <td class="tg-yw4l">{{summary.lifetime.total.steps}}</td>
+      </tr>
+      <tr>
+        <td class="tg-9hbo">Best distance in 1 day:</td>
+        <td class="tg-yw4l">{{summary.best.total.distance.date}}: {{summary.best.total.distance.value}} km</td>
+      </tr>
+      <tr>
+        <td class="tg-9hbo">Most steps in 1 day:</td>
+        <td class="tg-yw4l">{{summary.best.total.steps.date}}: {{summary.best.total.steps.value}}</td>
+      </tr>
+    </table>
+</ion-content>
+</ion-view>
