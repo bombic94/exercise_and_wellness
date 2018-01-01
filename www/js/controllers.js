@@ -840,32 +840,165 @@ function ($scope, $stateParams) {
 
 }])
 
-.controller('fitbitCtrl', function($scope, $http) {
+.controller('fitbitCtrl', function($scope, $http, $ionicLoading) {
     $scope.$on('$ionicView.beforeEnter', function(){
       $scope.token = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI1WEozRkciLCJhdWQiOiIyMkNIWk0iLCJpc3MiOiJGaXRiaXQiLCJ0eXAiOiJhY2Nlc3NfdG9rZW4iLCJzY29wZXMiOiJyc29jIHJhY3QgcnNldCBybG9jIHJ3ZWkgcmhyIHJudXQgcnBybyByc2xlIiwiZXhwIjoxNTQ1OTE0NzEzLCJpYXQiOjE1MTQzODUzMjV9.nCI0MVykbfvc_eyfxCAlBf4yG67_nbX-L2Ve3GO22S4";//window.localStorage.getItem("fitbitToken");
       $scope.user = "5XJ3FG";//window.localStorage.getItem("fitbitUser");
     
-      $http.defaults.headers.common.Authorization = 'Bearer ' + $scope.token;
-      var url = "https://api.fitbit.com/1/user/-/profile.json"      
+      /** Show loading */
+      $ionicLoading.show({
+          noBackdrop: true,
+          template: '<ion-spinner icon="circles"></ion-spinner>'
+      });
+        
+      //$http.defaults.headers.common.Authorization = 'Bearer ' + $scope.token;
+      $http.defaults.headers.common.Authorization = 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI1WEozRkciLCJhdWQiOiIyMkNIWk0iLCJpc3MiOiJGaXRiaXQiLCJ0eXAiOiJhY2Nlc3NfdG9rZW4iLCJzY29wZXMiOiJyc29jIHJzZXQgcmFjdCBybG9jIHJ3ZWkgcmhyIHJwcm8gcm51dCByc2xlIiwiZXhwIjoxNTQ1OTE0NzEzLCJpYXQiOjE1MTQ4MDQ2NTZ9.w9T3lMy-BYb0-T9mmOQINwC6D1vX2n8CnqjDX7en5IY';      
       
+      get1();
+      
+    });
+    
+    function get1(){
+      /** Get user information */
+      var url = "https://api.fitbit.com/1/user/-/profile.json";
       $http.get(url).then(function(response){
               console.log(response);
               $scope.userInfo = response.data;  
+              get2();
           },
           /** http ERROR */
           function(error){
   
           }); 
-          
-      url = "https://api.fitbit.com/1/user/-/activities.json"   
+    }
       
+    function get2(){
+      /** Get summary of steps, floors and distance */    
+      url = "https://api.fitbit.com/1/user/-/activities.json";      
       $http.get(url).then(function(response){
               console.log(response);
-              $scope.summary = response.data;  
+              $scope.userInfo.summary = response.data; 
+              get3(); 
           },
           /** http ERROR */
           function(error){
-  
+          
           }); 
-    })
+    }
+      
+    function get3(){ 
+      /** Get steps in last month */   
+      url = "https://api.fitbit.com/1/user/-/activities/steps/date/today/30d.json";       
+      $http.get(url).then(function(response){
+              console.log(response);
+              var avg = 0;
+              response.data['activities-steps'].forEach( function (item){
+                avg = avg + parseInt(item.value);
+              });
+              $scope.userInfo.summary.steps30 = Math.floor(avg / 30);  
+              get4();
+          },
+          /** http ERROR */
+          function(error){
+              $scope.userInfo.summary.steps30 = "";
+              get4();
+          });
+    }
+      
+    function get4(){
+      /** Get floors in last month */     
+      url = "https://api.fitbit.com/1/user/-/activities/floors/date/today/30d.json";   
+      $http.get(url).then(function(response){
+              console.log(response);
+              var avg = 0;
+              response.data['activities-floors'].forEach( function (item){
+                avg = avg + parseInt(item.value);
+              });
+              $scope.userInfo.summary.floors30 = Math.floor(avg / 30);
+              get5();  
+          },
+          /** http ERROR */
+          function(error){
+              $scope.userInfo.summary.floors30 = "";
+              get5();
+          });
+    }
+      
+    function get5(){    
+      /** Get distance in last month */    
+      url = "https://api.fitbit.com/1/user/-/activities/distance/date/today/30d.json";   
+      $http.get(url).then(function(response){
+              console.log(response);
+              var avg = 0;
+              response.data['activities-distance'].forEach( function (item){
+                avg = avg + parseInt(item.value);
+              });
+              $scope.userInfo.summary.distance30 = avg /30;  
+              get6();
+          },
+          /** http ERROR */
+          function(error){
+              $scope.distance30 = "";
+              get6();
+          });
+    }
+      
+    function get6(){
+      /** Get heart rate in last month*/    
+      url = "https://api.fitbit.com/1/user/-/activities/heart/date/today/1w.json";      
+      $http.get(url).then(function(response){
+              console.log(response);
+              var min = 999;
+              response.data['activities-heart'].forEach( function (item){
+                if (min > parseInt(item.value.restingHeartRate)){
+                   min = parseInt(item.value.restingHeartRate);
+                }
+              });
+              $scope.userInfo.summary.minHR = min + " BPM";  
+              if (min === 999){
+                 $scope.userInfo.summary.minHR = "";
+              }
+              get7();
+          },
+          /** http ERROR */
+          function(error){
+              $scope.userInfo.summary.minHR = "";
+              get7();
+          }); 
+    }
+      
+    function get7(){ 
+      /** Get sleep*/   
+      url = "https://api.fitbit.com/1/user/-/sleep/minutesAsleep/date/today/30d.json";     
+      $http.get(url).then(function(response){
+              console.log(response);
+              var avg = 0;
+              response.data['sleep-minutesAsleep'].forEach( function (item){
+                avg = avg + parseInt(item.value);
+              });
+              $scope.userInfo.summary.sleep30 = Math.floor(avg/1800) + " hours, " + Math.floor(avg/30) % 60 + " minutes"; 
+              showTable();
+          },
+          /** http ERROR */
+          function(error){
+              $scope.userInfo.summary.sleep30 = "";
+              showTable();
+          }); 
+    }
+    
+    function showTable(){
+         /** Hide loading */
+         $ionicLoading.hide();
+         console.log($scope.userInfo);
+         
+         if ($scope.userInfo.user.distanceUnit == "METRIC") {
+            $scope.userInfo.user.weight = $scope.userInfo.user.weight + " kg";
+            $scope.userInfo.user.height = $scope.userInfo.user.height + " cm";
+            $scope.userInfo.summary.best.total.distance.value = $scope.userInfo.summary.best.total.distance.value + " km";
+           $scope.userInfo.summary.lifetime.total.distance = $scope.userInfo.summary.lifetime.total.distance + " km";
+            if ($scope.userInfo.summary.distance30 != undefined){
+                $scope.userInfo.summary.distance30 = $scope.userInfo.summary.distance30 + " km";
+            }
+         }
+    }
 })
