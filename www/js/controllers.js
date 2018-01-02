@@ -609,7 +609,7 @@ angular.module('app.controllers', [])
         }
 
         /** Data for server */
-       var url = 'http://147.228.63.49:8080/app/mobile-services/measured-data';
+        var url = 'http://147.228.63.49:8080/app/mobile-services/measured-data';
         var data = {'client_username':$scope.username,
                     'token':$scope.token,
                     'personID':$scope.person.personID                    
@@ -842,9 +842,13 @@ function ($scope, $stateParams) {
 
 .controller('fitbitCtrl', function($scope, $http, $ionicLoading) {
     $scope.$on('$ionicView.beforeEnter', function(){
-      $scope.token = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI1WEozRkciLCJhdWQiOiIyMkNIWk0iLCJpc3MiOiJGaXRiaXQiLCJ0eXAiOiJhY2Nlc3NfdG9rZW4iLCJzY29wZXMiOiJyc29jIHJhY3QgcnNldCBybG9jIHJ3ZWkgcmhyIHJudXQgcnBybyByc2xlIiwiZXhwIjoxNTQ1OTE0NzEzLCJpYXQiOjE1MTQzODUzMjV9.nCI0MVykbfvc_eyfxCAlBf4yG67_nbX-L2Ve3GO22S4";//window.localStorage.getItem("fitbitToken");
-      $scope.user = "5XJ3FG";//window.localStorage.getItem("fitbitUser");
     
+      //$scope.token = window.localStorage.getItem("fitbitToken");
+      //$scope.user = window.localStorage.getItem("fitbitUser");
+      $scope.token = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI1WEozRkciLCJhdWQiOiIyMkNIWk0iLCJpc3MiOiJGaXRiaXQiLCJ0eXAiOiJhY2Nlc3NfdG9rZW4iLCJzY29wZXMiOiJyc29jIHJhY3QgcnNldCBybG9jIHJ3ZWkgcmhyIHJudXQgcnBybyByc2xlIiwiZXhwIjoxNTQ1OTE0NzEzLCJpYXQiOjE1MTQzODUzMjV9.nCI0MVykbfvc_eyfxCAlBf4yG67_nbX-L2Ve3GO22S4";
+      $scope.user = "5XJ3FG";
+    
+      $scope.showTable = false;
       /** Show loading */
       $ionicLoading.show({
           noBackdrop: true,
@@ -868,7 +872,16 @@ function ($scope, $stateParams) {
           },
           /** http ERROR */
           function(error){
-  
+
+            $ionicLoading.hide();
+
+            var alertPopup = $ionicPopup.alert({
+                title: $filter('translate')('ERROR'),
+                template: "{{ 'COULD_NOT_OBTAIN_FITBIT_DATA' | translate }}"
+            });
+            //return back
+            $state.go('login');
+
           }); 
     }
       
@@ -882,7 +895,16 @@ function ($scope, $stateParams) {
           },
           /** http ERROR */
           function(error){
-          
+
+            $ionicLoading.hide();
+
+            var alertPopup = $ionicPopup.alert({
+                title: $filter('translate')('ERROR'),
+                template: "{{ 'COULD_NOT_OBTAIN_FITBIT_DATA' | translate }}"
+            });
+            //return back
+            $state.go('login');
+
           }); 
     }
       
@@ -987,18 +1009,105 @@ function ($scope, $stateParams) {
     }
     
     function showTable(){
-         /** Hide loading */
-         $ionicLoading.hide();
+         
          console.log($scope.userInfo);
          
          if ($scope.userInfo.user.distanceUnit == "METRIC") {
-            $scope.userInfo.user.weight = $scope.userInfo.user.weight + " kg";
+            
             $scope.userInfo.user.height = $scope.userInfo.user.height + " cm";
             $scope.userInfo.summary.best.total.distance.value = $scope.userInfo.summary.best.total.distance.value + " km";
-           $scope.userInfo.summary.lifetime.total.distance = $scope.userInfo.summary.lifetime.total.distance + " km";
-            if ($scope.userInfo.summary.distance30 != undefined){
+            $scope.userInfo.summary.lifetime.total.distance = $scope.userInfo.summary.lifetime.total.distance + " km";
+            if (typeof $scope.userInfo.summary.distance30 !== 'undefined' && typeof $scope.userInfo.summary.distance30 !== 'null' && $scope.userInfo.summary.distance30 != ""){
                 $scope.userInfo.summary.distance30 = $scope.userInfo.summary.distance30 + " km";
             }
+         } else if ($scope.userInfo.user.distanceUnit == "en_US") {
+            $scope.userInfo.user.height = $scope.userInfo.user.height + " inches";
+            $scope.userInfo.summary.best.total.distance.value = $scope.userInfo.summary.best.total.distance.value + " miles";
+            $scope.userInfo.summary.lifetime.total.distance = $scope.userInfo.summary.lifetime.total.distance + " miles";
+            if (typeof $scope.userInfo.summary.distance30 !== 'undefined' && typeof $scope.userInfo.summary.distance30 !== 'null' && $scope.userInfo.summary.distance30 != ""){
+                $scope.userInfo.summary.distance30 = $scope.userInfo.summary.distance30 + " miles";
+            }
          }
+         
+         if ($scope.userInfo.user.weightUnit == "METRIC") {
+            $scope.userInfo.user.weight = $scope.userInfo.user.weight + " kg"; 
+         } else if ($scope.userInfo.user.weightUnit == "en_US") {
+            $scope.userInfo.user.weight = $scope.userInfo.user.weight + " pounds"; 
+         } else if ($scope.userInfo.user.weightUnit == "en_GB") {
+            $scope.userInfo.user.weight = $scope.userInfo.user.weight + " stone"; 
+         }
+         
+         
+         /** Hide loading */
+         $ionicLoading.hide();
+         $scope.showTable = true;
+    }
+    
+    function synchronize(){
+    
+//         /** Show loading */
+//         $ionicLoading.show({
+//             noBackdrop: true,
+//             template: '<ion-spinner icon="circles"></ion-spinner>'
+//         });
+//         
+//         /** Data for server */
+//         var url = 'http://147.228.63.49:8080/app/mobile-services/fitbit';
+//         var data = {'client_username':$scope.username,
+//                     'token':$scope.token,
+//                     'fitbit':$scope.userInfo                   
+//                     };
+// 
+//         /** Send data */
+//         console.log(url);
+//         console.log(data);
+//         $http.post(url, data).then(function(response){
+// 
+//             /** Hide loading */
+//             $ionicLoading.hide();
+// 
+//             /** parse data */
+//             var myData = response;
+//             console.log(myData);
+// 
+//             /** invalid ID */
+//             if (myData.data == 'Fitbit Failed'){                                                 
+//                 var alertPopup = $ionicPopup.alert({
+//                     title: $filter('translate')('FITBIT_SYNC_FAIL'),
+//                     template: "{{ 'FITBIT_SYNC_FAIL' | translate }}"
+//                 });
+//             } 
+//             /* token expired */
+//             else if (myData.data == 'authorization failed'){
+//                 var alertPopup = $ionicPopup.alert({
+//                     title: $filter('translate')('ERROR'),
+//                     template: "{{ 'AUTH_EXP' | translate }}"
+//                 });
+//             }
+//             /* OK*/
+//             else if (myData.data == 'OK'){
+//                 var alertPopup = $ionicPopup.alert({
+//                     title: $filter('translate')('SYNC_SUCCESS'),
+//                     template: "{{ 'SYNC_SUCCESS' | translate }}"
+//                 });
+//             }
+//             /** Uspecified error */
+//             else {
+//                 var alertPopup = $ionicPopup.alert({
+//                     title: $filter('translate')('ERROR'),
+//                     template: "{{ 'ERR_UNSP' | translate }}"
+//                 });
+//             }  
+//         }, 
+//         /** http ERROR */
+//         function(error){
+// 
+//             $ionicLoading.hide();
+// 
+//             var alertPopup = $ionicPopup.alert({
+//                 title: $filter('translate')('ERROR'),
+//                 template: "{{ 'CONNECT_FAIL' | translate }}"
+//             });
+//         });
     }
 })

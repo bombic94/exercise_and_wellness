@@ -55,7 +55,7 @@
         }
     </style>
 
-    <table class="tableCss">
+    <table ng-show="showTable" class="tableCss">
     <thead>
       <tr>
         <th>Name:</th>
@@ -122,5 +122,12 @@
       </tbody>
     </table>
     
+    <button id="fitbitLogin"
+            style="font-weight:300;" 
+            class="button button-positive  button-block icon ion-android-arrow-up"
+            ng-click="synchronize()"
+            ng-show="showTable">
+                  Synchronize with BodyInNumbers
+    </button>
 </ion-content>
 </ion-view>
