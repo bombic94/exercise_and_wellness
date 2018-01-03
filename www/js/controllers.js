@@ -843,10 +843,10 @@ function ($scope, $stateParams) {
 .controller('fitbitCtrl', function($scope, $http, $ionicLoading) {
     $scope.$on('$ionicView.beforeEnter', function(){
     
-      //$scope.token = window.localStorage.getItem("fitbitToken");
-      //$scope.user = window.localStorage.getItem("fitbitUser");
-      $scope.token = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI1WEozRkciLCJhdWQiOiIyMkNIWk0iLCJpc3MiOiJGaXRiaXQiLCJ0eXAiOiJhY2Nlc3NfdG9rZW4iLCJzY29wZXMiOiJyc29jIHJhY3QgcnNldCBybG9jIHJ3ZWkgcmhyIHJudXQgcnBybyByc2xlIiwiZXhwIjoxNTQ1OTE0NzEzLCJpYXQiOjE1MTQzODUzMjV9.nCI0MVykbfvc_eyfxCAlBf4yG67_nbX-L2Ve3GO22S4";
-      $scope.user = "5XJ3FG";
+      $scope.token = window.localStorage.getItem("fitbitToken");
+      $scope.user = window.localStorage.getItem("fitbitUser");
+      //$scope.token = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI1WEozRkciLCJhdWQiOiIyMkNIWk0iLCJpc3MiOiJGaXRiaXQiLCJ0eXAiOiJhY2Nlc3NfdG9rZW4iLCJzY29wZXMiOiJyc29jIHJhY3QgcnNldCBybG9jIHJ3ZWkgcmhyIHJudXQgcnBybyByc2xlIiwiZXhwIjoxNTQ1OTE0NzEzLCJpYXQiOjE1MTQzODUzMjV9.nCI0MVykbfvc_eyfxCAlBf4yG67_nbX-L2Ve3GO22S4";
+      //$scope.user = "5XJ3FG";
     
       $scope.showTable = false;
       /** Show loading */
@@ -917,7 +917,7 @@ function ($scope, $stateParams) {
               response.data['activities-steps'].forEach( function (item){
                 avg = avg + parseInt(item.value);
               });
-              $scope.userInfo.summary.steps30 = Math.floor(avg / 30);  
+              $scope.userInfo.summary.steps30 = Math.round(avg / 30);  
               get4();
           },
           /** http ERROR */
@@ -936,7 +936,7 @@ function ($scope, $stateParams) {
               response.data['activities-floors'].forEach( function (item){
                 avg = avg + parseInt(item.value);
               });
-              $scope.userInfo.summary.floors30 = Math.floor(avg / 30);
+              $scope.userInfo.summary.floors30 = Math.round(avg / 30);
               get5();  
           },
           /** http ERROR */
@@ -955,7 +955,7 @@ function ($scope, $stateParams) {
               response.data['activities-distance'].forEach( function (item){
                 avg = avg + parseInt(item.value);
               });
-              $scope.userInfo.summary.distance30 = avg /30;  
+              $scope.userInfo.summary.distance30 = (avg / 30).toFixed(2);  
               get6();
           },
           /** http ERROR */
@@ -998,7 +998,7 @@ function ($scope, $stateParams) {
               response.data['sleep-minutesAsleep'].forEach( function (item){
                 avg = avg + parseInt(item.value);
               });
-              $scope.userInfo.summary.sleep30 = Math.floor(avg/1800) + " hours, " + Math.floor(avg/30) % 60 + " minutes"; 
+              $scope.userInfo.summary.sleep30 = Math.floor(avg/1800) + " hours, " + Math.round(avg/30) % 60 + " minutes"; 
               showTable();
           },
           /** http ERROR */
@@ -1015,8 +1015,8 @@ function ($scope, $stateParams) {
          if ($scope.userInfo.user.distanceUnit == "METRIC") {
             
             $scope.userInfo.user.height = $scope.userInfo.user.height + " cm";
-            $scope.userInfo.summary.best.total.distance.value = $scope.userInfo.summary.best.total.distance.value + " km";
-            $scope.userInfo.summary.lifetime.total.distance = $scope.userInfo.summary.lifetime.total.distance + " km";
+            $scope.userInfo.summary.best.total.distance.value = $scope.userInfo.summary.best.total.distance.value.toFixed(2) + " km";
+            $scope.userInfo.summary.lifetime.total.distance = $scope.userInfo.summary.lifetime.total.distance.toFixed(2) + " km";
             if (typeof $scope.userInfo.summary.distance30 !== 'undefined' && typeof $scope.userInfo.summary.distance30 !== 'null' && $scope.userInfo.summary.distance30 != ""){
                 $scope.userInfo.summary.distance30 = $scope.userInfo.summary.distance30 + " km";
             }
