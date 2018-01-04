@@ -91,7 +91,7 @@ angular.module('app.controllers', [])
    //     window.localStorage.setItem("server", JSON.stringify($scope.server));     
 
         /** Data for server */
-        var url = 'http://147.228.63.49:8080/app/mobile-services/login';
+        var url = 'https://147.228.63.49:443/app/mobile-services/login';
         var data = {'client_username': $scope.user.username, 
                     'client_passwd': $scope.user.password
                    };   
@@ -164,7 +164,7 @@ angular.module('app.controllers', [])
          });
 
          /** Data for server */
-         var url = 'http://147.228.63.49:8080/app/mobile-services/measurement-list';
+         var url = 'https://147.228.63.49:443/app/mobile-services/measurement-list';
          var data = {'client_username': $scope.username, 
                      'token': $scope.token
                     };
@@ -251,7 +251,7 @@ angular.module('app.controllers', [])
         });
 
         /** Data for server */
-        var url = 'http://147.228.63.49:8080/app/mobile-services/scheme';
+        var url = 'https://147.228.63.49:443/app/mobile-services/scheme';
         var data = {'client_username': $scope.username, 
                     'token': $scope.token, 
                     'measurementID': $scope.measurement.id
@@ -418,7 +418,7 @@ angular.module('app.controllers', [])
                   (function(ind){      
                     setTimeout(function(){
                       console.log(ind);
-                    var url = 'http://147.228.63.49:8080/app/mobile-services/receive-data';
+                    var url = 'https://147.228.63.49:443/app/mobile-services/receive-data';
                     var data = {'client_username':$scope.username,
                                 'token':$scope.token,
                                 'personID':$scope.person.personID,
@@ -575,7 +575,7 @@ angular.module('app.controllers', [])
         }
 
         /** Data for server */
-       var url = 'http://147.228.63.49:8080/app/mobile-services/measured-data';
+       var url = 'https://147.228.63.49:443/app/mobile-services/measured-data';
         var data = {'client_username':$scope.username,
                     'token':$scope.token,
                     'personID':$scope.person.personID                    
@@ -727,7 +727,7 @@ angular.module('app.controllers', [])
    //     $scope.server = JSON.parse(window.localStorage.getItem("server"));
         
           /** Data for server */
-        var url = 'http://147.228.63.49:8080/app/mobile-services/logout';
+        var url = 'https://147.228.63.49:443/app/mobile-services/logout';
         var data = {'client_username': $scope.username, 
                     'token': $scope.token 
                    };
