@@ -5,6 +5,8 @@
     "dependencies": {
         "@ionic-native/core": "^4.5.2",
         "@ionic-native/in-app-browser": "^4.5.2",
+        "angular-chart.js": "^1.1.1",
+        "chart.js": "^2.7.1",
         "cordova-android": "^6.2.3",
         "cordova-plugin-console": "~1.0.5",
         "cordova-plugin-device": "~1.1.4",

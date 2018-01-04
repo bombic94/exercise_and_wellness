@@ -10,10 +10,10 @@
         table.tableCss {
           font-family: Arial, Helvetica, sans-serif;
           border: 0px solid #444444;
-          background: #11C1F3;
-          background: -moz-linear-gradient(top, #FFFFFF 0%, #11C1F3 100%); /* ff3.6+ */
-          background: -webkit-linear-gradient(top, #FFFFFF 0%, #11C1F3 100%); /* safari5.1+,chrome10+ */
-          background: linear-gradient(to bottom, #FFFFFF 0%, #11C1F3 100%); /* w3c */
+          background: #f5f5f5;
+        /*  background: -moz-linear-gradient(top, #FFFFFF 0%, #11C1F3 100%); /* ff3.6+ */
+        /*  background: -webkit-linear-gradient(top, #FFFFFF 0%, #11C1F3 100%); /* safari5.1+,chrome10+ */
+       /*   background: linear-gradient(to bottom, #FFFFFF 0%, #11C1F3 100%); /* w3c */
           width: 100%;
           height: 400px;
           text-align: center;
@@ -122,6 +122,51 @@
       </tbody>
     </table>
     
+    <div ng-show="showTable" class="card">
+        <div class="item item-divider">
+            Steps in last month
+        </div>
+        <div class="item item-text-wrap">
+            <canvas id="bar" class="chart chart-bar"chart-data="chart1.data" chart-labels="chart1.labels" chart-series = "chart1.series" chart-colors="chart1.colors"></canvas>
+        </div>
+    </div>
+    
+    <div ng-show="showTable" class="card">
+        <div class="item item-divider">
+            Floors in last month
+        </div>
+        <div class="item item-text-wrap">
+            <canvas id="bar" class="chart chart-bar"chart-data="chart2.data" chart-labels="chart2.labels" ></canvas>
+        </div>
+    </div>
+    
+    <div ng-show="showTable" class="card">
+        <div class="item item-divider">
+            Distance in last month
+        </div>
+        <div class="item item-text-wrap">
+            <canvas id="bar" class="chart chart-bar"chart-data="chart3.data" chart-labels="chart3.labels" ></canvas>
+        </div>
+    </div>
+    
+    <div ng-show="showTable" class="card">
+        <div class="item item-divider">
+            Resting HR in last week
+        </div>
+        <div class="item item-text-wrap">
+            <canvas id="bar" class="chart chart-bar"chart-data="chart4.data" chart-labels="chart4.labels" ></canvas>
+        </div>
+    </div>
+    
+    <div ng-show="showTable" class="card">
+        <div class="item item-divider">
+            Sleep in last month
+        </div>
+        <div class="item item-text-wrap">
+            <canvas id="bar" class="chart chart-bar"chart-data="chart5.data" chart-labels="chart5.labels"></canvas>
+        </div>
+    </div>
+     
     <button id="fitbitLogin"
             style="font-weight:300;" 
             class="button button-positive  button-block icon ion-android-arrow-up"

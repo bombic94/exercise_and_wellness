@@ -840,7 +840,7 @@ function ($scope, $stateParams) {
 
 }])
 
-.controller('fitbitCtrl', function($scope, $http, $ionicLoading) {
+.controller('fitbitCtrl', function($scope, $http, $ionicLoading, $ionicPopup, $filter) {
     $scope.$on('$ionicView.beforeEnter', function(){
     
       $scope.token = window.localStorage.getItem("fitbitToken");
@@ -909,12 +909,21 @@ function ($scope, $stateParams) {
     }
       
     function get3(){ 
+     
+      $scope.chart1 = {};
+      $scope.chart1.labels = [];    
+      $scope.chart1.data = [];
+      $scope.chart1.data[0] = [];
+      $scope.chart1.series = ["Steps"];
+      
       /** Get steps in last month */   
       url = "https://api.fitbit.com/1/user/-/activities/steps/date/today/30d.json";       
       $http.get(url).then(function(response){
               console.log(response);
               var avg = 0;
               response.data['activities-steps'].forEach( function (item){
+                $scope.chart1.labels.push(item.dateTime);
+                $scope.chart1.data[0].push(parseInt(item.value));
                 avg = avg + parseInt(item.value);
               });
               $scope.userInfo.summary.steps30 = Math.round(avg / 30);  
@@ -923,17 +932,30 @@ function ($scope, $stateParams) {
           /** http ERROR */
           function(error){
               $scope.userInfo.summary.steps30 = "";
+              for (var i = 0; i < 30; i++){
+                $scope.chart1.labels.push("");
+                $scope.chart1.data[0].push(0);
+              }
               get4();
           });
     }
       
     function get4(){
+    
+      $scope.chart2 = {};
+      $scope.chart2.labels = [];    
+      $scope.chart2.data = [];
+      $scope.chart2.data[0] = [];
+      $scope.chart2.series = ["Floors"];
+      
       /** Get floors in last month */     
       url = "https://api.fitbit.com/1/user/-/activities/floors/date/today/30d.json";   
       $http.get(url).then(function(response){
               console.log(response);
               var avg = 0;
               response.data['activities-floors'].forEach( function (item){
+                $scope.chart2.labels.push(item.dateTime);
+                $scope.chart2.data[0].push(parseInt(item.value));
                 avg = avg + parseInt(item.value);
               });
               $scope.userInfo.summary.floors30 = Math.round(avg / 30);
@@ -942,17 +964,30 @@ function ($scope, $stateParams) {
           /** http ERROR */
           function(error){
               $scope.userInfo.summary.floors30 = "";
+              for (var i = 0; i < 30; i++){
+                $scope.chart2.labels.push("");
+                $scope.chart2.data[0].push(0);
+              }
               get5();
           });
     }
       
     function get5(){    
+    
+      $scope.chart3 = {};
+      $scope.chart3.labels = [];    
+      $scope.chart3.data = [];
+      $scope.chart3.data[0] = [];
+      $scope.chart3.series = ["Distance"];
+      
       /** Get distance in last month */    
       url = "https://api.fitbit.com/1/user/-/activities/distance/date/today/30d.json";   
       $http.get(url).then(function(response){
               console.log(response);
               var avg = 0;
               response.data['activities-distance'].forEach( function (item){
+                $scope.chart3.labels.push(item.dateTime);
+                $scope.chart3.data[0].push(parseInt(item.value));
                 avg = avg + parseInt(item.value);
               });
               $scope.userInfo.summary.distance30 = (avg / 30).toFixed(2);  
@@ -961,17 +996,30 @@ function ($scope, $stateParams) {
           /** http ERROR */
           function(error){
               $scope.distance30 = "";
+              for (var i = 0; i < 30; i++){
+                $scope.chart3.labels.push("");
+                $scope.chart3.data[0].push(0);
+              }
               get6();
           });
     }
       
     function get6(){
-      /** Get heart rate in last month*/    
+    
+      $scope.chart4 = {};
+      $scope.chart4.labels = [];    
+      $scope.chart4.data = [];
+      $scope.chart4.data[0] = [];
+      $scope.chart4.series = ["Resting HR"];
+      
+      /** Get heart rate in last week*/    
       url = "https://api.fitbit.com/1/user/-/activities/heart/date/today/1w.json";      
       $http.get(url).then(function(response){
               console.log(response);
               var min = 999;
               response.data['activities-heart'].forEach( function (item){
+                $scope.chart4.labels.push(item.dateTime);
+                $scope.chart4.data[0].push(parseInt(item.value.restingHeartRate));
                 if (min > parseInt(item.value.restingHeartRate)){
                    min = parseInt(item.value.restingHeartRate);
                 }
@@ -985,17 +1033,30 @@ function ($scope, $stateParams) {
           /** http ERROR */
           function(error){
               $scope.userInfo.summary.minHR = "";
+              for (var i = 0; i < 7; i++){
+                $scope.chart4.labels.push("");
+                $scope.chart4.data[0].push(0);
+              }
               get7();
           }); 
     }
       
     function get7(){ 
+    
+      $scope.chart5 = {};
+      $scope.chart5.labels = [];    
+      $scope.chart5.data = [];
+      $scope.chart5.data[0] = [];
+      $scope.chart5.series = ["Sleep"];
+      
       /** Get sleep*/   
       url = "https://api.fitbit.com/1/user/-/sleep/minutesAsleep/date/today/30d.json";     
       $http.get(url).then(function(response){
               console.log(response);
               var avg = 0;
               response.data['sleep-minutesAsleep'].forEach( function (item){
+                $scope.chart5.labels.push(item.dateTime);
+                $scope.chart5.data[0].push(parseInt(item.value) / 60);
                 avg = avg + parseInt(item.value);
               });
               $scope.userInfo.summary.sleep30 = Math.floor(avg/1800) + " hours, " + Math.round(avg/30) % 60 + " minutes"; 
@@ -1004,6 +1065,10 @@ function ($scope, $stateParams) {
           /** http ERROR */
           function(error){
               $scope.userInfo.summary.sleep30 = "";
+              for (var i = 0; i < 30; i++){
+                $scope.chart5.labels.push("");
+                $scope.chart5.data[0].push(0);
+              }
               showTable();
           }); 
     }
