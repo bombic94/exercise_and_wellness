@@ -1175,4 +1175,8 @@ function ($scope, $stateParams) {
 //             });
 //         });
     }
+    
+    $scope.dashboard = function() {
+        var ref = window.open('https://www.fitbit.com/');
+    };
 })

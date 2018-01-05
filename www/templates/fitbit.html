@@ -166,8 +166,16 @@
             <canvas id="bar" class="chart chart-bar"chart-data="chart5.data" chart-labels="chart5.labels"></canvas>
         </div>
     </div>
+    
+    <button id="fitbit"
+            style="font-weight:300;" 
+            class="button button-positive  button-block icon ion-android-arrow-right"
+            ng-click="dashboard()"
+            ng-show="showTable">
+                  Show data in Fitbit Dashboard
+    </button>
      
-    <button id="fitbitLogin"
+    <button id="sync"
             style="font-weight:300;" 
             class="button button-positive  button-block icon ion-android-arrow-up"
             ng-click="synchronize()"
