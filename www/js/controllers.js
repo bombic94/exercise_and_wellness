@@ -6,9 +6,9 @@ angular.module('app.controllers', [])
     /** Variables */
     $scope.user = {};
 
- //   var master = {devel: false, port: 80};
- //   var devel = {devel: true, port: 8080};
- //   $scope.server = master;
+    var master = {devel: false, addr: "https://147.228.63.49:443/"};
+    var devel = {devel: true, addr: "http://147.228.63.49:8080/"};
+    $scope.server = master;
     
     /** After launch verify that use of camera is authorized (Android 6+) */
     $scope.$on('$ionicView.enter', function(){
@@ -47,7 +47,7 @@ angular.module('app.controllers', [])
     };
 
     $scope.login = function() {
-        
+
         /** Show loading */
         $ionicLoading.show({
             noBackdrop: true,
@@ -78,24 +78,26 @@ angular.module('app.controllers', [])
             return;
         }
 
-    //    if ($scope.user.username.startsWith("dev:")){
-    //         $scope.user.username = $scope.user.username.substring(4);
-    //         $scope.server = devel;
-    //    } else {
-	  //        $scope.server = master;
-	  //    }    
-        
+        if ($scope.user.username.indexOf('dev:') === 0){
+             $scope.user.username = $scope.user.username.substring(4);
+             $scope.server = devel;
+        } else {
+	          $scope.server = master;
+	      }    
+
         /** Save data */
         window.localStorage.setItem("username", $scope.user.username);
         window.localStorage.setItem("password", $scope.user.password);  
-   //     window.localStorage.setItem("server", JSON.stringify($scope.server));     
+        window.localStorage.setItem("server", JSON.stringify($scope.server));     
 
         /** Data for server */
-        var url = 'https://147.228.63.49:443/app/mobile-services/login';
+        var url = $scope.server.addr + 'app/mobile-services/login';
         var data = {'client_username': $scope.user.username, 
                     'client_passwd': $scope.user.password
-                   };   
-
+                   };  
+                       
+        //alert($scope.server.addr);
+        //alert(url);
         /** Send data */
         console.log(url);
         console.log(data);
@@ -149,13 +151,13 @@ angular.module('app.controllers', [])
 
 
 /** Measurement list page - choose one measurement */
-.controller('listOfMeasurementsCtrl', function($scope, $state, $http, $translate, $ionicLoading, $filter) {
+.controller('listOfMeasurementsCtrl', function($scope, $state, $http, $translate, $ionicPopup, $ionicLoading, $filter) {
 
     /** Get variables before entering */
     $scope.$on('$ionicView.beforeEnter', function(){   
         $scope.token = window.localStorage.getItem("token");
         $scope.username = window.localStorage.getItem("username");
- //       $scope.server = JSON.parse(window.localStorage.getItem("server"));
+        $scope.server = JSON.parse(window.localStorage.getItem("server"));
 
         /** Show loading */
          $ionicLoading.show({
@@ -164,7 +166,7 @@ angular.module('app.controllers', [])
          });
 
          /** Data for server */
-         var url = 'https://147.228.63.49:443/app/mobile-services/measurement-list';
+         var url = $scope.server.addr + 'app/mobile-services/measurement-list';
          var data = {'client_username': $scope.username, 
                      'token': $scope.token
                     };
@@ -242,7 +244,7 @@ angular.module('app.controllers', [])
         $scope.measurement = JSON.parse(window.localStorage.getItem("measurement"));
         $scope.token = window.localStorage.getItem("token"); 
         $scope.username = window.localStorage.getItem("username");
-   //     $scope.server = JSON.parse(window.localStorage.getItem("server"));
+        $scope.server = JSON.parse(window.localStorage.getItem("server"));
         
         /** Show loading */
         $ionicLoading.show({
@@ -251,7 +253,7 @@ angular.module('app.controllers', [])
         });
 
         /** Data for server */
-        var url = 'https://147.228.63.49:443/app/mobile-services/scheme';
+        var url = $scope.server.addr + 'app/mobile-services/scheme';
         var data = {'client_username': $scope.username, 
                     'token': $scope.token, 
                     'measurementID': $scope.measurement.id
@@ -418,7 +420,7 @@ angular.module('app.controllers', [])
                   (function(ind){      
                     setTimeout(function(){
                       console.log(ind);
-                    var url = 'https://147.228.63.49:443/app/mobile-services/receive-data';
+                    var url = $scope.server.addr + 'app/mobile-services/receive-data';
                     var data = {'client_username':$scope.username,
                                 'token':$scope.token,
                                 'personID':$scope.person.personID,
@@ -534,7 +536,7 @@ angular.module('app.controllers', [])
     $scope.$on('$ionicView.beforeEnter', function(){
         $scope.token = window.localStorage.getItem("token"); 
         $scope.username = window.localStorage.getItem("username");
-  //      $scope.server = JSON.parse(window.localStorage.getItem("server"));
+        $scope.server = JSON.parse(window.localStorage.getItem("server"));
     });
 
     /** Scan QR */
@@ -575,7 +577,7 @@ angular.module('app.controllers', [])
         }
 
         /** Data for server */
-       var url = 'https://147.228.63.49:443/app/mobile-services/measured-data';
+       var url = $scope.server.addr + 'app/mobile-services/measured-data';
         var data = {'client_username':$scope.username,
                     'token':$scope.token,
                     'personID':$scope.person.personID                    
@@ -655,7 +657,7 @@ angular.module('app.controllers', [])
     $scope.$on('$ionicView.beforeEnter', function(){
         $scope.result = JSON.parse(window.localStorage.getItem("result_data")); 
         $scope.personID = window.localStorage.getItem("personID");
-  //      $scope.server = JSON.parse(window.localStorage.getItem("server"));
+        $scope.server = JSON.parse(window.localStorage.getItem("server"));
 
          /** create empty array */
         for (var i = 0; i < $scope.result.experiments.length; i++){
@@ -690,7 +692,7 @@ angular.module('app.controllers', [])
     
     /** Get variables before entering */
     $scope.$on('$ionicView.beforeEnter', function(){
-  //      $scope.server = JSON.parse(window.localStorage.getItem("server"));
+        $scope.server = JSON.parse(window.localStorage.getItem("server"));
     });
     
      /** list of supported languages */
@@ -724,10 +726,10 @@ angular.module('app.controllers', [])
     $scope.logout = function(){
         $scope.token = window.localStorage.getItem("token"); 
         $scope.username = window.localStorage.getItem("username");
-   //     $scope.server = JSON.parse(window.localStorage.getItem("server"));
+        $scope.server = JSON.parse(window.localStorage.getItem("server"));
         
           /** Data for server */
-        var url = 'https://147.228.63.49:443/app/mobile-services/logout';
+        var url = $scope.server.addr + 'app/mobile-services/logout';
         var data = {'client_username': $scope.username, 
                     'token': $scope.token 
                    };
@@ -785,8 +787,8 @@ function ($scope, $stateParams) {
 
     /** Get variables before entering */
     $scope.$on('$ionicView.beforeEnter', function(){
- //       $scope.server = JSON.parse(window.localStorage.getItem("server"));
-  //      console.log($scope.server.devel);
+        $scope.server = JSON.parse(window.localStorage.getItem("server"));
+        console.log($scope.server.devel);
     });
 }])
 
@@ -798,7 +800,7 @@ function ($scope, $stateParams) {
 
     /** Get variables before entering */
     $scope.$on('$ionicView.beforeEnter', function(){
-  //      $scope.server = JSON.parse(window.localStorage.getItem("server"));
+        $scope.server = JSON.parse(window.localStorage.getItem("server"));
     });   
     $scope.version = "1.2.3";
     $scope.author = "David Bohmann";
